@@ -3,52 +3,410 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QoniCode | Email automation, coming soon</title>
-<meta name="description" content="Email automation that finds your customers well. Rule-based email flows for online stores, tested before they go live. Website coming soon.">
+<title>QoniCode · Ad-to-checkout research for DTC brands</title>
+<meta name="description" content="I follow your Meta ads to checkout on a phone and show you where shoppers may hesitate, with evidence you can check in 30 seconds.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23343b1b'/%3E%3Crect x='7' y='17' width='18' height='6' rx='2' fill='%23f6e6a5'/%3E%3Ccircle cx='16' cy='12' r='4' fill='%23c8d69b'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Viga&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --tea-green: #c8d69b;
-    --vanilla:   #f6e6a5;
-    --celtic:    #3971b8;
-    --ivory:     #fbfcee;
-    --brown:     #343b1b;
-  }
-  * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
-  body {
-    background: var(--ivory);
-    color: var(--brown);
-    font-family: "Viga", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    font-weight: 400;              /* Viga has one weight; avoid faux bold */
-    display: flex; align-items: center; justify-content: center;
-    padding: 24px; line-height: 1.5;
-  }
-  main { max-width: 560px; width: 100%; text-align: center; }
-  .badge {
-    display: inline-block; padding: 6px 16px;
-    background: var(--vanilla); color: var(--brown);
-    border-radius: 999px; font-size: 13px; letter-spacing: .08em;
-    text-transform: uppercase; margin-bottom: 28px;
-  }
-  .wordmark { font-size: clamp(2.6rem, 11vw, 4rem); margin: 0; letter-spacing: -0.01em; line-height: 1.1; }
-  .wordmark .q { color: var(--celtic); }   /* blue only on the Q */
-  .bar { width: 72px; height: 6px; border-radius: 3px; background: var(--tea-green); margin: 20px auto 28px; }
-  h1 { font-size: clamp(1.3rem, 5vw, 1.8rem); font-weight: 400; margin: 0 0 14px; line-height: 1.3; }
-  p { margin: 0; font-size: 1.05rem; opacity: .85; }
-  footer { margin-top: 44px; font-size: 13px; opacity: .7; }
+:root{
+  --ivory:#FBFCEE;
+  --tea:#C8D69B;
+  --vanilla:#F6E6A5;
+  --blue:#3971B8;
+  --brown:#343B1B;
+  --white:#FFFFFF;
+  --muted:#5E6448;
+  --line:#E2E4CF;
+  --max:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ivory);color:var(--brown);font-family:"Schibsted Grotesk",system-ui,sans-serif;font-size:18px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+p{margin:0 0 1em;max-width:62ch}
+h1,h2,h3{margin:0;line-height:1.1;letter-spacing:-0.02em}
+h1{font-size:clamp(2.4rem,5.2vw,4rem);font-weight:800;max-width:15ch}
+h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:800;max-width:20ch;margin-bottom:.6em}
+h3{font-size:1.15rem;font-weight:600;letter-spacing:-0.01em}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
+.link{text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/0 2px no-repeat;transition:background-size .25s ease;padding-bottom:2px}
+.link:hover{background-size:100% 2px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;font:600 1rem/1 "Schibsted Grotesk",sans-serif;padding:16px 22px;border-radius:999px;text-decoration:none;border:2px solid var(--brown);cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background .2s ease}
+.btn-primary{background:var(--blue);border-color:var(--brown);color:var(--white);box-shadow:0 4px 0 0 var(--brown)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 0 0 var(--brown)}
+.btn-primary:active{transform:translateY(3px);box-shadow:0 1px 0 0 var(--brown)}
+.btn-ghost{background:transparent;color:var(--brown)}
+.btn-ghost:hover{background:var(--vanilla)}
+.btn-ghost:active{transform:translateY(2px)}
+
+/* header */
+header{padding:22px 0;position:sticky;top:0;z-index:20;background:rgba(251,252,238,.9);backdrop-filter:blur(8px);border-bottom:1px solid transparent;transition:border-color .2s}
+header.scrolled{border-bottom-color:var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.logo{font-weight:800;font-size:1.25rem;letter-spacing:-0.03em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--brown);position:relative;flex:none}
+.logo-mark::before{content:"";position:absolute;left:10px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--tea)}
+.logo-mark::after{content:"";position:absolute;left:6px;right:6px;bottom:6px;height:6px;border-radius:2px;background:var(--vanilla)}
+header .btn{padding:12px 18px;font-size:.95rem}
+
+/* hero */
+.hero{padding:40px 0 80px}
+.hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
+.lede{font-size:1.25rem;color:var(--muted);margin:22px 0 28px;max-width:40ch}
+
+/* form */
+.journey-form{display:grid;gap:10px;max-width:460px}
+.journey-form label{font-size:.9rem;font-weight:600}
+.journey-form input{width:100%;font:inherit;font-size:1rem;padding:14px 16px;border:2px solid var(--brown);border-radius:12px;background:var(--white);color:var(--brown);transition:box-shadow .15s ease}
+.journey-form input:focus{outline:none;box-shadow:0 0 0 4px var(--tea)}
+.journey-form .btn{width:100%;margin-top:6px;padding:18px 22px;font-size:1.05rem}
+.form-note{font-size:.9rem;color:var(--muted);margin:4px 0 0}
+.form-note b{color:var(--brown);font-weight:600}
+.form-status{font-size:.95rem;margin:0;min-height:0}
+.form-status.err{color:#8A1F11}
+.sent{background:var(--tea);border:2px solid var(--brown);border-radius:16px;padding:20px;max-width:460px}
+.sent h3{margin-bottom:6px}
+.sent p{margin:0}
+.hidden{display:none}
+.fit{font-size:.88rem;color:var(--muted);margin-top:14px}
+
+/* journey trail */
+.trail{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:34px 26px 26px;background:var(--white);border:2px solid var(--brown);border-radius:24px;box-shadow:8px 8px 0 0 var(--tea)}
+.track{position:absolute;left:34px;right:34px;top:14px;height:2px;background:var(--line)}
+.dot{position:absolute;top:8px;left:28px;width:14px;height:14px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 5px var(--white)}
+.station{display:flex;flex-direction:column;gap:8px}
+.phone{aspect-ratio:9/17;border:2px solid var(--brown);border-radius:14px;padding:8px 6px;display:flex;flex-direction:column;gap:5px;background:var(--ivory);position:relative;overflow:hidden}
+.bar{height:6px;border-radius:3px;background:var(--line)}
+.bar.w60{width:60%}.bar.w80{width:80%}.bar.w40{width:40%}
+.img{flex:1;border-radius:6px;background:linear-gradient(160deg,#EEF2DA,var(--tea))}
+.btnbar{height:12px;border-radius:4px;background:var(--brown)}
+.station span{font-size:.8rem;color:var(--muted);text-align:center}
+.flag{position:absolute;left:4px;right:4px;bottom:20px;height:22px;border-radius:5px;background:var(--vanilla);border:2px dashed #B79A2E;transform:scaleX(0);transform-origin:left}
+.callout{grid-column:1/-1;margin-top:10px;padding:12px 14px;border-radius:12px;background:var(--vanilla);font-size:.92rem;opacity:0;transform:translateY(6px)}
+.callout b{font-weight:600}
+@media (prefers-reduced-motion:no-preference){
+  .dot{animation:travel 3.2s cubic-bezier(.6,.05,.3,1) .4s forwards}
+  .flag{animation:mark .45s ease 2.3s forwards}
+  .callout{animation:rise .5s ease 2.7s forwards}
+}
+@keyframes travel{0%{left:28px}35%{left:calc(37.5% - 7px)}55%{left:calc(37.5% - 7px)}100%{left:calc(62.5% - 7px)}}
+@keyframes mark{to{transform:scaleX(1)}}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* sections */
+section{padding:96px 0}
+.intro{color:var(--muted);font-size:1.1rem;margin-bottom:40px}
+
+/* how it works: sticky scroll stepper */
+.how{background:var(--white);border-top:2px solid var(--brown);border-bottom:2px solid var(--brown)}
+.how-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:start}
+.how-head{position:sticky;top:120px}
+.progress{height:6px;border-radius:3px;background:var(--line);overflow:hidden;max-width:320px;margin-top:8px}
+.progress span{display:block;height:100%;width:0;background:var(--blue);transition:width .5s ease}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:28px;counter-reset:s}
+.steps li{counter-increment:s;border:2px solid var(--line);border-radius:22px;padding:30px;background:var(--ivory);transition:border-color .4s ease,background .4s ease,transform .4s ease,box-shadow .4s ease}
+.steps li::before{content:counter(s);display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--white);border:2px solid var(--line);font-weight:800;font-size:1.2rem;margin-bottom:16px;transition:background .4s,border-color .4s,color .4s}
+.steps li.on{border-color:var(--brown);background:var(--tea);box-shadow:6px 6px 0 0 var(--brown)}
+.steps li.on::before{background:var(--brown);border-color:var(--brown);color:var(--ivory)}
+.steps h3{font-size:1.35rem;font-weight:800}
+.steps p{color:var(--brown);opacity:.85;font-size:1.02rem;margin:8px 0 0}
+
+/* example card (key segment, coloured) */
+.example{background:var(--tea)}
+.example-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.card{background:var(--white);border:2px solid var(--brown);border-radius:24px;padding:32px;box-shadow:10px 10px 0 0 var(--brown)}
+.disclaimer{display:inline-block;font-size:.85rem;background:var(--ivory);border:1px solid var(--line);border-radius:999px;padding:6px 12px;margin-bottom:18px;color:var(--muted)}
+.card h3{font-size:1.45rem;font-weight:800;margin-bottom:6px;letter-spacing:-0.02em}
+.exposure{color:var(--muted);font-size:.95rem;margin-bottom:22px}
+.mock{border:1px solid var(--line);border-radius:12px;padding:14px;margin:6px 0 22px;background:var(--ivory);font-size:.85rem}
+.mock .row{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
+.mock .price{font-weight:800;font-size:1.05rem}
+.mock .was{color:var(--muted);text-decoration:line-through;margin-left:8px;font-weight:400}
+.mock .atc{margin-top:8px;background:var(--brown);color:var(--ivory);text-align:center;border-radius:8px;padding:10px;font-weight:600}
+.mock .gap{margin-top:8px;border:2px dashed #B79A2E;background:var(--vanilla);border-radius:8px;padding:8px 10px}
+.field{margin-bottom:14px;font-size:1rem}
+.field b{font-weight:600}
+.field p{margin:2px 0 0}
+.label{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted);font-style:italic}
+
+/* principles: coloured cards, staggered reveal */
+.principles{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.principles li{border:2px solid var(--brown);border-radius:22px;padding:30px;min-height:260px;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.principles li:nth-child(1){background:var(--vanilla)}
+.principles li:nth-child(2){background:var(--blue);color:var(--white)}
+.principles li:nth-child(3){background:var(--tea)}
+.principles h3{font-size:1.4rem;font-weight:800}
+.principles p{margin:0;font-size:1rem}
+.icon{width:44px;height:44px;border-radius:12px;background:var(--white);border:2px solid var(--brown);display:grid;place-items:center}
+.icon svg{width:22px;height:22px;stroke:var(--brown);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* reveal (one shared pattern, used on two groups only) */
+@media (prefers-reduced-motion:no-preference){
+  .reveal > *{opacity:0;transform:translateY(28px) scale(.98);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in > *{opacity:1;transform:none}
+  .reveal.in > *:nth-child(2){transition-delay:.12s}
+  .reveal.in > *:nth-child(3){transition-delay:.24s}
+  .reveal.in > *:nth-child(4){transition-delay:.36s}
+}
+
+/* faq cards */
+.faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.faq-card{border:2px solid var(--brown);border-radius:20px;background:var(--white);transition:background .25s ease,box-shadow .2s ease,transform .2s ease}
+.faq-card:hover{transform:translateY(-2px);box-shadow:5px 5px 0 0 var(--brown)}
+.faq-card[open]{background:var(--vanilla);box-shadow:5px 5px 0 0 var(--brown)}
+.faq-card summary{list-style:none;cursor:pointer;padding:24px;font-weight:600;font-size:1.1rem;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-card summary::-webkit-details-marker{display:none}
+.plus{width:32px;height:32px;border-radius:50%;border:2px solid var(--brown);position:relative;flex:none;background:var(--ivory);transition:transform .25s ease}
+.plus::before,.plus::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;background:var(--brown);transform:translate(-50%,-50%)}
+.plus::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .25s ease}
+.faq-card[open] .plus{transform:rotate(180deg)}
+.faq-card[open] .plus::after{transform:translate(-50%,-50%) rotate(0deg)}
+.faq-card p{padding:0 24px 24px;margin:0}
+
+/* about */
+.about{background:var(--white);border-top:2px solid var(--brown)}
+.about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px}
+
+/* final */
+.final{background:var(--blue);color:var(--white);border:2px solid var(--brown);border-radius:28px;padding:64px 48px;box-shadow:10px 10px 0 0 var(--brown);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.final h2{color:var(--white)}
+.final > div > p{color:#E6EEF8;font-size:1.15rem}
+.final .journey-form label{color:var(--white)}
+.final .form-note{color:#E6EEF8}
+.final .form-note b{color:var(--white)}
+.final .btn-primary{background:var(--vanilla);color:var(--brown)}
+.final .sent{color:var(--brown)}
+footer{padding:48px 0;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+@media (max-width:900px){
+  .hero-grid,.example-grid,.about-grid,.how-grid,.final{grid-template-columns:1fr;gap:36px}
+  .how-head{position:static}
+  .principles{grid-template-columns:1fr}
+  .principles li{min-height:0}
+  .faq-grid{grid-template-columns:1fr}
+  section{padding:64px 0}
+  .final{padding:40px 22px;border-radius:22px;box-shadow:6px 6px 0 0 var(--brown)}
+}
+@media (max-width:480px){
+  body{font-size:17px}
+  .wrap{padding:0 16px}
+  header .btn{display:none}
+  .trail{gap:8px;padding:26px 12px 14px;box-shadow:5px 5px 0 0 var(--tea)}
+  .track{left:22px;right:22px}
+  .card{padding:22px;box-shadow:6px 6px 0 0 var(--brown)}
+  .steps li{padding:22px}
+}
 </style>
 </head>
 <body>
-<main>
-  <span class="badge">Coming soon</span>
-  <p class="wordmark" aria-label="QoniCode"><span class="q">Q</span>oniCode</p>
-  <div class="bar" aria-hidden="true"></div>
-  <h1>Email automation that finds your customers well.</h1>
-  <p>Rule-based email flows for online stores, tested before they go live.</p>
-  <footer>&copy; 2026 QoniCode</footer>
+
+<header id="hdr">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="QoniCode home"><span class="logo-mark" aria-hidden="true"></span>QoniCode</a>
+    <a class="btn btn-primary" href="#get">I want a free Journey</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div id="get">
+        <h1>Your ads make a promise. Does your checkout keep it?</h1>
+        <p class="lede">I follow your Meta ads to checkout on a phone and show you where shoppers may hesitate, with evidence you can check in 30 seconds.</p>
+        <form class="journey-form" data-form novalidate>
+          <label for="site1">Your store's website</label>
+          <input id="site1" name="website" type="url" inputmode="url" placeholder="https://yourstore.com" required>
+          <label for="email1">Your email</label>
+          <input id="email1" name="email" type="email" autocomplete="email" placeholder="you@yourstore.com" required>
+          <button class="btn btn-primary" type="submit">I want a free Journey</button>
+          <p class="form-note"><b>Report in your inbox within 3 working days, guaranteed.</b> I'll only use your email to send it.</p>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="sent hidden" data-sent><h3>Got it, thank you.</h3><p>Your Journey will reach your inbox within 3 working days.</p></div>
+        <p class="fit">For Shopify stores running Meta ads in Australia, the UK or the US.</p>
+      </div>
+
+      <div class="trail" role="img" aria-label="A shopper's path from ad to landing page to product page to checkout, with a finding marked on the product page">
+        <div class="track"></div>
+        <div class="dot"></div>
+        <div class="station"><div class="phone"><div class="bar w60"></div><div class="img"></div><div class="bar w80"></div><div class="btnbar"></div></div><span>Ad</span></div>
+        <div class="station"><div class="phone"><div class="bar w40"></div><div class="img"></div><div class="bar"></div><div class="bar w60"></div></div><span>Landing</span></div>
+        <div class="station"><div class="phone"><div class="bar w60"></div><div class="img"></div><div class="bar w40"></div><div class="flag"></div><div class="btnbar"></div></div><span>Product</span></div>
+        <div class="station"><div class="phone"><div class="bar w80"></div><div class="bar"></div><div class="bar w60"></div><div class="bar w40"></div><div class="btnbar"></div></div><span>Checkout</span></div>
+        <div class="callout"><b>Found on the product page:</b> nothing near Add to cart mentions shipping.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap how-grid">
+      <div class="how-head">
+        <h2>How the free Journey works</h2>
+        <p class="intro">Three steps. It takes you about two minutes to read the result.</p>
+        <div class="progress" aria-hidden="true"><span data-progress></span></div>
+      </div>
+      <ol class="steps" data-steps>
+        <li><h3>I pick your ads</h3><p>Up to three of your active Meta ads, chosen from the public Ad Library.</p></li>
+        <li><h3>I follow them on a phone</h3><p>As a new shopper in your market, from the ad to the first checkout screen. I never place an order.</p></li>
+        <li><h3>You get three findings</h3><p>A short PDF within 3 working days. Each finding has a screenshot, the exact page, and a 30-second check you can do yourself.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="example" id="example">
+    <div class="wrap example-grid">
+      <div>
+        <h2>What a finding looks like</h2>
+        <p>Every finding follows the same shape, so you can check it quickly and decide if it's worth your time.</p>
+        <p>I don't tell you how to redesign your store. I show you what a shopper sees, why it may matter, and how to see it in your own data.</p>
+      </div>
+      <article class="card" aria-label="Illustrative example finding">
+        <span class="disclaimer">Illustrative example, not a client finding</span>
+        <h3>Free shipping applies, but the buy area doesn't say so</h3>
+        <p class="exposure">5 of your active ads send visitors into this path.</p>
+        <div class="field"><b>What we saw</b><p>The product costs $96 and the store ships free over $75. Between the price and Add to cart, shipping isn't mentioned.</p></div>
+        <div class="mock" aria-hidden="true">
+          <div class="row"><span class="price">$96.00 <span class="was">$120.00</span></span><span>20% off</span></div>
+          <div class="gap">No mention of free shipping here</div>
+          <div class="atc">Add to cart</div>
+        </div>
+        <div class="field"><b>Why it may matter</b><p>In Baymard Institute's testing, 64% of shoppers looked for shipping costs on the product page before adding to cart (<a class="link" href="https://baymard.com/research-articles/show-shipping-costs-on-product-pages" target="_blank" rel="noopener">2017</a>).</p></div>
+        <div class="field"><b>Quick check</b><p>Open the product page on your phone and look for shipping between the price and Add to cart.</p></div>
+        <div class="field"><b>To see if it matters for you</b><p>In GA4, compare add-to-cart rates for products above and below your free-shipping threshold.</p></div>
+        <p class="label">Observation: verified with a screenshot. Impact: research-backed estimate, not measured on your store.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="wrap">
+      <h2>How I work</h2>
+      <ul class="principles reveal" data-reveal>
+        <li>
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 13l3 3 5-6"/></svg></span>
+          <div><h3>Every finding can be checked</h3><p>A screenshot, the exact page, and the date I saw it. If you can't see it yourself in 30 seconds, it doesn't go in the report.</p></div>
+        </li>
+        <li>
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15l3-4 3 2 4-6"/></svg></span>
+          <div><h3>No guesses about your revenue</h3><p>Without your data I don't put dollar figures on anything. If a finding looks worth chasing, I can check it against your GA4 data as a paid next step, only if you ask.</p></div>
+        </li>
+        <li>
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg></span>
+          <div><h3>Research only where it applies</h3><p>When I cite a study, I name the source and the year, and say what it can and can't tell us about your store.</p></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <h2>Questions founders ask</h2>
+      <div class="faq-grid">
+        <details class="faq-card"><summary>Is the Journey really free?<span class="plus" aria-hidden="true"></span></summary><p>Yes. It's how I show my work. There's no contract and no call.</p></details>
+        <details class="faq-card"><summary>Do you need access to my store?<span class="plus" aria-hidden="true"></span></summary><p>No. I only use what any shopper can see: your ads in the Meta Ad Library and your public pages.</p></details>
+        <details class="faq-card"><summary>Which markets do you cover?<span class="plus" aria-hidden="true"></span></summary><p>Australia, the UK and the US. I view your store as a local shopper would, with local prices and shipping.</p></details>
+        <details class="faq-card"><summary>How do we talk?<span class="plus" aria-hidden="true"></span></summary><p>By email. You don't need to book a call.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="wrap about-grid">
+      <h2>Who's behind QoniCode</h2>
+      <div>
+        <p>I'm Qonita Syahirah. My background is in finance, business and marketing, and I work remotely.</p>
+        <p>I look at stores the way a careful shopper would, and I write down only what I can show you.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="final">
+        <div>
+          <h2>See your store the way a new shopper does</h2>
+          <p>Send me your store link. I'll pick three of your current ads and follow them to checkout.</p>
+        </div>
+        <div>
+          <form class="journey-form" data-form novalidate>
+            <label for="site2">Your store's website</label>
+            <input id="site2" name="website" type="url" inputmode="url" placeholder="https://yourstore.com" required>
+            <label for="email2">Your email</label>
+            <input id="email2" name="email" type="email" autocomplete="email" placeholder="you@yourstore.com" required>
+            <button class="btn btn-primary" type="submit">I want a free Journey</button>
+            <p class="form-note"><b>Report in your inbox within 3 working days, guaranteed.</b></p>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="sent hidden" data-sent><h3>Got it, thank you.</h3><p>Your Journey will reach your inbox within 3 working days.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 QoniCode</span>
+    <a class="link" href="mailto:qonita@qonicode.tech">qonita@qonicode.tech</a>
+  </div>
+</footer>
+
+<script>
+/* Form: sends to your email via Web3Forms (free). Replace the key below with yours. */
+const WEB3FORMS_KEY = "PASTE-YOUR-ACCESS-KEY-HERE";
+
+document.querySelectorAll('[data-form]').forEach(form => {
+  const sent = form.parentElement.querySelector('[data-sent]');
+  const status = form.querySelector('.form-status');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    status.className = 'form-status';
+    let site = form.website.value.trim();
+    if (site && !/^https?:\/\//i.test(site)) { site = 'https://' + site; form.website.value = site; }
+    if (!form.website.checkValidity()) { status.textContent = 'Enter your store’s web address, for example yourstore.com.'; status.classList.add('err'); form.website.focus(); return; }
+    if (!form.email.checkValidity()) { status.textContent = 'Enter an email address I can send the report to.'; status.classList.add('err'); form.email.focus(); return; }
+    const btn = form.querySelector('button'); btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ access_key: WEB3FORMS_KEY, subject: 'New free Journey request', from_name: 'qonicode.tech', website: site, email: form.email.value.trim() })
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error();
+      form.classList.add('hidden'); sent.classList.remove('hidden');
+    } catch {
+      status.innerHTML = 'That didn’t send. Email me at <a href="mailto:qonita@qonicode.tech">qonita@qonicode.tech</a> instead.';
+      status.classList.add('err');
+      btn.disabled = false; btn.textContent = 'I want a free Journey';
+    }
+  });
+});
+
+/* Header border on scroll */
+const hdr = document.getElementById('hdr');
+addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 10), { passive: true });
+
+/* Steps light up as you scroll; progress bar follows */
+const steps = [...document.querySelectorAll('[data-steps] li')];
+const bar = document.querySelector('[data-progress]');
+const stepIO = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting) en.target.classList.add('on'); });
+  bar.style.width = (steps.filter(s => s.classList.contains('on')).length / steps.length * 100) + '%';
+}, { rootMargin: '0px 0px -45% 0px' });
+steps.forEach(s => stepIO.observe(s));
+
+/* Principle cards reveal once */
+const revIO = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); revIO.unobserve(en.target); } });
+}, { threshold: .25 });
+document.querySelectorAll('[data-reveal]').forEach(el => revIO.observe(el));
+</script>
 </body>
 </html>

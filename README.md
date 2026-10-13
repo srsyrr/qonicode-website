@@ -27,3 +27,13 @@ Static one-page "coming soon" site. No build step: `index.html` is the whole sit
 
 Hosted on Cloudflare. Domain: `qonicode.tech`.
 Best setup: connect this repo to Cloudflare so every push to `main` redeploys automatically.
+
+## Draft site v2 (branch `site-v2`)
+
+Full one-page site (hero, steps, principles, FAQ, free Journey request form). Not merged to `main` yet.
+
+Before merging to `main` (auto-deploys to qonicode.tech):
+
+1. Replace `WEB3FORMS_KEY` in `index.html` with the real Web3Forms access key. Forms do not work until then.
+2. Add the logo (still missing).
+3. Check the copy: v1 positioning was "email automation"; v2 is the free Ad-to-Checkout Journey.
