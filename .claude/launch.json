@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "site",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5179", "--directory", "D:/Claude/Email Marketing/TBH/public"],
+      "port": 5179
+    }
+  ]
+}
