@@ -1,5 +1,6 @@
 /* Site chrome: floating nav, Let's Talk buttons, carousels, newsletter. */
 import { openDialog } from './dialog.js';
+import { mountTurnstile } from './turnstile.js';
 import './desk.js';
 
 /* Let's Talk buttons anywhere on the page */
@@ -115,16 +116,27 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
 const news = document.querySelector('[data-newsletter]');
 if (news) {
   const status = news.querySelector('[data-news-status]');
+  // Load the spam check only when someone starts typing an email.
+  let captcha;
+  news.addEventListener('focusin', () => { if (!captcha) captcha = mountTurnstile(news.querySelector('[data-turnstile]')); });
   news.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!news.reportValidity()) return;
     const email = news.email.value.trim();
+    const check = await (captcha || (captcha = mountTurnstile(news.querySelector('[data-turnstile]'))));
+    if (check.enabled && !check.token()) {
+      status.textContent = 'Checking…';
+      if (!(await check.waitToken())) {
+        status.textContent = 'Please complete the security check.';
+        return;
+      }
+    }
     status.textContent = 'Subscribing…';
     try {
       const res = await fetch('/api/request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ kind: 'newsletter', email, company: news.company.value }),
+        body: JSON.stringify({ kind: 'newsletter', email, company: news.company.value, turnstile: check.token() }),
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok || !body.ok) throw new Error(body.error || res.status);
@@ -132,6 +144,8 @@ if (news) {
       status.textContent = 'Thanks! You’re on the list.';
     } catch (err) {
       status.textContent = 'Couldn’t subscribe right now — please try again later.';
+    } finally {
+      check.reset();
     }
   });
 }

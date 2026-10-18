@@ -46,6 +46,9 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .skip-link:focus { top: 8px; }
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+/* Turnstile only shows something when Cloudflare needs the visitor to click */
+.turnstile-slot:empty { display: none; }
+.turnstile-slot { margin-top: 10px; }
 
 .page-width { width: 100%; max-width: calc(var(--page-width) + var(--gutter) * 2); margin: 0 auto; padding: 0 var(--gutter); }
 .section { padding: var(--section-gap) 0; }

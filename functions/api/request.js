@@ -3,7 +3,10 @@
    Environment variables (Pages → Settings → Variables and Secrets):
      RESEND_API_KEY  (secret)  — API key from resend.com
      MAIL_FROM       — verified sender, e.g. "Qonicode Desk <desk@qonicode.tech>"
-     MAIL_TO         — optional, defaults to qonita@qonicode.tech */
+     MAIL_TO         — optional, defaults to qonita@qonicode.tech
+     TURNSTILE_SECRET (secret) — optional; when set, every submission must carry a valid Turnstile token
+     ALLOWED_ORIGINS — optional, comma-separated (e.g. "https://qonicode.tech,https://www.qonicode.tech");
+                       when unset, only requests from the site's own origin are accepted */
 
 const DEFAULT_TO = 'qonita@qonicode.tech';
 const MAX_BODY = 8 * 1024 * 1024; // 8 MB of JSON
@@ -24,15 +27,52 @@ function toBase64(text) {
   return btoa(bin);
 }
 
+/* Only accept form posts made from our own pages (stops other sites from using this endpoint). */
+function originAllowed(request, env) {
+  const origin = request.headers.get('Origin');
+  if (!origin) return false;
+  const allowed = String(env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean);
+  if (allowed.length) return allowed.includes(origin);
+  return origin === new URL(request.url).origin;
+}
+
+/* Cloudflare Turnstile: required only once TURNSTILE_SECRET is configured. */
+async function turnstileOk(token, request, env) {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (!token) return false;
+  const form = new FormData();
+  form.append('secret', env.TURNSTILE_SECRET);
+  form.append('response', String(token).slice(0, 2048));
+  const ip = request.headers.get('CF-Connecting-IP');
+  if (ip) form.append('remoteip', ip);
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form });
+    const out = await res.json();
+    return out.success === true;
+  } catch (err) {
+    console.error('Turnstile verification failed', err);
+    return false;
+  }
+}
+
 export async function onRequestPost({ request, env }) {
+  if (!originAllowed(request, env)) return json({ ok: false, error: 'Forbidden.' }, 403);
+  if (!String(request.headers.get('Content-Type') || '').includes('application/json')) {
+    return json({ ok: false, error: 'Invalid request.' }, 415);
+  }
   const length = Number(request.headers.get('content-length') || 0);
   if (length > MAX_BODY) return json({ ok: false, error: 'Layout image is too large.' }, 413);
 
   let data;
   try { data = await request.json(); } catch { return json({ ok: false, error: 'Invalid request.' }, 400); }
+  if (!data || typeof data !== 'object') return json({ ok: false, error: 'Invalid request.' }, 400);
 
   // Honeypot: bots fill the hidden "company" field. Pretend it worked.
   if (clean(data.company, 200)) return json({ ok: true });
+
+  if (!(await turnstileOk(data.turnstile, request, env))) {
+    return json({ ok: false, error: 'Security check failed. Please try again.' }, 403);
+  }
 
   // request: layout from the playground (PNG attached) · talk: Let's Talk form · newsletter: footer signup
   const kind = ['request', 'talk', 'newsletter'].includes(data.kind) ? data.kind : 'request';

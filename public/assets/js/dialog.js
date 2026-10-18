@@ -1,6 +1,8 @@
 /* "Let's Talk" and "Request" share one neobrutalist dialog.
    request: also renders the playground to a PNG and attaches it. */
 
+import { mountTurnstile } from './turnstile.js';
+
 const MAIL_TO = 'qonita@qonicode.tech';
 const ENDPOINT = '/api/request';
 
@@ -78,6 +80,8 @@ export async function openDialog(mode, opts = {}) {
   ui.submit.disabled = mode === 'request';
   ui.preview.removeAttribute('src');
   ui.dialog.showModal();
+  // Spam check loads the first time the dialog is open (it needs to be visible to run).
+  if (!ui.captcha) ui.captcha = mountTurnstile(ui.dialog.querySelector('[data-turnstile]'));
 
   if (mode === 'request') {
     ui.attachText.textContent = 'Rendering your layout…';
@@ -106,6 +110,15 @@ async function send() {
     notes: String(fd.get('notes')).trim(),
     company: fd.get('company'),
   };
+  const captcha = await (ui.captcha || mountTurnstile(null));
+  if (captcha.enabled && !captcha.token()) {
+    setStatus('Checking…');
+    if (!(await captcha.waitToken())) {
+      setStatus('Please complete the security check above.', 'error');
+      return;
+    }
+  }
+  payload.turnstile = captcha.token();
   if (state.mode === 'request') {
     payload.image = state.dataUrl;
     payload.layout = state.layout();
@@ -132,5 +145,7 @@ async function send() {
     } else {
       ui.status.innerHTML = `Couldn’t send automatically. Please email <a href="${mailto}">${MAIL_TO}</a>.`;
     }
+  } finally {
+    captcha.reset(); // tokens are single-use
   }
 }
