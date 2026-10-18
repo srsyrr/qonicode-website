@@ -166,11 +166,13 @@ h1, h2, h3, p, figure, ul { margin: 0; }
    ========================================================================== */
 /* The section fills the screen under the nav: controls on the left, the desk on the right.
    If the desk needs more room than that, it scrolls inside. */
-.playground { height: calc(100svh - var(--nav-space)); min-height: 520px; padding: 6px 0 18px; }
+/* Full screen tall, with the nav's height kept free at the top so the nav never covers it.
+   The negative scroll-margin cancels html's scroll-padding, so #playground lands with the section at the very top. */
+.playground { height: 100svh; min-height: 600px; padding: calc(var(--nav-space) + 8px) 0 18px; scroll-margin-top: calc(-1 * var(--nav-space)); }
 .playground__grid { display: grid; grid-template-columns: minmax(250px, 300px) 1fr; gap: clamp(20px, 3vw, 36px); height: 100%; }
 .playground__side { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding-top: 6px; }
 /* sized to fit the side column (~9em wide at 125% stretch) */
-.playground__title { width: 100%; padding-bottom: 10px; border-bottom: 6px double var(--c-ink); font-size: clamp(26px, 2.5vw, 33px); }
+.playground__title { width: 100%; font-size: clamp(26px, 2.5vw, 33px); }
 @media (max-width: 899px) { .playground__title { font-size: clamp(26px, 7vw, 44px); } }
 .desk-hint { color: var(--c-muted); font-size: 14px; line-height: 1.5; }
 .playground__pages { width: 100%; }
