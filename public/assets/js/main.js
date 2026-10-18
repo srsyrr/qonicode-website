@@ -7,7 +7,23 @@ document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-open-talk]');
   if (!btn) return;
   e.preventDefault();
-  openDialog('talk');
+  openDialog('talk', { topic: btn.dataset.topic });
+});
+
+/* Testimonials: arrows scroll by one card */
+document.querySelectorAll('[data-scroller]').forEach((root) => {
+  const track = root.querySelector('[data-scroll-track]');
+  root.querySelectorAll('[data-scroll]').forEach((btn) => btn.addEventListener('click', () => {
+    const card = track.firstElementChild;
+    const step = card.offsetWidth + parseFloat(getComputedStyle(track).columnGap || 0);
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    const atStart = track.scrollLeft <= 4;
+    const dir = Number(btn.dataset.scroll);
+    // wrap around at either end
+    if (dir > 0 && atEnd) track.scrollTo({ left: 0, behavior: 'smooth' });
+    else if (dir < 0 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+    else track.scrollBy({ left: dir * step, behavior: 'smooth' });
+  }));
 });
 
 /* Footer links that open the playground on a given page type */

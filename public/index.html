@@ -6,10 +6,10 @@
   <title>Qonicode — Custom Shopify themes</title>
   <meta name="description" content="Custom Shopify themes, designed around your layout. Sketch your store in the playground and send it to us.">
   <meta name="theme-color" content="#F5EFE3">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Ctext x='32' y='45' font-family='Arial Black,Arial' font-weight='900' font-size='38' text-anchor='middle' fill='%23B4F23E'%3EQ%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Ctext x='32' y='45' font-family='Arial Black,Arial' font-weight='900' font-size='38' text-anchor='middle' fill='%232FD67B'%3EQ%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Caveat:wght@500&display=swap" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" crossorigin="anonymous">
   <link rel="stylesheet" href="assets/css/style.css">
   <script type="module" src="assets/js/main.js"></script>
 </head>
@@ -22,13 +22,13 @@
       <a class="seg__item seg__logo" href="#top" aria-label="Qonicode — back to top">
         <span class="logo-mark" aria-hidden="true">Q</span><span class="seg__text">qonicode</span>
       </a>
+      <a class="seg__item" href="#services" data-spy="services">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span class="seg__text">Services</span>
+      </a>
       <a class="seg__item" href="#playground" data-spy="playground">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><circle cx="17" cy="7" r="4"/><path d="M7 14l4 7H3Z"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
         <span class="seg__text">Playground</span>
-      </a>
-      <a class="seg__item" href="#skills" data-spy="skills">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 3 12l5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>
-        <span class="seg__text">Skills</span>
       </a>
       <a class="seg__item" href="#work" data-spy="work">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
@@ -64,17 +64,115 @@
 
         <div class="hero__meta">
           <p class="hero__sub">Custom Shopify themes <em>built around your layout</em></p>
-          <div class="hero__rating">
+          <a class="hero__rating" href="#testimonials" aria-label="One service, done properly — read what clients say">
             <div class="avatars" aria-hidden="true">
               <span style="background:var(--c-pink)">D</span>
               <span style="background:var(--c-green)">B</span>
               <span style="background:var(--c-yellow)">C</span>
               <span class="avatars__plus">+</span>
             </div>
-            <div><strong>One service</strong><small>done properly</small></div>
-          </div>
+            <div><strong>One service</strong><small>done properly ↓</small></div>
+          </a>
           <span class="hero__arrow" aria-hidden="true"><svg viewBox="0 0 220 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 40c20-30 52-30 44 0s-30 12-12-6 50-24 54 8-26 22-14 0 46-30 58-6-14 26-6 8 40-30 80-12"/><path d="M196 18l16 14-20 8"/></svg></span>
-          <button type="button" class="btn btn--lime hero__cta" data-open-talk>Let's Talk</button>
+          <button type="button" class="btn btn--accent hero__cta" data-open-talk>Let's Talk</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Our services ============ -->
+    <section class="section services" id="services">
+      <div class="page-width">
+        <h2 class="display display--italic h-section">Our services</h2>
+        <div class="svc-grid">
+          <article class="svc" style="--svc:#8ED8FF">
+            <span class="svc__doodle svc__doodle--sun" aria-hidden="true"></span>
+            <div class="svc__sticker" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><path d="M24 36h72M24 60h72M24 84h72"/><circle cx="44" cy="36" r="9" class="f1"/><circle cx="78" cy="60" r="9" class="f2"/><circle cx="54" cy="84" r="9" class="f3"/></svg>
+            </div>
+            <div class="svc__body">
+              <span class="pill">Customization</span>
+              <h3 class="svc__title">Small theme customization</h3>
+              <div class="svc__foot">
+                <div><small>Price</small><strong>US$50–150</strong></div>
+                <button type="button" class="svc__btn" data-open-talk data-topic="Small theme customization" aria-label="Ask about small theme customization"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="svc" style="--svc:#FFB3E6">
+            <span class="svc__doodle svc__doodle--sun" aria-hidden="true"></span>
+            <div class="svc__sticker" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><rect x="22" y="18" width="76" height="22" rx="5"/><rect x="22" y="48" width="76" height="26" rx="5" class="f2"/><rect x="22" y="82" width="76" height="20" rx="5"/><path d="M60 54v14M53 61h14"/></svg>
+            </div>
+            <div class="svc__body">
+              <span class="pill">Section</span>
+              <h3 class="svc__title">Satu custom section</h3>
+              <div class="svc__foot">
+                <div><small>Price</small><strong>US$75–200</strong></div>
+                <button type="button" class="svc__btn" data-open-talk data-topic="Satu custom section" aria-label="Ask about one custom section"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="svc" style="--svc:#FFB27A">
+            <span class="svc__doodle svc__doodle--sun" aria-hidden="true"></span>
+            <div class="svc__sticker" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><rect x="16" y="20" width="88" height="80" rx="8"/><path d="M16 34h88"/><circle cx="25" cy="27" r="1.5" class="f0"/><circle cx="32" cy="27" r="1.5" class="f0"/><rect x="26" y="44" width="68" height="26" rx="4" class="f1"/><path d="M30 80h36"/><rect x="62" y="84" width="32" height="9" rx="4.5" class="f3"/></svg>
+            </div>
+            <div class="svc__body">
+              <span class="pill">Landing page</span>
+              <h3 class="svc__title">Landing page sederhana</h3>
+              <div class="svc__foot">
+                <div><small>Price</small><strong>US$150–400</strong></div>
+                <button type="button" class="svc__btn" data-open-talk data-topic="Landing page sederhana" aria-label="Ask about a simple landing page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="svc" style="--svc:#D9CCFF">
+            <span class="svc__doodle svc__doodle--sun" aria-hidden="true"></span>
+            <div class="svc__sticker" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><path d="M30 42h60l-5 58H35Z" class="f2"/><path d="M46 42v-6a14 14 0 0 1 28 0v6"/><path d="M60 58l4 8.5 9 1-6.8 6.2 1.9 9-8.1-4.7-8.1 4.7 1.9-9-6.8-6.2 9-1Z" class="f1"/></svg>
+            </div>
+            <div class="svc__body">
+              <span class="pill">PDP</span>
+              <h3 class="svc__title">PDP redesign / improvement</h3>
+              <div class="svc__foot">
+                <div><small>Price</small><strong>US$150–400</strong></div>
+                <button type="button" class="svc__btn" data-open-talk data-topic="PDP redesign / improvement" aria-label="Ask about a PDP redesign"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="svc" style="--svc:#A8EFC6">
+            <span class="svc__doodle svc__doodle--sun" aria-hidden="true"></span>
+            <div class="svc__sticker" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><rect x="26" y="16" width="68" height="90" rx="8"/><rect x="44" y="10" width="32" height="12" rx="4" class="f3"/><path d="M36 44l6 6 10-11M36 68l6 6 10-11"/><path d="M60 46h24M60 70h24M36 92h48"/></svg>
+            </div>
+            <div class="svc__body">
+              <span class="pill">QA</span>
+              <h3 class="svc__title">Storefront QA terbatas</h3>
+              <div class="svc__foot">
+                <div><small>Price</small><strong>US$50–150</strong></div>
+                <button type="button" class="svc__btn" data-open-talk data-topic="Storefront QA terbatas" aria-label="Ask about storefront QA"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="svc" style="--svc:#FFF1A1;--doodle:var(--c-orange)">
+            <span class="svc__doodle svc__doodle--sun" aria-hidden="true"></span>
+            <div class="svc__sticker" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><path d="M20 98h70"/><rect x="26" y="66" width="12" height="32" rx="2" class="f1"/><rect x="44" y="50" width="12" height="48" rx="2" class="f2"/><rect x="62" y="74" width="12" height="24" rx="2" class="f3"/><circle cx="78" cy="40" r="20" class="f0"/><path d="M92 54l14 14"/></svg>
+            </div>
+            <div class="svc__body">
+              <span class="pill">Audit</span>
+              <h3 class="svc__title">UX/CRO audit dengan bukti dan prioritas</h3>
+              <div class="svc__foot">
+                <div><small>Price</small><strong>US$200–400</strong></div>
+                <button type="button" class="svc__btn" data-open-talk data-topic="UX/CRO audit dengan bukti dan prioritas" aria-label="Ask about a UX/CRO audit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></button>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -111,7 +209,7 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3.5c2 0 3.2 1 4.5 3l1 1.6c1.3 2 2.5 3.4 4.5 3.4H20m0 0-3-3m3 3-3 3M4 17h3.5c1.4 0 2.4-.6 3.3-1.6M20 7h-2.5c-1.4 0-2.4.6-3.3 1.6M20 7l-3-3m3 3-3 3"/></svg>
               Shuffle
             </button>
-            <button type="button" class="btn btn--lime" data-action="request">
+            <button type="button" class="btn btn--accent" data-action="request">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5 16-3.5-6.5L4 12Zm7.5 1.5L20 4"/></svg>
               Request
             </button>
@@ -134,28 +232,6 @@
           </div>
         </div>
         <p class="visually-hidden" aria-live="polite" data-live></p>
-      </div>
-    </section>
-
-    <!-- ============ Skills ============ -->
-    <section class="section section--rule" id="skills">
-      <div class="page-width">
-        <h2 class="display display--italic h-section">Skills</h2>
-        <div class="skills">
-          <table class="skills__table">
-            <thead><tr><th scope="col">Skill</th><th scope="col">Target awal</th></tr></thead>
-            <tbody>
-              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-orange)"></span>HTML</th><td>Bisa menulis dan membaca kode</td></tr>
-              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-pink)"></span>CSS</th><td>Cukup kuat untuk mereplikasi desain kompleks</td></tr>
-              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-yellow)"></span>JavaScript</th><td>Bisa memahami dan memodifikasi interaksi umum</td></tr>
-              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-green)"></span>Liquid</th><td>Bisa membaca, menulis, dan debugging template</td></tr>
-              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-purple)"></span>Theme architecture</th><td>Paham alur file dan dependensinya</td></tr>
-              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-lime)"></span>JSON schema</th><td>Bisa membuat section dengan pengaturan Theme Editor</td></tr>
-              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-orange)"></span>Git dan CLI</th><td>Bisa preview, membandingkan perubahan, dan memulihkan versi</td></tr>
-              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-pink)"></span>Shopify commerce</th><td>Bisa menguji alur produk hingga cart</td></tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </section>
 
@@ -211,7 +287,7 @@
             <div class="work-slide__media" style="--media:var(--c-green)">
               <div class="mock mock--a"><b>New in</b><span class="mock__img" style="--mi:var(--c-orange)"></span><span class="mock__star">✦</span></div>
               <div class="mock mock--b"><b class="mock__big">Rp 349K</b><i></i><i></i><span class="mock__btn">Add to cart</span></div>
-              <div class="mock mock--c"><small>Hello, shopper!</small><b>CATEGORY</b><span class="mock__band" style="--mb:var(--c-lime)">Dresses <em>128</em></span></div>
+              <div class="mock mock--c"><small>Hello, shopper!</small><b>CATEGORY</b><span class="mock__band" style="--mb:var(--c-accent)">Dresses <em>128</em></span></div>
             </div>
           </article>
 
@@ -261,6 +337,117 @@
       </div>
     </section>
 
+    <!-- ============ Testimonials ============ -->
+    <section class="section testimonials" id="testimonials">
+      <div class="page-width" data-scroller>
+        <div class="section-head">
+          <h2 class="display display--italic h-section">What clients say</h2>
+          <div class="carousel-nav">
+            <button type="button" class="btn btn--icon" data-scroll="-1" aria-label="Previous testimonials"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m0 0 6-6m-6 6 6 6"/></svg></button>
+            <button type="button" class="btn btn--icon" data-scroll="1" aria-label="Next testimonials"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg></button>
+          </div>
+        </div>
+        <div class="tst-track" data-scroll-track tabindex="0" aria-label="Client testimonials">
+          <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
+          <article class="tst" style="--tc:#A8EFC6">
+            <div class="tst__head">
+              <h3 class="tst__name">Client name</h3>
+              <span class="tst__star" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+            <span class="pill">Fashion</span>
+            <div class="tst__art">
+              <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
+              <blockquote class="tst__quote">“Replace this with a real quote from a past client — one to three sentences about the result.”</blockquote>
+            </div>
+            <div class="tst__foot">
+              <div><small>Project</small><strong>PDP redesign</strong></div>
+              <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+          </article>
+          <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
+          <article class="tst" style="--tc:#8ED8FF">
+            <div class="tst__head">
+              <h3 class="tst__name">Client name</h3>
+              <span class="tst__star" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+            <span class="pill">Beauty</span>
+            <div class="tst__art">
+              <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
+              <blockquote class="tst__quote">“Replace this with a real quote from a past client — one to three sentences about the result.”</blockquote>
+            </div>
+            <div class="tst__foot">
+              <div><small>Project</small><strong>Custom section</strong></div>
+              <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+          </article>
+          <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
+          <article class="tst" style="--tc:#FFB27A">
+            <div class="tst__head">
+              <h3 class="tst__name">Client name</h3>
+              <span class="tst__star" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+            <span class="pill">Coffee</span>
+            <div class="tst__art">
+              <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
+              <blockquote class="tst__quote">“Replace this with a real quote from a past client — one to three sentences about the result.”</blockquote>
+            </div>
+            <div class="tst__foot">
+              <div><small>Project</small><strong>Landing page</strong></div>
+              <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+          </article>
+          <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
+          <article class="tst" style="--tc:#FFB3E6">
+            <div class="tst__head">
+              <h3 class="tst__name">Client name</h3>
+              <span class="tst__star" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+            <span class="pill">Kids</span>
+            <div class="tst__art">
+              <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
+              <blockquote class="tst__quote">“Replace this with a real quote from a past client — one to three sentences about the result.”</blockquote>
+            </div>
+            <div class="tst__foot">
+              <div><small>Project</small><strong>Theme customization</strong></div>
+              <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+          </article>
+          <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
+          <article class="tst" style="--tc:#D9CCFF">
+            <div class="tst__head">
+              <h3 class="tst__name">Client name</h3>
+              <span class="tst__star" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+            <span class="pill">Home decor</span>
+            <div class="tst__art">
+              <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
+              <blockquote class="tst__quote">“Replace this with a real quote from a past client — one to three sentences about the result.”</blockquote>
+            </div>
+            <div class="tst__foot">
+              <div><small>Project</small><strong>UX/CRO audit</strong></div>
+              <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+          </article>
+          <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
+          <article class="tst" style="--tc:#FFF1A1">
+            <div class="tst__head">
+              <h3 class="tst__name">Client name</h3>
+              <span class="tst__star" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+            <span class="pill">Food</span>
+            <div class="tst__art">
+              <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
+              <blockquote class="tst__quote">“Replace this with a real quote from a past client — one to three sentences about the result.”</blockquote>
+            </div>
+            <div class="tst__foot">
+              <div><small>Project</small><strong>Storefront QA</strong></div>
+              <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ Talk CTA ============ -->
     <section class="section talk" id="contact">
       <div class="page-width">
@@ -291,7 +478,8 @@
 
         <ul class="footer-links">
           <li><a href="#playground">Playground</a></li>
-          <li><a href="#skills">Skills</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#work">Work gallery</a></li>
           <li><a href="#contact" data-open-talk>Let's Talk</a></li>
         </ul>
@@ -316,7 +504,7 @@
       </div>
 
       <div class="site-footer__bottom">
-        <p class="footer-mini"><a href="#playground">Playground</a>. <a href="#skills">Skills</a>. <a href="#work">Work</a></p>
+        <p class="footer-mini"><a href="#playground">Playground</a>. <a href="#services">Services</a>. <a href="#work">Work</a></p>
         <span class="chevrons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg></span>
         <p><b>©<span data-year></span> Qonicode.</b> <span class="muted-light">All rights reserved</span></p>
       </div>
@@ -350,7 +538,7 @@
       <p class="nb-dialog__status" data-dialog-status role="status"></p>
       <footer class="nb-dialog__footer">
         <button type="button" class="btn" data-close>Cancel</button>
-        <button type="submit" class="btn btn--lime" data-dialog-submit>Send</button>
+        <button type="submit" class="btn btn--accent" data-dialog-submit>Send</button>
       </footer>
     </form>
   </dialog>

@@ -60,5 +60,10 @@ Open http://localhost:5179. The email endpoint only runs on Cloudflare (or with 
 
 ## Placeholders to replace
 
+- **Testimonials** (`#testimonials`): all six cards are placeholders (“Client name”, sample store type and project).
+  Replace them with real quotes before going live, or remove the cards you don't have yet.
 - Latest work: the four projects and their mock screens are examples.
 - About: the striped box is a photo placeholder.
+
+Service prices live in the `#services` cards in `index.html`. Each card's bag button opens Let's Talk with the
+service name already in the message.

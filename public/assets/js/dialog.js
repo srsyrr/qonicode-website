@@ -66,6 +66,13 @@ export async function openDialog(mode, opts = {}) {
   ui.notesLabel.textContent = copy.notes;
   ui.submit.textContent = copy.submit;
   ui.form.querySelectorAll('input, textarea').forEach((el) => { el.disabled = false; });
+  // Service cards pass their name, so the message starts with what the visitor asked about.
+  const notes = ui.form.elements.notes;
+  const untouched = !notes.value || notes.dataset.auto === notes.value;
+  if (untouched) {
+    notes.value = opts.topic ? `I'm interested in: ${opts.topic}\n` : '';
+    notes.dataset.auto = notes.value;
+  }
   setStatus('');
   ui.attach.hidden = mode !== 'request';
   ui.submit.disabled = mode === 'request';
