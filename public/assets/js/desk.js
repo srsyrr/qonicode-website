@@ -531,7 +531,7 @@ class Playground {
       ctx.fillRect(0, sh, out.width, cap);
       ctx.textBaseline = 'middle';
       const st = this.pageState;
-      ctx.fillStyle = '#2FD67B';
+      ctx.fillStyle = '#8C9EFF';
       ctx.font = `800 ${Math.round(cap * 0.3)}px Archivo, sans-serif`;
       const title = st.name === 'Shuffled' ? 'shuffled layout' : st.name;
       ctx.fillText(`${PAGES[this.page].label} — ${title}${st.edited ? ' (edited)' : ''}`.toUpperCase(), cap * 0.4, sh + cap / 2);
