@@ -1,3 +1,13 @@
-name = "qonicode"
-pages_build_output_dir = "public"
+# Cloudflare Workers: static site from public/ + a small Worker for the /api/* form endpoints.
+# `name` must match the Worker's name in the Cloudflare dashboard.
+name = "qonicode-website"
+main = "src/worker.js"
 compatibility_date = "2026-10-01"
+# Keep the plain-text variables set in the dashboard (MAIL_FROM, TURNSTILE_SITE_KEY, …) on every deploy.
+keep_vars = true
+
+# Files in public/ are served as-is (with public/_headers applied); requests that don't match a file
+# (like /api/request) go to the Worker.
+[assets]
+directory = "./public"
+binding = "ASSETS"

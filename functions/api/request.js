@@ -1,6 +1,6 @@
-/* Cloudflare Pages Function: POST /api/request
+/* API handler (see src/worker.js): POST /api/request
    Emails the visitor's layout PNG to the studio through the Resend API.
-   Environment variables (Pages → Settings → Variables and Secrets):
+   Environment variables (Worker → Settings → Variables and Secrets):
      RESEND_API_KEY  (secret)  — API key from resend.com
      MAIL_FROM       — verified sender, e.g. "Qonicode Desk <desk@qonicode.tech>"
      MAIL_TO         — optional, defaults to qonita@qonicode.tech

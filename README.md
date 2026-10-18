@@ -1,11 +1,12 @@
 # Qonicode — agency site with a layout playground
 
-Static site (plain HTML/CSS/JS, no build step) for **Cloudflare Pages**, deployed from GitHub.
+Static site (plain HTML/CSS/JS, no build step) on **Cloudflare Workers** (static assets + a tiny Worker for the form API),
+deployed from GitHub.
 The centerpiece is the **Playground**: visitors drag paper wireframe cards onto a page, then save it as a PNG
 or send it to `qonita@qonicode.tech`.
 
 ```
-public/                     ← what Cloudflare serves
+public/                     ← static files Cloudflare serves
   index.html
   assets/css/style.css
   assets/js/main.js         ← floating nav, Let's Talk buttons, work carousel, newsletter
@@ -15,9 +16,10 @@ public/                     ← what Cloudflare serves
   assets/js/turnstile.js    ← Cloudflare Turnstile spam check for the forms
   _headers                  ← security headers (CSP, etc.) applied by Cloudflare
   assets/vendor/html-to-image.js (MIT) ← renders the playground to PNG
-functions/api/request.js    ← Pages Function: POST /api/request → email (request / talk / newsletter)
-functions/api/config.js     ← Pages Function: GET /api/config → public settings (Turnstile site key)
-wrangler.toml
+src/worker.js               ← Worker entry: routes /api/* to the handlers below, everything else → public/
+functions/api/request.js    ← POST /api/request → email (request / talk / newsletter)
+functions/api/config.js     ← GET /api/config → public settings (Turnstile site key)
+wrangler.toml               ← Worker name, entry point and assets folder
 ```
 
 ## Playground
@@ -38,13 +40,15 @@ on the page or edits a label, Delete removes. Layouts are kept in the visitor's 
 
 To add or change standard wireframes, edit `PAGES` (lists of rows) and `ROWS` in `public/assets/js/pieces.js`.
 
-## Deploy (GitHub → Cloudflare Pages)
+## Deploy (GitHub → Cloudflare Workers)
 
-1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick the repo.
-2. **Build settings:** framework **None**, build command **empty**, build output directory **`public`**,
-   production branch **`main`** (every push to `main` goes live). The `functions/` folder is picked up automatically.
-3. **Preview deployments:** set to *None* unless you need them — previews get public `*.pages.dev` URLs.
-4. **Settings → Variables and Secrets** (Production only):
+The repo is connected as a **Worker** with Workers Builds: every push to `main` runs `npx wrangler deploy`, which uploads
+`public/` as static assets and `src/worker.js` as the Worker (all set in `wrangler.toml`).
+
+1. **Build settings** (Worker → Settings → Build): build command **None**, deploy command **`npx wrangler deploy`**,
+   root directory **`/`**, branch **`main`**. The `name` in `wrangler.toml` (`qonicode-website`) must match the
+   Worker's name in the dashboard — if yours is different, change it in `wrangler.toml`.
+2. **Variables and secrets** (Worker → Settings → Variables and Secrets — runtime, not "Build variables"):
 
    | Name | Type | Value |
    | --- | --- | --- |
@@ -55,15 +59,18 @@ To add or change standard wireframes, edit `PAGES` (lists of rows) and `ROWS` in
    | `TURNSTILE_SECRET` | **Secret** | secret key of the same widget |
    | `ALLOWED_ORIGINS` | Text | optional, e.g. `https://qonicode.tech,https://www.qonicode.tech` |
 
-5. **Resend:** add and verify `qonicode.tech` (SPF/DKIM records go into Cloudflare DNS).
-6. **Turnstile:** dashboard → *Turnstile* → *Add widget* → hostnames `qonicode.tech` (+ `www`, + your `*.pages.dev`
-   if you test there), mode *Managed*. Put its site key and secret key in the variables above.
+   Add them in the dashboard. `keep_vars = true` in `wrangler.toml` makes deploys keep the Text variables;
+   Secrets are always kept.
+3. **Resend:** add and verify `qonicode.tech` (SPF/DKIM records go into Cloudflare DNS).
+4. **Turnstile:** dashboard → *Turnstile* → *Add widget* → hostnames `qonicode.tech` (+ `www`, + your
+   `*.workers.dev` URL if you test there), mode *Managed*. Put its keys in the variables above.
    Set both keys or neither — with only the secret, every form submission is rejected.
-7. **Rate limit the form endpoint:** *Security → WAF → Rate limiting rules* → create rule:
-   URI Path *equals* `/api/request` → 5 requests per 10 seconds per IP → *Block*.
-8. **Domain & HTTPS:** *Custom domains* → add `qonicode.tech`; SSL/TLS *Full (strict)*, *Always Use HTTPS* on.
-9. Redeploy after changing variables, then send yourself a Let's Talk, a Request and a newsletter signup.
-   If something fails, check the deployment's *Functions → Real-time logs*.
+5. **Rate limit the form endpoint:** *Security → WAF → Rate limiting rules* → URI Path *equals* `/api/request` →
+   5 requests per 10 seconds per IP → *Block*.
+6. **Domain & HTTPS:** Worker → Settings → *Domains & Routes* → add custom domain `qonicode.tech` (and `www`).
+   SSL/TLS *Full (strict)*, *Always Use HTTPS* on. Optionally turn off the `*.workers.dev` URL once the domain works.
+7. Trigger a new build (push or *Retry build*), then send yourself a Let's Talk, a Request and a newsletter signup.
+   If something fails, check Worker → *Observability / Logs*.
 
 ### What protects the forms
 
@@ -81,8 +88,14 @@ To add or change standard wireframes, edit `PAGES` (lists of rows) and `ROWS` in
 python -m http.server 5179 --directory public
 ```
 
-Open http://localhost:5179. The email endpoint, Turnstile and the `_headers` rules only run on Cloudflare
-(or with `npx wrangler pages dev public`); locally the forms show their fallback message.
+Open http://localhost:5179 — the forms show their fallback message there.
+
+To run it exactly like Cloudflare (Worker, `/api/*`, `_headers`), create a `.dev.vars` file (gitignored) with the
+variables above — Turnstile has test keys `1x00000000000000000000AA` / `1x0000000000000000000000000000000AA` — and run:
+
+```bash
+npx wrangler dev
+```
 
 ## Placeholders to replace
 
