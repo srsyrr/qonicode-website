@@ -14,15 +14,15 @@ const DESKS = {
   // Waiting cards on the left (3 columns under the wireframe bar), the page on the right.
   wide: {
     // minU: smallest scale (px per unit) before the desk scrolls instead of shrinking further
-    w: 190, h: 170, ox: 85, oy: 5, miniScale: 0.78, minU: 2.8,
+    w: 190, h: 170, ox: 85, oy: 5, miniScale: 0.936, minU: 2.8,
     bar: { x: 5, y: 4, w: 75 },   // in desk units from the stage's top-left
-    slots: [30, 66, 102, 138].flatMap((y) => [-67.5, -42.5, -17.5].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
+    slots: [30, 66, 102, 138].flatMap((y) => [-69, -42, -15].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
   },
   // Phones: the page on top, the bar and the waiting cards underneath.
   narrow: {
-    w: 110, h: 252, ox: 5, oy: 4, miniScale: 0.9,
+    w: 110, h: 260, ox: 5, oy: 4, miniScale: 1.08,
     bar: { x: 5, y: 167, w: 100 },
-    slots: [184, 201, 218, 235].flatMap((y) => [17, 50, 83].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
+    slots: [185, 205, 225, 245].flatMap((y) => [17, 50, 83].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
   },
 };
 

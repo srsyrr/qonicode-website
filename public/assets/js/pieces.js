@@ -58,8 +58,9 @@ export const TYPES = {
   },
 };
 
-/* Desk slot order (one waiting card per type). */
-export const SUPPLY = ['img', 'circle', 'text', 'table', 'cta', 'stars', 'menu', 'banner', 'section', 'slider', 'label'];
+/* Desk slot order (one waiting card per type), row by row in 3 columns.
+   The wide cards (menu, banner, slider) share the left column so they never collide. */
+export const SUPPLY = ['img', 'circle', 'text', 'menu', 'cta', 'table', 'banner', 'stars', 'section', 'slider', 'label'];
 
 const p = (type, x, y, w, h) => ({ type, x, y, w, h });
 const row = (h, items) => ({ h, items });
