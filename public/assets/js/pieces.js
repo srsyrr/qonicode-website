@@ -24,7 +24,7 @@ export const TYPES = {
     art: () => `<div class="sk-col">${lines(4)}</div>`,
   },
   cta: {
-    label: 'CTA', color: 'var(--m-green)', size: [24, 7], mini: [18, 6],
+    label: 'CTA', color: 'var(--m-cobalt)', size: [24, 7], mini: [18, 6],
     art: () => lines(1),
   },
   menu: {
