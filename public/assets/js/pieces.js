@@ -7,52 +7,53 @@ const lines = (n) => '<span class="sk-line"></span>'.repeat(n);
 const cross = '<svg class="sk-svg" viewBox="0 0 10 10" preserveAspectRatio="none"><path d="M0 0 10 10M10 0 0 10"/></svg>';
 const star = '<svg class="sk-svg" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 21l1.6-7L2 9.2l7.1-.6Z"/></svg>';
 
-/* size: default size on the page. mini: size while waiting on the desk.
+/* color: the card's fill (lines are always ink).
+   size: default size on the page. mini: size while waiting on the desk.
    label: the caption printed on the desk under the card's spot (never on the card itself).
    ratio: width / height kept while resizing. */
 export const TYPES = {
   img: {
-    label: 'img box', color: 'var(--m-blue)', size: [40, 28], mini: [18, 13],
+    label: 'img box', color: 'var(--c-teal)', size: [40, 28], mini: [18, 13],
     art: () => cross,
   },
   table: {
-    label: 'table', color: 'var(--m-brown)', size: [60, 22], mini: [24, 11],
+    label: 'table', color: 'var(--c-purple)', size: [60, 22], mini: [24, 11],
     art: () => `<div class="sk-table">${'<span></span>'.repeat(12)}</div>`,
   },
   text: {
-    label: 'description', color: 'var(--m-brown)', size: [48, 18], mini: [24, 11],
+    label: 'description', color: 'var(--c-yellow)', size: [48, 18], mini: [24, 11],
     art: () => `<div class="sk-col">${lines(4)}</div>`,
   },
   cta: {
-    label: 'CTA', color: 'var(--m-cobalt)', size: [24, 7], mini: [18, 6],
+    label: 'CTA', color: 'var(--c-green)', size: [24, 7], mini: [18, 6],
     art: () => lines(1),
   },
   menu: {
-    label: 'menu', color: 'var(--m-ink)', size: [98, 7], mini: [32, 5],
+    label: 'menu', color: 'var(--c-paper)', size: [98, 7], mini: [32, 5],
     art: () => `<div class="sk-row"><span class="sk-dot"></span><span class="sk-links">${lines(4)}</span><span class="sk-burger">${lines(3)}</span></div>`,
   },
   circle: {
-    label: 'circle img', color: 'var(--m-orange)', size: [16, 16], mini: [11, 11], ratio: 1,
+    label: 'circle img', color: 'var(--c-orange)', size: [16, 16], mini: [11, 11], ratio: 1,
     art: () => '<svg class="sk-svg" viewBox="0 0 40 40"><circle cx="27" cy="14" r="4"/><path d="M6 31 16 20l7 7 5-4 8 8"/></svg>',
   },
   stars: {
-    label: '5 stars', color: 'var(--m-orange)', size: [30, 6], mini: [22, 4.4], ratio: 5,
+    label: '5 stars', color: 'var(--c-paper)', size: [30, 6], mini: [22, 4.4], ratio: 5,
     art: () => `<div class="sk-stars">${star.repeat(5)}</div>`,
   },
   banner: {
-    label: 'banner', color: 'var(--m-pink)', size: [98, 4], mini: [32, 4],
+    label: 'banner', color: 'var(--c-pink)', size: [98, 4], mini: [32, 4],
     art: () => lines(1),
   },
   section: {
-    label: 'section / sidebar', color: 'var(--m-purple)', size: [92, 30], mini: [24, 15],
+    label: 'section / sidebar', color: 'color-mix(in srgb, var(--c-purple) 35%, transparent)', size: [92, 30], mini: [24, 15],
     art: () => '',
   },
   slider: {
-    label: 'slider', color: 'var(--m-purple)', size: [92, 22], mini: [30, 11],
+    label: 'slider', color: 'var(--c-teal)', size: [92, 22], mini: [30, 11],
     art: () => '<div class="sk-row"><svg class="sk-svg sk-chev" viewBox="0 0 10 20"><path d="M8 2 2 10l6 8"/></svg><span class="sk-box"></span><svg class="sk-svg sk-chev" viewBox="0 0 10 20"><path d="M2 2l6 8-6 8"/></svg></div>',
   },
   label: {
-    label: 'label (type it!)', color: 'var(--m-ink)', size: [30, 6], mini: [22, 6], editable: true,
+    label: 'label (type it!)', color: 'var(--c-paper)', size: [30, 6], mini: [22, 6], editable: true,
     art: () => '<input class="piece__input" type="text" maxlength="20" placeholder="label" aria-label="Label text (max 20 characters)" spellcheck="false" autocomplete="off">',
   },
 };

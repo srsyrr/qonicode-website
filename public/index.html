@@ -6,7 +6,7 @@
   <title>Qonicode — Custom Shopify themes</title>
   <meta name="description" content="Custom Shopify themes, designed around your layout. Sketch your store in the playground and send it to us.">
   <meta name="theme-color" content="#F5EFE3">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Ctext x='32' y='45' font-family='Arial Black,Arial' font-weight='900' font-size='38' text-anchor='middle' fill='%232FD67B'%3EQ%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F5EFE3'/%3E%3Cg fill='none' stroke='%23111' stroke-linecap='round'%3E%3Cellipse cx='32' cy='27' rx='12.5' ry='16.5' stroke-width='6'/%3E%3Cpath d='M25 52c5 1.5 10 1.3 14.5-.7' stroke-width='4.5'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" crossorigin="anonymous">
@@ -20,7 +20,7 @@
   <header class="site-header">
     <nav class="seg seg--nav" aria-label="Main">
       <a class="seg__item seg__logo" href="#top" aria-label="Qonicode — back to top">
-        <span class="logo-mark" aria-hidden="true">Q</span><span class="seg__text">qonicode</span>
+        <svg class="logo-q" viewBox="0 0 40 56" aria-hidden="true"><ellipse cx="20" cy="22" rx="13.5" ry="18"/><path d="M12.5 49.5c5.5 1.6 11 1.4 16-.8"/></svg><span class="seg__text">qonicode</span>
       </a>
       <a class="seg__item" href="#services" data-spy="services">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
@@ -67,14 +67,14 @@
           <a class="hero__rating" href="#testimonials" aria-label="One service, done properly — read what clients say">
             <div class="avatars" aria-hidden="true">
               <span style="background:var(--c-pink)">D</span>
-              <span style="background:var(--c-blue);color:#fff">B</span>
+              <span style="background:var(--c-teal)">B</span>
               <span style="background:var(--c-yellow)">C</span>
               <span class="avatars__plus">+</span>
             </div>
             <div><strong>One service</strong><small>done properly ↓</small></div>
           </a>
           <span class="hero__arrow" aria-hidden="true"><svg viewBox="0 0 220 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 40c20-30 52-30 44 0s-30 12-12-6 50-24 54 8-26 22-14 0 46-30 58-6-14 26-6 8 40-30 80-12"/><path d="M196 18l16 14-20 8"/></svg></span>
-          <button type="button" class="btn btn--accent hero__cta" data-open-talk>Let's Talk</button>
+          <button type="button" class="btn hero__cta" data-open-talk>Let's Talk</button>
         </div>
       </div>
     </section>
@@ -85,7 +85,7 @@
         <h2 class="display display--italic h-section">Our services</h2>
         <div class="svc-grid">
           <article class="svc">
-            <div class="svc__media" style="--media:var(--c-blue)">
+            <div class="svc__media" style="--media:var(--c-teal)">
               <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M24 36h72M24 60h72M24 84h72"/><circle cx="44" cy="36" r="9" class="f1"/><circle cx="78" cy="60" r="9" class="f2"/><circle cx="54" cy="84" r="9" class="f3"/></svg></div>
             </div>
             <div class="svc__body">
@@ -99,7 +99,7 @@
             </div>
           </article>
           <article class="svc">
-            <div class="svc__media" style="--media:var(--c-yellow)">
+            <div class="svc__media" style="--media:var(--c-green)">
               <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><rect x="22" y="18" width="76" height="22" rx="5"/><rect x="22" y="48" width="76" height="26" rx="5" class="f2"/><rect x="22" y="82" width="76" height="20" rx="5"/><path d="M60 54v14M53 61h14"/></svg></div>
             </div>
             <div class="svc__body">
@@ -113,7 +113,7 @@
             </div>
           </article>
           <article class="svc">
-            <div class="svc__media" style="--media:var(--c-pink)">
+            <div class="svc__media" style="--media:var(--c-yellow)">
               <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><rect x="16" y="20" width="88" height="80" rx="8"/><path d="M16 34h88"/><circle cx="25" cy="27" r="1.5" class="f0"/><circle cx="32" cy="27" r="1.5" class="f0"/><rect x="26" y="44" width="68" height="26" rx="4" class="f1"/><path d="M30 80h36"/><rect x="62" y="84" width="32" height="9" rx="4.5" class="f3"/></svg></div>
             </div>
             <div class="svc__body">
@@ -127,7 +127,7 @@
             </div>
           </article>
           <article class="svc">
-            <div class="svc__media" style="--media:var(--c-purple)">
+            <div class="svc__media" style="--media:var(--c-orange)">
               <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M30 42h60l-5 58H35Z" class="f2"/><path d="M46 42v-6a14 14 0 0 1 28 0v6"/><path d="M60 58l4 8.5 9 1-6.8 6.2 1.9 9-8.1-4.7-8.1 4.7 1.9-9-6.8-6.2 9-1Z" class="f1"/></svg></div>
             </div>
             <div class="svc__body">
@@ -141,7 +141,7 @@
             </div>
           </article>
           <article class="svc">
-            <div class="svc__media" style="--media:var(--c-blue)">
+            <div class="svc__media" style="--media:var(--c-pink)">
               <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><rect x="26" y="16" width="68" height="90" rx="8"/><rect x="44" y="10" width="32" height="12" rx="4" class="f3"/><path d="M36 44l6 6 10-11M36 68l6 6 10-11"/><path d="M60 46h24M60 70h24M36 92h48"/></svg></div>
             </div>
             <div class="svc__body">
@@ -155,7 +155,7 @@
             </div>
           </article>
           <article class="svc">
-            <div class="svc__media" style="--media:var(--c-yellow)">
+            <div class="svc__media" style="--media:var(--c-purple)">
               <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M20 98h70"/><rect x="26" y="66" width="12" height="32" rx="2" class="f1"/><rect x="44" y="50" width="12" height="48" rx="2" class="f2"/><rect x="62" y="74" width="12" height="24" rx="2" class="f3"/><circle cx="78" cy="40" r="20" class="f0"/><path d="M92 54l14 14"/></svg></div>
             </div>
             <div class="svc__body">
@@ -204,7 +204,7 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3.5c2 0 3.2 1 4.5 3l1 1.6c1.3 2 2.5 3.4 4.5 3.4H20m0 0-3-3m3 3-3 3M4 17h3.5c1.4 0 2.4-.6 3.3-1.6M20 7h-2.5c-1.4 0-2.4.6-3.3 1.6M20 7l-3-3m3 3-3 3"/></svg>
               Shuffle
             </button>
-            <button type="button" class="btn btn--accent" data-action="request">
+            <button type="button" class="btn" data-action="request">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5 16-3.5-6.5L4 12Zm7.5 1.5L20 4"/></svg>
               Request
             </button>
@@ -222,8 +222,10 @@
         </div>
 
         <div class="desk" data-desk>
-          <div class="desk__frame" data-frame aria-hidden="true">
-            <div class="desk__frame-bar"><i></i><i></i><i></i><span></span></div>
+          <div class="desk__stage" data-stage>
+            <div class="desk__frame" data-frame aria-hidden="true">
+              <div class="desk__frame-bar"><i></i><i></i><i></i><span></span></div>
+            </div>
           </div>
         </div>
         <p class="visually-hidden" aria-live="polite" data-live></p>
@@ -262,13 +264,9 @@
 
     <!-- ============ Work ============ -->
     <section class="section" id="work">
-      <div class="page-width" data-carousel>
+      <div class="page-width" data-carousel="project">
         <div class="section-head">
           <h2 class="display display--italic h-section">Latest work</h2>
-          <div class="carousel-nav">
-            <button type="button" class="btn btn--icon" data-prev aria-label="Previous project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m0 0 6-6m-6 6 6 6"/></svg></button>
-            <button type="button" class="btn btn--icon" data-next aria-label="Next project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg></button>
-          </div>
         </div>
 
         <div class="work-track" data-track tabindex="0" aria-label="Projects">
@@ -279,10 +277,10 @@
               <p class="work-slide__text">A bold home page and collection grid for a growing apparel brand.</p>
               <ul class="tags"><li>Shopify</li><li>Home page</li><li>PLP</li></ul>
             </div>
-            <div class="work-slide__media" style="--media:var(--c-blue)">
+            <div class="work-slide__media" style="--media:var(--c-teal)">
               <div class="mock mock--a"><b>New in</b><span class="mock__img" style="--mi:var(--c-orange)"></span><span class="mock__star">✦</span></div>
               <div class="mock mock--b"><b class="mock__big">Rp 349K</b><i></i><i></i><span class="mock__btn">Add to cart</span></div>
-              <div class="mock mock--c"><small>Hello, shopper!</small><b>CATEGORY</b><span class="mock__band" style="--mb:var(--c-blue);--mb-text:#fff">Dresses <em>128</em></span></div>
+              <div class="mock mock--c"><small>Hello, shopper!</small><b>CATEGORY</b><span class="mock__band" style="--mb:var(--c-teal)">Dresses <em>128</em></span></div>
             </div>
           </article>
 
@@ -296,7 +294,7 @@
             <div class="work-slide__media" style="--media:var(--c-yellow)">
               <div class="mock mock--a"><b>Glow serum</b><span class="mock__img" style="--mi:var(--c-pink)"></span><span class="mock__star">✦</span></div>
               <div class="mock mock--b"><b class="mock__big">4.9 ★</b><i></i><i></i><span class="mock__btn">Buy now</span></div>
-              <div class="mock mock--c"><small>Ingredients</small><b>TABLE</b><span class="mock__band" style="--mb:var(--c-blue);--mb-text:#fff">Niacinamide <em>5%</em></span></div>
+              <div class="mock mock--c"><small>Ingredients</small><b>TABLE</b><span class="mock__band" style="--mb:var(--c-teal)">Niacinamide <em>5%</em></span></div>
             </div>
           </article>
 
@@ -322,7 +320,7 @@
               <ul class="tags"><li>Shopify</li><li>PLP</li><li>Filters</li></ul>
             </div>
             <div class="work-slide__media" style="--media:var(--c-purple)">
-              <div class="mock mock--a"><b>Living room</b><span class="mock__img" style="--mi:var(--c-blue)"></span><span class="mock__star">✦</span></div>
+              <div class="mock mock--a"><b>Living room</b><span class="mock__img" style="--mi:var(--c-teal)"></span><span class="mock__star">✦</span></div>
               <div class="mock mock--b"><b class="mock__big">86 items</b><i></i><i></i><span class="mock__btn">Filter</span></div>
               <div class="mock mock--c"><small>Sort by</small><b>SOFAS</b><span class="mock__band" style="--mb:var(--c-orange)">Best selling <em>↓</em></span></div>
             </div>
@@ -334,18 +332,14 @@
 
     <!-- ============ Testimonials ============ -->
     <section class="section testimonials" id="testimonials">
-      <div class="page-width" data-scroller>
+      <div class="page-width" data-carousel="testimonial">
         <div class="section-head">
           <h2 class="display display--italic h-section">What clients say</h2>
-          <div class="carousel-nav">
-            <button type="button" class="btn btn--icon" data-scroll="-1" aria-label="Previous testimonials"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m0 0 6-6m-6 6 6 6"/></svg></button>
-            <button type="button" class="btn btn--icon" data-scroll="1" aria-label="Next testimonials"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg></button>
-          </div>
         </div>
-        <div class="tst-track" data-scroll-track tabindex="0" aria-label="Client testimonials">
+        <div class="tst-track" data-track tabindex="0" aria-label="Client testimonials">
           <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
           <article class="tst">
-            <div class="tst__media" style="--media:var(--c-blue)">
+            <div class="tst__media" style="--media:var(--c-teal)">
               <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
               <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
             </div>
@@ -358,7 +352,7 @@
           </article>
           <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
           <article class="tst">
-            <div class="tst__media" style="--media:var(--c-yellow)">
+            <div class="tst__media" style="--media:var(--c-green)">
               <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
               <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
             </div>
@@ -371,7 +365,7 @@
           </article>
           <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
           <article class="tst">
-            <div class="tst__media" style="--media:var(--c-pink)">
+            <div class="tst__media" style="--media:var(--c-yellow)">
               <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
               <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
             </div>
@@ -384,7 +378,7 @@
           </article>
           <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
           <article class="tst">
-            <div class="tst__media" style="--media:var(--c-purple)">
+            <div class="tst__media" style="--media:var(--c-orange)">
               <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
               <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
             </div>
@@ -397,7 +391,7 @@
           </article>
           <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
           <article class="tst">
-            <div class="tst__media" style="--media:var(--c-blue)">
+            <div class="tst__media" style="--media:var(--c-pink)">
               <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
               <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
             </div>
@@ -410,7 +404,7 @@
           </article>
           <!-- Placeholder: replace name, store type, quote and project with a real client's testimonial. -->
           <article class="tst">
-            <div class="tst__media" style="--media:var(--c-yellow)">
+            <div class="tst__media" style="--media:var(--c-purple)">
               <span class="tst__avatar" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="23" r="11"/><path d="M10 56c2-12 10-18 20-18s18 6 20 18"/></svg></span>
               <span class="tst__rating" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.8 6.3 6.9.6-5.2 4.6 1.5 6.8L12 17.3l-6 3.5 1.5-6.8-5.2-4.6 6.9-.6Z"/></svg></span>
             </div>
@@ -422,11 +416,15 @@
             </div>
           </article>
         </div>
+        <div class="carousel-dots" data-dots></div>
       </div>
     </section>
 
+  </main>
+
+  <div class="finale" id="contact">
     <!-- ============ Talk CTA ============ -->
-    <section class="section talk" id="contact">
+    <section class="talk">
       <div class="page-width">
         <h2 class="talk__title display">
           <span class="talk__line">LET'S MAKE <span class="shape shape--infinity" aria-hidden="true"><svg viewBox="0 0 120 60"><path d="M60 30C46 8 12 8 12 30s34 22 48 0 48-22 48 0-34 22-48 0Z" fill="none" stroke="currentColor" stroke-width="11" stroke-linejoin="round"/></svg></span></span>
@@ -436,7 +434,6 @@
         <button type="button" class="btn btn--lg" data-open-talk>Let's Talk</button>
       </div>
     </section>
-  </main>
 
   <!-- ============ Footer ============ -->
   <footer class="page-width site-footer-wrap">
@@ -487,6 +484,7 @@
       </div>
     </div>
   </footer>
+  </div>
 
   <!-- ============ Let's Talk / Request dialog ============ -->
   <dialog class="nb-dialog" data-dialog aria-labelledby="dialog-title" aria-describedby="dialog-desc">
@@ -515,7 +513,7 @@
       <p class="nb-dialog__status" data-dialog-status role="status"></p>
       <footer class="nb-dialog__footer">
         <button type="button" class="btn" data-close>Cancel</button>
-        <button type="submit" class="btn btn--accent" data-dialog-submit>Send</button>
+        <button type="submit" class="btn" data-dialog-submit>Send</button>
       </footer>
     </form>
   </dialog>

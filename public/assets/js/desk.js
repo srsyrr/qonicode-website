@@ -12,7 +12,8 @@ const SLOT_TILT = [-5, 4, -3, 6, -4, 3, -6, 5, -2, 4, -5];
 /* Desk sizes (in frame units) for wide and narrow screens, with one slot per card type. */
 const DESKS = {
   wide: {
-    w: 200, h: 176, ox: 50, oy: 8, miniScale: 1,
+    // minU: smallest scale (px per unit) before the desk scrolls instead of shrinking further
+    w: 200, h: 176, ox: 50, oy: 8, miniScale: 1, minU: 4.2,
     slots: [
       ...[10, 36, 62, 88, 114, 140].map((y) => ({ x: -25, y })),
       ...[10, 36, 62, 88, 114].map((y) => ({ x: 125, y })),
@@ -33,7 +34,9 @@ const nextFrame = () => new Promise((r) => requestAnimationFrame(() => requestAn
 class Playground {
   constructor(root) {
     this.root = root;
-    this.desk = root.querySelector('[data-desk]');
+    // viewport: the visible, scrollable desk area. desk: the scaled canvas inside it (cards live here).
+    this.viewport = root.querySelector('[data-desk]');
+    this.desk = root.querySelector('[data-stage]');
     this.frame = root.querySelector('[data-frame]');
     this.label = root.querySelector('[data-preset-label]');
     this.live = root.querySelector('[data-live]');
@@ -60,10 +63,13 @@ class Playground {
   measure() {
     const prevMode = this.mode;
     this.mode = mq.matches ? 'narrow' : 'wide';
-    const border = this.desk.offsetWidth - this.desk.clientWidth;
-    this.u = this.desk.clientWidth / this.cfg.w;
+    // Fit the whole desk in the visible area when possible; below minU it scrolls inside the desk instead.
+    const fitW = this.viewport.clientWidth / this.cfg.w;
+    const fitH = this.viewport.clientHeight / this.cfg.h;
+    this.u = this.cfg.minU ? clamp(fitH, Math.min(this.cfg.minU, fitW), fitW) : fitW;
     this.desk.style.setProperty('--u', `${this.u}px`);
-    this.desk.style.height = `${this.cfg.h * this.u + border}px`;
+    this.desk.style.width = `${this.cfg.w * this.u}px`;
+    this.desk.style.height = `${this.cfg.h * this.u}px`;
     Object.assign(this.frame.style, {
       left: `${this.cfg.ox * this.u}px`, top: `${this.cfg.oy * this.u}px`,
       width: `${FRAME.w * this.u}px`, height: `${FRAME.h * this.u}px`,
@@ -130,7 +136,7 @@ class Playground {
     const el = document.createElement('div');
     el.className = `piece piece--${spec.type}`;
     el.tabIndex = 0;
-    el.style.setProperty('--pc', type.color);
+    el.style.setProperty('--fill', type.color);
     el.innerHTML = `<div class="piece__paper">${type.art()}</div>`
       + '<button type="button" class="piece__del" aria-label="Remove card" tabindex="-1">×</button>'
       + '<span class="piece__resize" aria-hidden="true"></span>';
@@ -350,8 +356,9 @@ class Playground {
     on('[data-action="request"]', () => this.openRequest());
     this.pageButtons.forEach((b) => b.addEventListener('click', () => { if (b.dataset.page !== this.page) this.loadPage(b.dataset.page); }));
 
+    // Re-fit whenever the visible desk area changes size (window resize, toolbar wrapping, …).
     let t;
-    window.addEventListener('resize', () => {
+    const refit = () => {
       clearTimeout(t);
       t = setTimeout(() => {
         this.desk.classList.add('no-anim');
@@ -359,7 +366,26 @@ class Playground {
         this.pieces.forEach((pc) => this.draw(pc));
         requestAnimationFrame(() => this.desk.classList.remove('no-anim'));
       }, 120);
-    });
+    };
+    if ('ResizeObserver' in window) new ResizeObserver(refit).observe(this.viewport);
+    else window.addEventListener('resize', refit);
+  }
+
+  /* While dragging near the top/bottom edge of the desk, scroll it so cards can reach every spot. */
+  autoScroll() {
+    const d = this.drag;
+    if (!d || !d.moved || !d.last) { this.scrolling = false; return; }
+    const r = this.viewport.getBoundingClientRect();
+    const edge = 48;
+    const y = d.last.clientY;
+    const x = d.last.clientX;
+    const vy = y < r.top + edge ? -1 : y > r.bottom - edge ? 1 : 0;
+    const vx = x < r.left + edge ? -1 : x > r.right - edge ? 1 : 0;
+    const before = [this.viewport.scrollLeft, this.viewport.scrollTop];
+    this.viewport.scrollBy(vx * 12, vy * 12);
+    if (this.viewport.scrollLeft !== before[0] || this.viewport.scrollTop !== before[1]) this.applyDrag(d.last);
+    if (vx || vy) requestAnimationFrame(() => this.autoScroll());
+    else this.scrolling = false;
   }
 
   find(el) { return el ? this.pieces.find((pc) => pc.el === el) : null; }
@@ -373,7 +399,10 @@ class Playground {
     e.preventDefault();
     this.select(piece);
     const resizing = !piece.supply && !!e.target.closest('.piece__resize');
-    this.drag = { piece, resizing, moved: false, pointerId: e.pointerId, sx: e.clientX, sy: e.clientY, x: piece.x, y: piece.y, w: piece.w, h: piece.h };
+    this.drag = {
+      piece, resizing, moved: false, pointerId: e.pointerId, sx: e.clientX, sy: e.clientY,
+      sl: this.viewport.scrollLeft, st: this.viewport.scrollTop, x: piece.x, y: piece.y, w: piece.w, h: piece.h,
+    };
     window.addEventListener('pointermove', this.onMove);
     window.addEventListener('pointerup', this.onUp);
     window.addEventListener('pointercancel', this.onUp);
@@ -382,8 +411,6 @@ class Playground {
   onMove(e) {
     const d = this.drag;
     if (!d || e.pointerId !== d.pointerId) return;
-    const dx = (e.clientX - d.sx) / this.u;
-    const dy = (e.clientY - d.sy) / this.u;
     const pc = d.piece;
     if (!d.moved) {
       if (Math.hypot(e.clientX - d.sx, e.clientY - d.sy) < DRAG_THRESHOLD) return;
@@ -393,6 +420,17 @@ class Playground {
       pc.el.classList.add(d.resizing ? 'is-resizing' : 'is-dragging');
     }
     e.preventDefault();
+    d.last = { clientX: e.clientX, clientY: e.clientY };
+    this.applyDrag(d.last);
+    if (!this.scrolling) { this.scrolling = true; requestAnimationFrame(() => this.autoScroll()); }
+  }
+
+  /* Pointer position → card position (accounts for the desk having scrolled since the drag began). */
+  applyDrag({ clientX, clientY }) {
+    const d = this.drag;
+    const pc = d.piece;
+    const dx = (clientX - d.sx + this.viewport.scrollLeft - d.sl) / this.u;
+    const dy = (clientY - d.sy + this.viewport.scrollTop - d.st) / this.u;
     if (d.resizing) {
       const ratio = TYPES[pc.type].ratio;
       pc.w = clamp(d.w + dx, 4, FRAME.w - pc.x);
@@ -531,7 +569,7 @@ class Playground {
       ctx.fillRect(0, sh, out.width, cap);
       ctx.textBaseline = 'middle';
       const st = this.pageState;
-      ctx.fillStyle = '#2FD67B';
+      ctx.fillStyle = '#FFDB58';
       ctx.font = `800 ${Math.round(cap * 0.3)}px Archivo, sans-serif`;
       const title = st.name === 'Shuffled' ? 'shuffled layout' : st.name;
       ctx.fillText(`${PAGES[this.page].label} — ${title}${st.edited ? ' (edited)' : ''}`.toUpperCase(), cap * 0.4, sh + cap / 2);

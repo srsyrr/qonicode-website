@@ -1,4 +1,4 @@
-/* Site chrome: floating nav, Let's Talk buttons, work carousel, newsletter. */
+/* Site chrome: floating nav, Let's Talk buttons, carousels, newsletter. */
 import { openDialog } from './dialog.js';
 import './desk.js';
 
@@ -8,22 +8,6 @@ document.addEventListener('click', (e) => {
   if (!btn) return;
   e.preventDefault();
   openDialog('talk', { topic: btn.dataset.topic });
-});
-
-/* Testimonials: arrows scroll by one card */
-document.querySelectorAll('[data-scroller]').forEach((root) => {
-  const track = root.querySelector('[data-scroll-track]');
-  root.querySelectorAll('[data-scroll]').forEach((btn) => btn.addEventListener('click', () => {
-    const card = track.firstElementChild;
-    const step = card.offsetWidth + parseFloat(getComputedStyle(track).columnGap || 0);
-    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-    const atStart = track.scrollLeft <= 4;
-    const dir = Number(btn.dataset.scroll);
-    // wrap around at either end
-    if (dir > 0 && atEnd) track.scrollTo({ left: 0, behavior: 'smooth' });
-    else if (dir < 0 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
-    else track.scrollBy({ left: dir * step, behavior: 'smooth' });
-  }));
 });
 
 /* Footer links that open the playground on a given page type */
@@ -53,35 +37,78 @@ if ('IntersectionObserver' in window && spied.length) {
   spied.forEach((s) => io.observe(s));
 }
 
-/* Work carousel: native scroll-snap, with buttons and dots */
+/* Carousels (Latest work + Testimonials): scroll-snap track, dots, swipe, and mouse drag. */
 document.querySelectorAll('[data-carousel]').forEach((root) => {
   const track = root.querySelector('[data-track]');
-  const slides = [...track.children];
   const dots = root.querySelector('[data-dots]');
-  const prev = root.querySelector('[data-prev]');
-  const next = root.querySelector('[data-next]');
-  const dotEls = slides.map((_, i) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'carousel-dot';
-    b.setAttribute('aria-label', `Go to project ${i + 1}`);
-    b.addEventListener('click', () => go(i));
-    dots.appendChild(b);
-    return b;
-  });
-  const current = () => Math.round(track.scrollLeft / (slides[0].offsetWidth + parseFloat(getComputedStyle(track).columnGap || 0)));
-  const go = (i) => {
-    const n = (i + slides.length) % slides.length;
-    track.scrollTo({ left: slides[n].offsetLeft - track.offsetLeft, behavior: 'smooth' });
+  const slides = [...track.children].filter((el) => el.nodeType === 1);
+  const label = root.dataset.carousel || 'slide';
+  let dotEls = [];
+
+  const step = () => slides[0].offsetWidth + parseFloat(getComputedStyle(track).columnGap || 0);
+  // With several cards in view, the last positions can't reach the left edge — one dot per reachable position.
+  const pages = () => Math.max(1, slides.length - Math.max(1, Math.round((track.clientWidth + 1) / step())) + 1);
+  const current = () => Math.min(pages() - 1, Math.round(track.scrollLeft / step()));
+  const go = (i, smooth = true) => {
+    const n = (i + pages()) % pages();
+    track.scrollTo({ left: slides[n].offsetLeft - slides[0].offsetLeft, behavior: smooth ? 'smooth' : 'auto' });
   };
   const sync = () => {
     const i = current();
     dotEls.forEach((d, j) => d.setAttribute('aria-current', String(i === j)));
   };
-  prev.addEventListener('click', () => go(current() - 1));
-  next.addEventListener('click', () => go(current() + 1));
+  const buildDots = () => {
+    const n = pages();
+    if (n === dotEls.length) return sync();
+    dots.innerHTML = '';
+    dotEls = Array.from({ length: n }, (_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'carousel-dot';
+      b.setAttribute('aria-label', `Go to ${label} ${i + 1}`);
+      b.addEventListener('click', () => go(i));
+      dots.appendChild(b);
+      return b;
+    });
+    dots.hidden = n < 2;
+    sync();
+  };
+
+  // Mouse drag (touch and trackpads already scroll natively).
+  let drag = null;
+  track.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    drag = { x: e.clientX, left: track.scrollLeft, moved: false };
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x;
+    if (!drag.moved && Math.abs(dx) < 6) return;
+    if (!drag.moved) { drag.moved = true; track.classList.add('is-dragging'); }
+    track.scrollLeft = drag.left - dx;
+  });
+  window.addEventListener('pointerup', () => {
+    if (!drag) return;
+    const moved = drag.moved;
+    drag = null;
+    if (!moved) return;
+    track.classList.remove('is-dragging');
+    go(current());
+    // a drag shouldn't also click the card's button
+    track.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); }, { capture: true, once: true });
+  });
+
+  // Keyboard: arrow keys move one slide when the track has focus.
+  track.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      go(current() + (e.key === 'ArrowRight' ? 1 : -1));
+    }
+  });
+
   track.addEventListener('scroll', () => requestAnimationFrame(sync), { passive: true });
-  sync();
+  if ('ResizeObserver' in window) new ResizeObserver(buildDots).observe(track);
+  buildDots();
 });
 
 /* Newsletter */
