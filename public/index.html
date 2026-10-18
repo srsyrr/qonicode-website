@@ -4,50 +4,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Qonicode — Custom Shopify themes</title>
-  <meta name="description" content="Custom Shopify themes, designed around your layout. Pick your layout on our desk and send it to us.">
+  <meta name="description" content="Custom Shopify themes, designed around your layout. Sketch your store in the playground and send it to us.">
   <meta name="theme-color" content="#F5EFE3">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Ctext x='32' y='45' font-family='Arial Black,Arial' font-weight='900' font-size='38' text-anchor='middle' fill='%23FFD233'%3EQ%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Ctext x='32' y='45' font-family='Arial Black,Arial' font-weight='900' font-size='38' text-anchor='middle' fill='%23B4F23E'%3EQ%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Caveat:wght@500;700&display=swap" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Caveat:wght@500&display=swap" crossorigin="anonymous">
   <link rel="stylesheet" href="assets/css/style.css">
-  <script type="module" src="assets/js/desk.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
 </head>
-<body>
+<body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <!-- ============ Floating nav ============ -->
   <header class="site-header">
-    <div class="page-width site-header__inner">
-      <a href="#" class="site-header__logo" aria-label="Qonicode home">
-        <span class="site-header__logo-mark" aria-hidden="true">Q</span>
-        <span>qonicode</span>
+    <nav class="seg seg--nav" aria-label="Main">
+      <a class="seg__item seg__logo" href="#top" aria-label="Qonicode — back to top">
+        <span class="logo-mark" aria-hidden="true">Q</span><span class="seg__text">qonicode</span>
       </a>
-      <nav aria-label="Main">
-        <ul class="site-nav">
-          <li><a href="#layout-desk">Layout desk</a></li>
-          <li><a href="#how">How it works</a></li>
-          <li><a href="#work">Work</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-      <div class="site-header__actions">
-        <a class="btn btn--sm site-header__cta" href="#layout-desk">Let's Talk</a>
-        <a class="icon-btn" href="mailto:qonita@qonicode.tech" aria-label="Email us">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
-        </a>
-        <details class="menu-drawer">
-          <summary class="icon-btn" aria-label="Menu">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
-          </summary>
-          <div class="menu-drawer__panel">
-            <a href="#layout-desk">Layout desk</a>
-            <a href="#how">How it works</a>
-            <a href="#work">Work</a>
-            <a href="#contact">Contact</a>
-          </div>
-        </details>
-      </div>
-    </div>
+      <a class="seg__item" href="#playground" data-spy="playground">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><circle cx="17" cy="7" r="4"/><path d="M7 14l4 7H3Z"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        <span class="seg__text">Playground</span>
+      </a>
+      <a class="seg__item" href="#skills" data-spy="skills">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 3 12l5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>
+        <span class="seg__text">Skills</span>
+      </a>
+      <a class="seg__item" href="#work" data-spy="work">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+        <span class="seg__text">Work</span>
+      </a>
+      <button type="button" class="seg__item seg__talk" data-open-talk>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"/></svg>
+        <span class="seg__text">Let's Talk</span>
+      </button>
+    </nav>
   </header>
 
   <main id="main">
@@ -83,45 +74,55 @@
             <div><strong>One service</strong><small>done properly</small></div>
           </div>
           <span class="hero__arrow" aria-hidden="true"><svg viewBox="0 0 220 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 40c20-30 52-30 44 0s-30 12-12-6 50-24 54 8-26 22-14 0 46-30 58-6-14 26-6 8 40-30 80-12"/><path d="M196 18l16 14-20 8"/></svg></span>
-          <a class="starburst hero__quote" href="#layout-desk">
-            <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50.0,1.0 58.9,11.0 71.3,5.9 74.9,18.7 88.3,19.4 86.0,32.6 97.8,39.1 90.0,50.0 97.8,60.9 86.0,67.4 88.3,80.6 74.9,81.3 71.3,94.1 58.9,89.0 50.0,99.0 41.1,89.0 28.7,94.1 25.1,81.3 11.7,80.6 14.0,67.4 2.2,60.9 10.0,50.0 2.2,39.1 14.0,32.6 11.7,19.4 25.1,18.7 28.7,5.9 41.1,11.0"/></svg>
-            <span>Pick Your Layout</span>
-          </a>
+          <button type="button" class="btn btn--lime hero__cta" data-open-talk>Let's Talk</button>
         </div>
       </div>
     </section>
 
-    <!-- ============ Layout desk ============ -->
-    <section class="section desk-section" id="layout-desk">
+    <!-- ============ Playground ============ -->
+    <section class="section playground" id="playground">
       <div class="page-width">
         <div class="desk-head">
-          <div>
-            <p class="hand desk-kicker">step 1 — sketch your store</p>
-            <h2 class="display display--italic h-section">Pick your layout</h2>
-            <p class="desk-hint">psst, drag the paper pieces onto the page — they can overlap. Grab the corner to resize.</p>
-          </div>
+          <h2 class="display display--italic h-section">Playground</h2>
+          <p class="desk-hint">Drag cards from the desk onto the page — they can overlap. Grab the yellow corner to resize, drag a card off the page to remove it.</p>
         </div>
 
-        <div class="desk-toolbar" role="toolbar" aria-label="Layout desk tools">
+        <div class="desk-toolbar" role="toolbar" aria-label="Playground tools">
+          <div class="seg seg--sm" role="radiogroup" aria-label="Page type">
+            <button type="button" class="seg__item" role="radio" data-page="home">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>
+              <span>Home page</span>
+            </button>
+            <button type="button" class="seg__item" role="radio" data-page="pdp">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8Z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>
+              <span>PDP</span>
+            </button>
+            <button type="button" class="seg__item" role="radio" data-page="plp">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              <span>PLP</span>
+            </button>
+          </div>
+
           <div class="desk-toolbar__group">
-            <button type="button" class="tool-btn tool-btn--icon" data-action="save" title="Save as PNG" aria-label="Save as PNG">
+            <button type="button" class="btn btn--icon" data-action="save" title="Save as PNG" aria-label="Save as PNG">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
             </button>
-            <button type="button" class="tool-btn" data-action="shuffle">
+            <button type="button" class="btn" data-action="shuffle">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3.5c2 0 3.2 1 4.5 3l1 1.6c1.3 2 2.5 3.4 4.5 3.4H20m0 0-3-3m3 3-3 3M4 17h3.5c1.4 0 2.4-.6 3.3-1.6M20 7h-2.5c-1.4 0-2.4.6-3.3 1.6M20 7l-3-3m3 3-3 3"/></svg>
               Shuffle
             </button>
-            <button type="button" class="tool-btn tool-btn--green" data-action="request">
+            <button type="button" class="btn btn--lime" data-action="request">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5 16-3.5-6.5L4 12Zm7.5 1.5L20 4"/></svg>
               Request
             </button>
           </div>
+
           <div class="preset-nav">
-            <button type="button" class="tool-btn tool-btn--icon" data-action="prev" aria-label="Previous standard wireframe">
+            <button type="button" class="btn btn--icon" data-action="prev" aria-label="Previous standard wireframe">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m0 0 6-6m-6 6 6 6"/></svg>
             </button>
-            <span class="preset-label" data-preset-label aria-live="polite">—</span>
-            <button type="button" class="tool-btn tool-btn--icon" data-action="next" aria-label="Next standard wireframe">
+            <span class="preset-label" data-preset-label aria-live="polite"></span>
+            <button type="button" class="btn btn--icon" data-action="next" aria-label="Next standard wireframe">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg>
             </button>
           </div>
@@ -132,35 +133,29 @@
             <div class="desk__frame-bar"><i></i><i></i><i></i><span></span></div>
           </div>
         </div>
-
-        <div class="tray" data-tray>
-          <span class="tray__label hand">add a piece:</span>
-        </div>
         <p class="visually-hidden" aria-live="polite" data-live></p>
       </div>
     </section>
 
-    <!-- ============ How it works ============ -->
-    <section class="section section--rule" id="how">
+    <!-- ============ Skills ============ -->
+    <section class="section section--rule" id="skills">
       <div class="page-width">
-        <h2 class="display display--italic h-section">How it works</h2>
-        <ol class="steps">
-          <li class="step accent-yellow">
-            <span class="step__num">01.</span>
-            <h3 class="step__title">Pick your layout</h3>
-            <p>Start from a standard wireframe or drag pieces onto the page until it feels like your store.</p>
-          </li>
-          <li class="step accent-pink">
-            <span class="step__num">02.</span>
-            <h3 class="step__title">Send the request</h3>
-            <p>Hit <strong>Request</strong>. Your layout lands in our inbox as an image, with your notes.</p>
-          </li>
-          <li class="step accent-green">
-            <span class="step__num">03.</span>
-            <h3 class="step__title">We design &amp; code it</h3>
-            <p>We turn it into a custom Shopify theme — fast, mobile-first and editable in the theme editor.</p>
-          </li>
-        </ol>
+        <h2 class="display display--italic h-section">Skills</h2>
+        <div class="skills">
+          <table class="skills__table">
+            <thead><tr><th scope="col">Skill</th><th scope="col">Target awal</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-orange)"></span>HTML</th><td>Bisa menulis dan membaca kode</td></tr>
+              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-pink)"></span>CSS</th><td>Cukup kuat untuk mereplikasi desain kompleks</td></tr>
+              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-yellow)"></span>JavaScript</th><td>Bisa memahami dan memodifikasi interaksi umum</td></tr>
+              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-green)"></span>Liquid</th><td>Bisa membaca, menulis, dan debugging template</td></tr>
+              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-purple)"></span>Theme architecture</th><td>Paham alur file dan dependensinya</td></tr>
+              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-lime)"></span>JSON schema</th><td>Bisa membuat section dengan pengaturan Theme Editor</td></tr>
+              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-orange)"></span>Git dan CLI</th><td>Bisa preview, membandingkan perubahan, dan memulihkan versi</td></tr>
+              <tr><th scope="row"><span class="skills__dot" style="--dot:var(--c-pink)"></span>Shopify commerce</th><td>Bisa menguji alur produk hingga cart</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -173,14 +168,12 @@
             <p>We do one thing: custom Shopify themes. No templates bent out of shape — a theme designed around how your customers shop and coded so you can keep editing it yourself.</p>
           </div>
           <div class="about__actions">
-            <a class="btn" href="#layout-desk">Let's Get Started</a>
-            <span class="chevrons" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z" fill="currentColor"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z" fill="currentColor"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z" fill="currentColor"/></svg>
-            </span>
+            <a class="btn btn--dark" href="#playground">Let's Get Started</a>
+            <span class="chevrons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg></span>
           </div>
         </div>
         <div class="about__media">
-          <div class="about__img about__img--placeholder" role="img" aria-label="Team photo placeholder"></div>
+          <div class="about__img" role="img" aria-label="Team photo placeholder"></div>
           <div class="starburst about__badge">
             <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50.0,1.0 58.9,11.0 71.3,5.9 74.9,18.7 88.3,19.4 86.0,32.6 97.8,39.1 90.0,50.0 97.8,60.9 86.0,67.4 88.3,80.6 74.9,81.3 71.3,94.1 58.9,89.0 50.0,99.0 41.1,89.0 28.7,94.1 25.1,81.3 11.7,80.6 14.0,67.4 2.2,60.9 10.0,50.0 2.2,39.1 14.0,32.6 11.7,19.4 25.1,18.7 28.7,5.9 41.1,11.0"/></svg>
             <span><strong>100%</strong>Custom</span>
@@ -191,86 +184,174 @@
 
     <!-- ============ Stats ============ -->
     <section class="stats">
-      <div class="stats__item"><div class="stats__num display display--italic">8</div><div class="stats__label">Standard wireframes</div></div>
-      <div class="stats__item"><div class="stats__num display display--italic">12</div><div class="stats__label">Paper pieces to play with</div></div>
+      <div class="stats__item"><div class="stats__num display display--italic">3</div><div class="stats__label">Page types to sketch</div></div>
+      <div class="stats__item"><div class="stats__num display display--italic">11</div><div class="stats__label">Standard wireframes</div></div>
       <div class="stats__item"><div class="stats__num display display--italic">1</div><div class="stats__label">Focus: Shopify themes</div></div>
     </section>
 
     <!-- ============ Work ============ -->
     <section class="section" id="work">
-      <div class="page-width">
+      <div class="page-width" data-carousel>
         <div class="section-head">
           <h2 class="display display--italic h-section">Latest work</h2>
-          <a class="btn btn--sm" href="#contact">Ask for the portfolio</a>
+          <div class="carousel-nav">
+            <button type="button" class="btn btn--icon" data-prev aria-label="Previous project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m0 0 6-6m-6 6 6 6"/></svg></button>
+            <button type="button" class="btn btn--icon" data-next aria-label="Next project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg></button>
+          </div>
         </div>
-        <div class="work-grid">
-          <a class="work-card accent-green" href="#contact">
-            <div class="work-card__media"><span class="work-card__placeholder hand">your project here</span></div>
-            <div class="work-card__body">
-              <div><span class="work-card__num">01.</span><h3 class="work-card__title">Fashion store theme</h3><p class="work-card__tags">Shopify · Custom theme · Mobile-first</p></div>
-              <span class="icon-btn" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+
+        <div class="work-track" data-track tabindex="0" aria-label="Projects">
+          <article class="work-slide">
+            <div class="work-slide__body">
+              <div class="work-slide__top"><span class="work-slide__num">01.</span><button type="button" class="arrow-btn" data-open-talk aria-label="Ask about this project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button></div>
+              <h3 class="work-slide__title">Fashion store theme</h3>
+              <p class="work-slide__text">A bold home page and collection grid for a growing apparel brand.</p>
+              <ul class="tags"><li>Shopify</li><li>Home page</li><li>PLP</li></ul>
             </div>
-          </a>
-          <a class="work-card accent-pink" href="#contact">
-            <div class="work-card__media"><span class="work-card__placeholder hand">your project here</span></div>
-            <div class="work-card__body">
-              <div><span class="work-card__num">02.</span><h3 class="work-card__title">Beauty brand redesign</h3><p class="work-card__tags">Shopify · CRO · Theme editor ready</p></div>
-              <span class="icon-btn" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            <div class="work-slide__media" style="--media:var(--c-green)">
+              <div class="mock mock--a"><b>New in</b><span class="mock__img" style="--mi:var(--c-orange)"></span><span class="mock__star">✦</span></div>
+              <div class="mock mock--b"><b class="mock__big">Rp 349K</b><i></i><i></i><span class="mock__btn">Add to cart</span></div>
+              <div class="mock mock--c"><small>Hello, shopper!</small><b>CATEGORY</b><span class="mock__band" style="--mb:var(--c-lime)">Dresses <em>128</em></span></div>
             </div>
-          </a>
+          </article>
+
+          <article class="work-slide">
+            <div class="work-slide__body">
+              <div class="work-slide__top"><span class="work-slide__num">02.</span><button type="button" class="arrow-btn" data-open-talk aria-label="Ask about this project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button></div>
+              <h3 class="work-slide__title">Skincare product page</h3>
+              <p class="work-slide__text">A product page with sticky buy box, ingredient table and reviews.</p>
+              <ul class="tags"><li>Shopify</li><li>PDP</li><li>CRO</li></ul>
+            </div>
+            <div class="work-slide__media" style="--media:var(--c-yellow)">
+              <div class="mock mock--a"><b>Glow serum</b><span class="mock__img" style="--mi:var(--c-pink)"></span><span class="mock__star">✦</span></div>
+              <div class="mock mock--b"><b class="mock__big">4.9 ★</b><i></i><i></i><span class="mock__btn">Buy now</span></div>
+              <div class="mock mock--c"><small>Ingredients</small><b>TABLE</b><span class="mock__band" style="--mb:var(--c-green)">Niacinamide <em>5%</em></span></div>
+            </div>
+          </article>
+
+          <article class="work-slide">
+            <div class="work-slide__body">
+              <div class="work-slide__top"><span class="work-slide__num">03.</span><button type="button" class="arrow-btn" data-open-talk aria-label="Ask about this project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button></div>
+              <h3 class="work-slide__title">Coffee subscription store</h3>
+              <p class="work-slide__text">Subscription-first home page with a slider of roasts and a simple quiz.</p>
+              <ul class="tags"><li>Shopify</li><li>Theme editor</li><li>UI/UX</li></ul>
+            </div>
+            <div class="work-slide__media" style="--media:var(--c-pink)">
+              <div class="mock mock--a"><b>Roast club</b><span class="mock__img" style="--mi:var(--c-yellow)"></span><span class="mock__star">✦</span></div>
+              <div class="mock mock--b"><b class="mock__big">12 bags</b><i></i><i></i><span class="mock__btn">Subscribe</span></div>
+              <div class="mock mock--c"><small>Pick your roast</small><b>SLIDER</b><span class="mock__band" style="--mb:var(--c-purple)">Dark roast <em>04</em></span></div>
+            </div>
+          </article>
+
+          <article class="work-slide">
+            <div class="work-slide__body">
+              <div class="work-slide__top"><span class="work-slide__num">04.</span><button type="button" class="arrow-btn" data-open-talk aria-label="Ask about this project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button></div>
+              <h3 class="work-slide__title">Furniture catalog</h3>
+              <p class="work-slide__text">A collection page with sidebar filters and big product tiles.</p>
+              <ul class="tags"><li>Shopify</li><li>PLP</li><li>Filters</li></ul>
+            </div>
+            <div class="work-slide__media" style="--media:var(--c-purple)">
+              <div class="mock mock--a"><b>Living room</b><span class="mock__img" style="--mi:var(--c-green)"></span><span class="mock__star">✦</span></div>
+              <div class="mock mock--b"><b class="mock__big">86 items</b><i></i><i></i><span class="mock__btn">Filter</span></div>
+              <div class="mock mock--c"><small>Sort by</small><b>SOFAS</b><span class="mock__band" style="--mb:var(--c-orange)">Best selling <em>↓</em></span></div>
+            </div>
+          </article>
         </div>
+        <div class="carousel-dots" data-dots></div>
       </div>
     </section>
 
-    <!-- ============ CTA ============ -->
-    <section class="section" id="contact">
+    <!-- ============ Talk CTA ============ -->
+    <section class="section talk" id="contact">
       <div class="page-width">
-        <div class="cta-banner accent-purple">
-          <h2 class="cta-banner__title display display--italic">Let's make something loud.</h2>
-          <p>Send your layout from the desk, or just write to us.</p>
-          <div class="cta-banner__actions">
-            <a class="btn" href="#layout-desk">Pick your layout</a>
-            <a class="btn btn--light" href="mailto:qonita@qonicode.tech">qonita@qonicode.tech</a>
-          </div>
-        </div>
+        <h2 class="talk__title display">
+          <span class="talk__line">LET'S MAKE <span class="shape shape--infinity" aria-hidden="true"><svg viewBox="0 0 120 60"><path d="M60 30C46 8 12 8 12 30s34 22 48 0 48-22 48 0-34 22-48 0Z" fill="none" stroke="currentColor" stroke-width="11" stroke-linejoin="round"/></svg></span></span>
+          <span class="talk__line"><span class="talk__word">S<span class="talk__o" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="var(--c-yellow)" stroke="var(--c-ink)" stroke-width="5"/><ellipse cx="36" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><ellipse cx="64" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><path d="M28 58q22 26 44 0Z" fill="var(--c-ink)"/></svg></span><span class="visually-hidden">O</span>METHING</span></span>
+          <span class="talk__line">LOUD. <span class="shape shape--flag" aria-hidden="true"><svg viewBox="0 0 110 70"><path d="M8 14c30-14 52 14 86 0l10 46c-34 14-56-14-86 0Z" fill="currentColor"/></svg></span></span>
+        </h2>
+        <button type="button" class="btn btn--lg" data-open-talk>Let's Talk</button>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="page-width">
-      <p class="site-footer__big display">Got an idea?<br><span>Let's build it.</span></p>
+  <!-- ============ Footer ============ -->
+  <footer class="page-width site-footer-wrap">
+    <div class="site-footer">
+      <div class="site-footer__grid">
+        <form class="newsletter" data-newsletter novalidate>
+          <h2 class="newsletter__title display">Subscribe to our<br><span>newsletter.</span></h2>
+          <label class="newsletter__field">
+            <span class="visually-hidden">Your email address</span>
+            <input type="email" name="email" placeholder="Your email address" autocomplete="email" required>
+            <button type="submit" aria-label="Subscribe"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17m0 0-6-6m6 6-6 6"/></svg></button>
+          </label>
+          <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
+          <p class="newsletter__status" data-news-status role="status"></p>
+        </form>
+
+        <ul class="footer-links">
+          <li><a href="#playground">Playground</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#work">Work gallery</a></li>
+          <li><a href="#contact" data-open-talk>Let's Talk</a></li>
+        </ul>
+
+        <div>
+          <ul class="footer-links">
+            <li><a href="#playground" data-goto-page="home">Home page</a></li>
+            <li><a href="#playground" data-goto-page="pdp">PDP</a></li>
+            <li><a href="#playground" data-goto-page="plp">PLP</a></li>
+          </ul>
+          <span class="footer-squiggle" aria-hidden="true"><svg viewBox="0 0 140 70"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+
+        <div class="footer-contact">
+          <p class="muted-light">Custom Shopify themes,<br>designed with you.</p>
+          <a class="footer-contact__mail" href="mailto:qonita@qonicode.tech">qonita@qonicode.tech</a>
+          <div class="footer-social">
+            <a class="social-btn" href="mailto:qonita@qonicode.tech" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+            <button type="button" class="social-btn" data-open-talk aria-label="Let's talk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"/></svg></button>
+          </div>
+        </div>
+      </div>
+
       <div class="site-footer__bottom">
-        <span>&copy; <span data-year></span> Qonicode</span>
-        <a href="mailto:qonita@qonicode.tech">qonita@qonicode.tech</a>
+        <p class="footer-mini"><a href="#playground">Playground</a>. <a href="#skills">Skills</a>. <a href="#work">Work</a></p>
+        <span class="chevrons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg></span>
+        <p><b>©<span data-year></span> Qonicode.</b> <span class="muted-light">All rights reserved</span></p>
       </div>
     </div>
   </footer>
 
-  <!-- ============ Request dialog ============ -->
-  <dialog class="request-dialog" data-request-dialog aria-labelledby="request-title">
-    <form class="request-form" data-request-form novalidate>
-      <div class="request-form__head">
-        <h2 id="request-title" class="display display--italic">Send your layout</h2>
-        <button type="button" class="icon-btn" data-close aria-label="Close">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-        </button>
+  <!-- ============ Let's Talk / Request dialog ============ -->
+  <dialog class="nb-dialog" data-dialog aria-labelledby="dialog-title" aria-describedby="dialog-desc">
+    <form class="nb-dialog__content" novalidate>
+      <button type="button" class="nb-dialog__close" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <header class="nb-dialog__header">
+        <h2 class="nb-dialog__title" id="dialog-title" data-dialog-title>Let's talk</h2>
+        <p class="nb-dialog__desc" id="dialog-desc" data-dialog-desc></p>
+      </header>
+
+      <div class="nb-dialog__attachment" data-attachment hidden>
+        <img alt="Your layout" data-attachment-img>
+        <span data-attachment-text></span>
       </div>
-      <div class="request-form__body">
-        <figure class="request-form__preview">
-          <img alt="Preview of your layout" data-request-preview>
-          <figcaption class="hand" data-request-caption>rendering your layout…</figcaption>
-        </figure>
-        <div class="request-form__fields" data-request-fields>
-          <label class="field">Your name <input class="input" name="name" autocomplete="name" required></label>
-          <label class="field">Email <input class="input" name="email" type="email" autocomplete="email" required></label>
-          <label class="field"><span>Store URL <span class="muted">(optional)</span></span><input class="input" name="store" type="url" placeholder="https://yourstore.com"></label>
-          <label class="field"><span>Notes <span class="muted">(optional)</span></span><textarea class="input" name="notes" rows="3" placeholder="Products, vibe, deadline…"></textarea></label>
-          <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
-          <p class="request-form__status" data-request-status role="status"></p>
-          <button class="btn btn--green" type="submit" data-request-submit>Send to qonicode</button>
-        </div>
+
+      <div class="nb-dialog__fields">
+        <label class="nb-field"><span>Your name</span><input class="nb-input" name="name" autocomplete="name" required></label>
+        <label class="nb-field"><span>Email</span><input class="nb-input" name="email" type="email" autocomplete="email" required></label>
+        <label class="nb-field"><span>Store URL <em>(optional)</em></span><input class="nb-input" name="store" type="url" placeholder="https://yourstore.com"></label>
+        <label class="nb-field"><span><span data-notes-label>Message</span> <em>(optional)</em></span><textarea class="nb-input" name="notes" rows="3" placeholder="Products, vibe, deadline…"></textarea></label>
+        <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
       </div>
+
+      <p class="nb-dialog__status" data-dialog-status role="status"></p>
+      <footer class="nb-dialog__footer">
+        <button type="button" class="btn" data-close>Cancel</button>
+        <button type="submit" class="btn btn--lime" data-dialog-submit>Send</button>
+      </footer>
     </form>
   </dialog>
 </body>

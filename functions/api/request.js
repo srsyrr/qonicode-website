@@ -34,35 +34,43 @@ export async function onRequestPost({ request, env }) {
   // Honeypot: bots fill the hidden "company" field. Pretend it worked.
   if (clean(data.company, 200)) return json({ ok: true });
 
+  // request: layout from the playground (PNG attached) · talk: Let's Talk form · newsletter: footer signup
+  const kind = ['request', 'talk', 'newsletter'].includes(data.kind) ? data.kind : 'request';
   const name = clean(data.name, 120);
   const email = clean(data.email, 200);
   const store = clean(data.store, 300);
   const notes = clean(data.notes, 4000);
   const image = String(data.image || '');
 
-  if (!name) return json({ ok: false, error: 'Please add your name.' }, 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ ok: false, error: 'Please add a valid email.' }, 400);
-  if (!image.startsWith(PNG_PREFIX)) return json({ ok: false, error: 'Missing layout image.' }, 400);
+  if (kind !== 'newsletter' && !name) return json({ ok: false, error: 'Please add your name.' }, 400);
+  if (kind === 'request' && !image.startsWith(PNG_PREFIX)) return json({ ok: false, error: 'Missing layout image.' }, 400);
   if (!env.RESEND_API_KEY || !env.MAIL_FROM) return json({ ok: false, error: 'Email is not configured yet.' }, 500);
 
   const layout = data.layout && typeof data.layout === 'object' ? data.layout : {};
   const layoutName = clean(layout.name, 80) || 'Custom';
+  const pageType = clean(layout.page, 40) || '—';
   const pieceCount = Array.isArray(layout.pieces) ? layout.pieces.length : 0;
 
-  const rows = [
-    ['Name', name],
-    ['Email', email],
-    ['Store', store || '—'],
-    ['Layout', `${layoutName}${layout.edited ? ' (edited)' : ''} · ${pieceCount} pieces on the page`],
-  ];
+  const heading = { request: 'New layout request', talk: "New message (Let's Talk)", newsletter: 'New newsletter subscriber' }[kind];
+  const subject = { request: `Layout request — ${name}`, talk: `Let's talk — ${name}`, newsletter: `Newsletter signup — ${email}` }[kind];
+  const rows = kind === 'newsletter' ? [['Email', email]] : [['Name', name], ['Email', email], ['Store', store || '—']];
+  if (kind === 'request') {
+    rows.push(['Page', pageType], ['Layout', `${layoutName}${layout.edited ? ' (edited)' : ''} · ${pieceCount} cards on the page`]);
+  }
+  const message = kind === 'newsletter' ? '' : notes || '(no message)';
   const html = `
-    <h2 style="font-family:Arial,sans-serif">New layout request</h2>
+    <h2 style="font-family:Arial,sans-serif">${heading}</h2>
     <table style="font-family:Arial,sans-serif;font-size:14px;border-collapse:collapse">
       ${rows.map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;color:#666">${k}</td><td style="padding:4px 0"><strong>${escapeHtml(v)}</strong></td></tr>`).join('')}
     </table>
-    <p style="font-family:Arial,sans-serif;font-size:14px;white-space:pre-wrap">${escapeHtml(notes || '(no notes)')}</p>
-    <p style="font-family:Arial,sans-serif;font-size:12px;color:#666">The layout image and its JSON are attached. Reply to this email to answer ${escapeHtml(name)}.</p>`;
-  const text = `New layout request\n\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\nNotes:\n${notes || '(no notes)'}`;
+    ${message ? `<p style="font-family:Arial,sans-serif;font-size:14px;white-space:pre-wrap">${escapeHtml(message)}</p>` : ''}
+    <p style="font-family:Arial,sans-serif;font-size:12px;color:#666">${kind === 'request' ? 'The layout image and its JSON are attached. ' : ''}Reply to this email to answer ${escapeHtml(name || email)}.</p>`;
+  const text = `${heading}\n\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}${message ? `\n\nMessage:\n${message}` : ''}`;
+  const attachments = kind !== 'request' ? null : [
+    { filename: 'layout.png', content: image.slice(PNG_PREFIX.length) },
+    { filename: 'layout.json', content: toBase64(JSON.stringify(layout, null, 2)) },
+  ];
 
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -71,13 +79,10 @@ export async function onRequestPost({ request, env }) {
       from: env.MAIL_FROM,
       to: [env.MAIL_TO || DEFAULT_TO],
       reply_to: email,
-      subject: `Layout request — ${name}`,
+      subject,
       html,
       text,
-      attachments: [
-        { filename: 'layout.png', content: image.slice(PNG_PREFIX.length) },
-        { filename: 'layout.json', content: toBase64(JSON.stringify(layout, null, 2)) },
-      ],
+      ...(attachments ? { attachments } : {}),
     }),
   });
 

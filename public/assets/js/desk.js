@@ -1,23 +1,26 @@
-/* Layout desk — paper pieces you drag onto a page frame.
+/* Playground — paper cards you drag onto a page frame.
+   Every card type waits in its own spot on the desk; take one onto the page and a fresh one appears.
    Positions are stored in frame units (see pieces.js) and drawn in px. */
-import { FRAME, TYPES, SUPPLY, PRESETS, buildLayout, randomRows } from './pieces.js';
+import { FRAME, TYPES, SUPPLY, PAGES, buildLayout } from './pieces.js';
+import { openDialog, triggerDownload } from './dialog.js';
 
-const STORE_KEY = 'qonicode-desk-v1';
-const MAIL_TO = 'qonita@qonicode.tech';
-const REQUEST_URL = '/api/request';
+const STORE_KEY = 'qonicode-desk-v2';
 const DRAG_THRESHOLD = 4;
 const DESK_BG = '#EFE7D8';
+const SLOT_TILT = [-5, 4, -3, 6, -4, 3, -6, 5, -2, 4, -5];
 
-/* Desk sizes (in frame units) for wide and narrow screens, with the slots loose pieces rest in. */
+/* Desk sizes (in frame units) for wide and narrow screens, with one slot per card type. */
 const DESKS = {
   wide: {
     w: 200, h: 176, ox: 50, oy: 8, miniScale: 1,
-    // left column, then right column
-    slots: [-25, 125].flatMap((x) => [12, 38, 64, 90, 116, 142].map((y) => ({ x, y }))),
+    slots: [
+      ...[10, 36, 62, 88, 114, 140].map((y) => ({ x: -25, y })),
+      ...[10, 36, 62, 88, 114].map((y) => ({ x: 125, y })),
+    ],
   },
   narrow: {
-    w: 110, h: 244, ox: 5, oy: 4, miniScale: 0.86,
-    slots: [172, 190, 208, 226].flatMap((y) => [16, 50, 84].map((x) => ({ x, y }))),
+    w: 110, h: 244, ox: 5, oy: 4, miniScale: 0.9,
+    slots: [171, 190, 209, 228].flatMap((y) => [17, 50, 83].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
   },
 };
 
@@ -25,34 +28,34 @@ const mq = window.matchMedia('(max-width: 749px)');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 const half = (v) => Math.round(v * 2) / 2;
-const tilt = () => Math.round((Math.random() * 14 - 7) * 10) / 10;
 const nextFrame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-class LayoutDesk {
+class Playground {
   constructor(root) {
     this.root = root;
     this.desk = root.querySelector('[data-desk]');
     this.frame = root.querySelector('[data-frame]');
     this.label = root.querySelector('[data-preset-label]');
     this.live = root.querySelector('[data-live]');
+    this.pageButtons = [...root.querySelectorAll('[data-page]')];
     this.pieces = [];
     this.uid = 0;
-    this.topZ = 1;
+    this.topZ = 20;
     this.selected = null;
     this.drag = null;
-    this.presetIndex = 0;
-    this.layoutName = PRESETS[0].name;
-    this.edited = false;
+    this.store = this.load();
+    this.page = PAGES[this.store.page] ? this.store.page : 'home';
 
-    this.buildTray();
     this.measure();
-    if (!this.restore()) this.applyPreset(0, { animate: false });
+    this.fillSupply();
+    this.loadPage(this.page, { animate: false });
     this.bind();
   }
 
   /* ---------- geometry ---------- */
 
   get cfg() { return DESKS[this.mode]; }
+  get pagePieces() { return this.pieces.filter((pc) => !pc.supply); }
 
   measure() {
     const prevMode = this.mode;
@@ -65,7 +68,23 @@ class LayoutDesk {
       left: `${this.cfg.ox * this.u}px`, top: `${this.cfg.oy * this.u}px`,
       width: `${FRAME.w * this.u}px`, height: `${FRAME.h * this.u}px`,
     });
-    if (prevMode && prevMode !== this.mode) this.reslotLoose();
+    this.drawCaptions();
+    if (prevMode && prevMode !== this.mode) this.pieces.filter((pc) => pc.supply).forEach((pc) => this.toSlot(pc));
+  }
+
+  /* Card names are written on the desk, under each card's spot. */
+  drawCaptions() {
+    this.desk.querySelectorAll('.desk__caption').forEach((el) => el.remove());
+    SUPPLY.forEach((type, i) => {
+      const slot = this.cfg.slots[i];
+      const [, h] = this.miniSize(type);
+      const el = document.createElement('span');
+      el.className = 'desk__caption';
+      el.textContent = TYPES[type].label;
+      el.style.left = `${(this.cfg.ox + slot.x) * this.u}px`;
+      el.style.top = `${(this.cfg.oy + slot.y + h / 2 + 1.4) * this.u}px`;
+      this.desk.insertBefore(el, this.frame);
+    });
   }
 
   draw(piece) {
@@ -75,10 +94,12 @@ class LayoutDesk {
     el.style.top = `${(oy + piece.y) * this.u}px`;
     el.style.width = `${piece.w * this.u}px`;
     el.style.height = `${piece.h * this.u}px`;
-    el.style.zIndex = piece.z;
+    el.style.setProperty('--h', `${piece.h * this.u}px`);
+    // Sections are containers: they stay underneath the other cards unless being dragged.
+    el.style.zIndex = piece.type === 'section' && !piece.supply ? 2 : piece.z;
     el.style.setProperty('--r', piece.r);
-    el.classList.toggle('piece--loose', piece.loose);
-    el.setAttribute('aria-label', `${TYPES[piece.type].label} piece, ${piece.loose ? 'on the desk' : 'on the page'}`);
+    el.classList.toggle('piece--supply', piece.supply);
+    el.setAttribute('aria-label', `${TYPES[piece.type].label} card${piece.supply ? ' (on the desk — drag it onto the page)' : ''}`);
   }
 
   miniSize(type) {
@@ -87,35 +108,19 @@ class LayoutDesk {
     return [w * s, h * s];
   }
 
-  /* A desk slot for a loose piece: the one for its type if free, otherwise the emptiest. */
-  pickSlot(type, taken = new Set()) {
-    const slots = this.cfg.slots;
-    const own = SUPPLY.indexOf(type);
-    const occupied = (slot) => this.pieces.some((pc) => pc.loose && !pc.leaving
-      && Math.abs(pc.x + pc.w / 2 - slot.x) < 8 && Math.abs(pc.y + pc.h / 2 - slot.y) < 6);
-    if (own >= 0 && slots[own] && !taken.has(own) && !occupied(slots[own])) { taken.add(own); return slots[own]; }
-    const free = slots.findIndex((s, i) => !taken.has(i) && !occupied(s));
-    const i = free >= 0 ? free : Math.floor(Math.random() * slots.length);
-    taken.add(i);
-    return slots[i];
-  }
-
-  placeLoose(piece, slot) {
+  /* Put a supply card back on its spot. */
+  toSlot(piece) {
+    const i = SUPPLY.indexOf(piece.type);
+    const slot = this.cfg.slots[i];
     const [w, h] = this.miniSize(piece.type);
-    const jitter = () => Math.random() * 3 - 1.5;
-    Object.assign(piece, { w, h, x: slot.x - w / 2 + jitter(), y: slot.y - h / 2 + jitter(), r: tilt(), loose: true });
-    this.clampToDesk(piece);
+    Object.assign(piece, { w, h, x: slot.x - w / 2, y: slot.y - h / 2, r: SLOT_TILT[i % SLOT_TILT.length], supply: true });
+    this.draw(piece);
   }
 
   clampToDesk(piece) {
     const { w: dw, h: dh, ox, oy } = this.cfg;
     piece.x = clamp(piece.x, -ox, dw - ox - piece.w);
     piece.y = clamp(piece.y, -oy, dh - oy - piece.h);
-  }
-
-  reslotLoose() {
-    const taken = new Set();
-    this.pieces.filter((pc) => pc.loose).forEach((pc) => { this.placeLoose(pc, this.pickSlot(pc.type, taken)); this.draw(pc); });
   }
 
   /* ---------- pieces ---------- */
@@ -127,31 +132,38 @@ class LayoutDesk {
     el.tabIndex = 0;
     el.style.setProperty('--pc', type.color);
     el.innerHTML = `<div class="piece__paper">${type.art()}</div>`
-      + `<span class="piece__tag" aria-hidden="true">${type.label}</span>`
-      + '<button type="button" class="piece__del" aria-label="Remove piece" tabindex="-1">×</button>'
+      + '<button type="button" class="piece__del" aria-label="Remove card" tabindex="-1">×</button>'
       + '<span class="piece__resize" aria-hidden="true"></span>';
-    const piece = { id: `p${++this.uid}`, type: spec.type, x: 0, y: 0, w: type.size[0], h: type.size[1], r: 0, loose: false, z: ++this.topZ, ...spec, el };
-    el.dataset.id = piece.id;
+    const piece = { id: `p${++this.uid}`, type: spec.type, x: 0, y: 0, w: type.size[0], h: type.size[1], r: 0, supply: false, z: ++this.topZ, text: '', ...spec, el };
+    const input = el.querySelector('.piece__input');
+    if (input) {
+      input.value = piece.text || '';
+      input.tabIndex = -1;
+      input.addEventListener('input', () => { piece.text = input.value.slice(0, 20); this.markEdited(); });
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); input.blur(); el.focus(); } e.stopPropagation(); });
+      input.addEventListener('blur', () => el.classList.remove('is-editing'));
+    }
     this.pieces.push(piece);
     this.desk.appendChild(el);
     return piece;
   }
 
-  async addFromTray(type) {
-    const piece = this.createPiece({ type });
-    this.placeLoose(piece, this.pickSlot(type));
-    piece.el.classList.add('is-entering');
-    this.draw(piece);
+  fillSupply() {
+    SUPPLY.forEach((type) => {
+      if (this.pieces.some((pc) => pc.supply && pc.type === type)) return;
+      this.toSlot(this.createPiece({ type, supply: true }));
+    });
+  }
+
+  async respawn(type) {
+    const pc = this.createPiece({ type, supply: true });
+    pc.el.classList.add('is-entering');
+    this.toSlot(pc);
     await nextFrame();
-    piece.el.classList.remove('is-entering');
-    this.select(piece);
-    piece.el.focus({ preventScroll: true });
-    this.markEdited();
-    this.announce(`${TYPES[type].label} piece added to the desk`);
+    pc.el.classList.remove('is-entering');
   }
 
   removePiece(piece) {
-    piece.leaving = true;
     this.pieces = this.pieces.filter((pc) => pc !== piece);
     if (this.selected === piece) this.selected = null;
     piece.el.classList.add('is-leaving');
@@ -164,133 +176,152 @@ class LayoutDesk {
     if (piece) piece.el.classList.add('is-selected');
   }
 
-  /* Dropped somewhere: on the page it straightens up (and grows to full size), on the desk it shrinks back. */
+  startEditing(piece) {
+    const input = piece.el.querySelector('.piece__input');
+    if (!input || piece.supply) return;
+    piece.el.classList.add('is-editing');
+    input.focus();
+    input.select();
+  }
+
+  /* A card was dropped. On the page it straightens up (supply cards grow to full size and get replaced);
+     anywhere else on the desk it goes away (page cards) or back to its spot (supply cards). */
   settle(piece) {
     const cx = piece.x + piece.w / 2;
     const cy = piece.y + piece.h / 2;
-    const onPage = cx >= 0 && cx <= FRAME.w && cy >= 0 && cy <= FRAME.h;
-    if (onPage) {
-      if (piece.loose) {
-        [piece.w, piece.h] = TYPES[piece.type].size;
-        piece.x = cx - piece.w / 2;
-        piece.y = cy - piece.h / 2;
-      }
-      piece.loose = false;
-      piece.r = 0;
-      piece.x = clamp(half(piece.x), 0, FRAME.w - piece.w);
-      piece.y = clamp(half(piece.y), FRAME.top, FRAME.h - piece.h);
-    } else if (!piece.loose) {
-      [piece.w, piece.h] = this.miniSize(piece.type);
+    const onPage = cx >= 0 && cx <= FRAME.w && cy >= FRAME.top && cy <= FRAME.h;
+    if (!onPage) {
+      if (piece.supply) { this.toSlot(piece); return 'back'; }
+      this.removePiece(piece);
+      return 'removed';
+    }
+    const wasSupply = piece.supply;
+    if (wasSupply) {
+      [piece.w, piece.h] = TYPES[piece.type].size;
       piece.x = cx - piece.w / 2;
       piece.y = cy - piece.h / 2;
-      piece.loose = true;
-      piece.r = tilt();
-      this.clampToDesk(piece);
+      piece.supply = false;
+      this.respawn(piece.type);
     }
+    piece.r = 0;
+    piece.x = clamp(half(piece.x), 0, FRAME.w - piece.w);
+    piece.y = clamp(half(piece.y), FRAME.top, FRAME.h - piece.h);
     this.draw(piece);
+    return wasSupply ? 'added' : 'moved';
   }
 
-  /* ---------- layouts ---------- */
+  /* ---------- pages, presets, shuffle ---------- */
 
-  applyPreset(index, opts) {
-    this.presetIndex = (index + PRESETS.length) % PRESETS.length;
-    const preset = PRESETS[this.presetIndex];
+  get pageState() {
+    if (!this.store.layouts[this.page]) this.store.layouts[this.page] = { preset: 0, name: PAGES[this.page].presets[0].name, edited: false, pieces: null };
+    return this.store.layouts[this.page];
+  }
+
+  loadPage(page, { animate = true } = {}) {
+    this.page = page;
+    this.store.page = page;
+    this.pageButtons.forEach((b) => {
+      const on = b.dataset.page === page;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-checked', String(on));
+    });
+    const st = this.pageState;
+    const valid = Array.isArray(st.pieces) && st.pieces.length && st.pieces.every((s) => TYPES[s.type]);
+    if (valid) this.applyLayout(st.pieces, st.name, { animate, keepEdited: true });
+    else this.applyPreset(st.preset || 0, { animate });
+  }
+
+  applyPreset(index, opts = {}) {
+    const presets = PAGES[this.page].presets;
+    const st = this.pageState;
+    st.preset = (index + presets.length) % presets.length;
+    const preset = presets[st.preset];
     this.applyLayout(buildLayout(preset.rows), preset.name, opts);
   }
 
   shuffle() {
-    this.applyLayout(buildLayout(randomRows()), 'Shuffled', {});
+    this.applyLayout(buildLayout(PAGES[this.page].shuffle()), 'Shuffled');
     this.announce('Shuffled a new layout');
   }
 
-  /* Re-use pieces of the same type so they glide into place; keep one loose piece of every type on the desk. */
-  async applyLayout(specs, name, { animate = true } = {}) {
+  /* Re-use page cards of the same type so they glide into place; new ones fly in from their desk spot. */
+  async applyLayout(specs, name, { animate = true, keepEdited = false } = {}) {
     if (!animate) this.desk.classList.add('no-anim');
     this.select(null);
     const pool = new Map();
-    [...this.pieces].sort((a, b) => a.loose - b.loose).forEach((pc) => {
+    this.pagePieces.forEach((pc) => {
       if (!pool.has(pc.type)) pool.set(pc.type, []);
       pool.get(pc.type).push(pc);
     });
 
     const entering = [];
-    let z = 1;
+    let z = 20;
     specs.forEach((spec) => {
       let piece = pool.get(spec.type)?.shift();
-      if (!piece) { piece = this.createPiece(spec); entering.push(piece); }
-      Object.assign(piece, { x: spec.x, y: spec.y, w: spec.w, h: spec.h, r: 0, loose: false, z: z++ });
+      if (!piece) {
+        piece = this.createPiece({ type: spec.type });
+        // start on its desk spot, then fly to the page
+        const slot = this.cfg.slots[SUPPLY.indexOf(spec.type)];
+        const [mw, mh] = this.miniSize(spec.type);
+        Object.assign(piece, { x: slot.x - mw / 2, y: slot.y - mh / 2, w: mw, h: mh, r: 0 });
+        this.draw(piece);
+        entering.push(piece);
+      }
+      const text = String(spec.text || '').slice(0, 20);
+      Object.assign(piece, { x: +spec.x, y: +spec.y, w: +spec.w, h: +spec.h, r: 0, supply: false, z: z++, text });
+      const input = piece.el.querySelector('.piece__input');
+      if (input) input.value = text;
     });
+    for (const rest of pool.values()) rest.forEach((pc) => this.removePiece(pc));
+    this.topZ = z + 20;
+    this.pieces.filter((pc) => pc.supply).forEach((pc) => { pc.z = ++this.topZ; this.draw(pc); });
 
-    const taken = new Set();
-    const covered = new Set();
-    for (const leftovers of pool.values()) {
-      leftovers.forEach((pc) => {
-        if (covered.has(pc.type)) { this.removePiece(pc); return; }
-        covered.add(pc.type);
-        this.placeLoose(pc, this.pickSlot(pc.type, taken));
-        pc.z = 100 + z++;
-      });
-    }
-    SUPPLY.filter((t) => !covered.has(t)).forEach((type) => {
-      const pc = this.createPiece({ type });
-      this.placeLoose(pc, this.pickSlot(type, taken));
-      pc.z = 100 + z++;
-      entering.push(pc);
-    });
-    this.topZ = 100 + z;
+    if (animate && entering.length) await nextFrame();
+    this.pagePieces.forEach((pc) => this.draw(pc));
 
-    entering.forEach((pc) => animate && pc.el.classList.add('is-entering'));
-    this.pieces.forEach((pc) => this.draw(pc));
-    this.layoutName = name;
-    this.edited = false;
+    const st = this.pageState;
+    st.name = name;
+    st.edited = keepEdited ? !!st.edited : false;
     this.updateLabel();
     this.save();
-
     await nextFrame();
-    entering.forEach((pc) => pc.el.classList.remove('is-entering'));
     this.desk.classList.remove('no-anim');
   }
 
   updateLabel() {
-    const shuffled = this.layoutName === 'Shuffled';
-    const num = shuffled ? '??' : String(this.presetIndex + 1).padStart(2, '0');
-    const total = String(PRESETS.length).padStart(2, '0');
-    const title = shuffled ? 'shuffled layout' : this.layoutName;
-    this.label.innerHTML = `${num} / ${total}<small>${title}${this.edited ? ' · edited' : ''}</small>`;
+    const st = this.pageState;
+    const presets = PAGES[this.page].presets;
+    const shuffled = st.name === 'Shuffled';
+    const num = shuffled ? '??' : String(st.preset + 1).padStart(2, '0');
+    const total = String(presets.length).padStart(2, '0');
+    const title = shuffled ? 'Shuffled layout' : st.name;
+    this.label.innerHTML = `<b>${num} / ${total}</b><span>${title}${st.edited ? ' · edited' : ''}</span>`;
   }
 
   markEdited() {
-    if (!this.edited) { this.edited = true; this.updateLabel(); }
+    const st = this.pageState;
+    if (!st.edited) { st.edited = true; this.updateLabel(); }
     this.save();
   }
 
   /* ---------- persistence ---------- */
 
-  save() {
-    const data = {
-      v: 1, mode: this.mode, preset: this.presetIndex, name: this.layoutName, edited: this.edited,
-      pieces: this.pieces.map(({ type, x, y, w, h, r, loose, z }) => ({ type, x, y, w, h, r, loose, z })),
-    };
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch (e) { /* private mode — ignore */ }
+  load() {
+    const empty = { v: 2, page: 'home', layouts: {} };
+    try {
+      const data = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      return data && data.v === 2 && data.layouts ? data : empty;
+    } catch (e) {
+      return empty;
+    }
   }
 
-  restore() {
-    let data;
-    try { data = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) { return false; }
-    if (!data || data.v !== 1 || !Array.isArray(data.pieces) || !data.pieces.length) return false;
-    this.desk.classList.add('no-anim');
-    data.pieces.filter((s) => TYPES[s.type]).forEach((s) => {
-      const pc = this.createPiece({ type: s.type, x: +s.x || 0, y: +s.y || 0, w: +s.w || 10, h: +s.h || 10, r: +s.r || 0, loose: !!s.loose, z: +s.z || 1 });
-      this.topZ = Math.max(this.topZ, pc.z + 1);
-    });
-    if (data.mode !== this.mode) this.reslotLoose();
-    this.pieces.forEach((pc) => { this.clampToDesk(pc); this.draw(pc); });
-    this.presetIndex = clamp(+data.preset || 0, 0, PRESETS.length - 1);
-    this.layoutName = data.name || PRESETS[this.presetIndex].name;
-    this.edited = !!data.edited;
-    this.updateLabel();
-    requestAnimationFrame(() => this.desk.classList.remove('no-anim'));
-    return true;
+  save() {
+    this.pageState.pieces = this.pagePieces.map(({ type, x, y, w, h, text }) => ({ type, x, y, w, h, ...(text ? { text } : {}) }));
+    clearTimeout(this.saveTimer);
+    this.saveTimer = setTimeout(() => {
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(this.store)); } catch (e) { /* private mode — ignore */ }
+    }, 150);
   }
 
   /* ---------- events ---------- */
@@ -302,21 +333,22 @@ class LayoutDesk {
     this.desk.addEventListener('keydown', (e) => this.onKey(e));
     this.desk.addEventListener('click', (e) => {
       const del = e.target.closest('.piece__del');
-      if (del) {
-        const pc = this.find(del.closest('.piece'));
-        if (pc) { this.removePiece(pc); this.markEdited(); this.announce('Piece removed'); }
-      }
+      if (!del) return;
+      const pc = this.find(del.closest('.piece'));
+      if (pc) { this.removePiece(pc); this.markEdited(); this.announce('Card removed'); }
     });
     this.desk.addEventListener('focusin', (e) => {
       const pc = this.find(e.target.closest('.piece'));
       if (pc) this.select(pc);
     });
 
-    this.root.querySelector('[data-action="prev"]').addEventListener('click', () => this.applyPreset(this.presetIndex - 1));
-    this.root.querySelector('[data-action="next"]').addEventListener('click', () => this.applyPreset(this.presetIndex + 1));
-    this.root.querySelector('[data-action="shuffle"]').addEventListener('click', () => this.shuffle());
-    this.root.querySelector('[data-action="save"]').addEventListener('click', (e) => this.downloadPNG(e.currentTarget));
-    this.root.querySelector('[data-action="request"]').addEventListener('click', () => requestDialog.open(this));
+    const on = (sel, fn) => this.root.querySelector(sel)?.addEventListener('click', fn);
+    on('[data-action="prev"]', () => this.applyPreset(this.pageState.preset - 1));
+    on('[data-action="next"]', () => this.applyPreset(this.pageState.preset + 1));
+    on('[data-action="shuffle"]', () => this.shuffle());
+    on('[data-action="save"]', (e) => this.downloadPNG(e.currentTarget));
+    on('[data-action="request"]', () => this.openRequest());
+    this.pageButtons.forEach((b) => b.addEventListener('click', () => { if (b.dataset.page !== this.page) this.loadPage(b.dataset.page); }));
 
     let t;
     window.addEventListener('resize', () => {
@@ -334,17 +366,14 @@ class LayoutDesk {
 
   onDown(e) {
     if (e.button !== 0 || this.drag) return;
-    const el = e.target.closest('.piece');
-    const piece = this.find(el);
+    const piece = this.find(e.target.closest('.piece'));
     if (!piece) { this.select(null); return; }
     if (e.target.closest('.piece__del')) return;
+    if (piece.el.classList.contains('is-editing') && e.target.closest('.piece__input')) return;
     e.preventDefault();
     this.select(piece);
-    const resizing = !!e.target.closest('.piece__resize');
-    this.drag = {
-      piece, resizing, moved: false, pointerId: e.pointerId,
-      sx: e.clientX, sy: e.clientY, x: piece.x, y: piece.y, w: piece.w, h: piece.h,
-    };
+    const resizing = !piece.supply && !!e.target.closest('.piece__resize');
+    this.drag = { piece, resizing, moved: false, pointerId: e.pointerId, sx: e.clientX, sy: e.clientY, x: piece.x, y: piece.y, w: piece.w, h: piece.h };
     window.addEventListener('pointermove', this.onMove);
     window.addEventListener('pointerup', this.onUp);
     window.addEventListener('pointercancel', this.onUp);
@@ -355,24 +384,26 @@ class LayoutDesk {
     if (!d || e.pointerId !== d.pointerId) return;
     const dx = (e.clientX - d.sx) / this.u;
     const dy = (e.clientY - d.sy) / this.u;
+    const pc = d.piece;
     if (!d.moved) {
       if (Math.hypot(e.clientX - d.sx, e.clientY - d.sy) < DRAG_THRESHOLD) return;
       d.moved = true;
-      d.piece.z = ++this.topZ;
-      d.piece.el.classList.add(d.resizing ? 'is-resizing' : 'is-dragging');
+      pc.z = ++this.topZ;
+      pc.el.style.zIndex = 9999;
+      pc.el.classList.add(d.resizing ? 'is-resizing' : 'is-dragging');
     }
     e.preventDefault();
-    const pc = d.piece;
     if (d.resizing) {
+      const ratio = TYPES[pc.type].ratio;
       pc.w = clamp(d.w + dx, 4, FRAME.w - pc.x);
-      pc.h = TYPES[pc.type].lockAspect ? clamp(pc.w, 3, FRAME.h - pc.y) : clamp(d.h + dy, 3, FRAME.h - pc.y);
-      if (TYPES[pc.type].lockAspect) pc.w = pc.h;
+      pc.h = ratio ? pc.w / ratio : clamp(d.h + dy, 3, FRAME.h - pc.y);
     } else {
       pc.x = d.x + dx;
       pc.y = d.y + dy;
       this.clampToDesk(pc);
     }
     this.draw(pc);
+    pc.el.style.zIndex = 9999;
   }
 
   onUp(e) {
@@ -384,15 +415,22 @@ class LayoutDesk {
     this.drag = null;
     const pc = d.piece;
     pc.el.classList.remove('is-dragging', 'is-resizing');
-    if (!d.moved) return;
+    if (!d.moved) {
+      this.draw(pc);
+      if (TYPES[pc.type].editable) this.startEditing(pc);
+      return;
+    }
     if (d.resizing) {
       pc.w = half(pc.w);
-      pc.h = half(pc.h);
+      pc.h = TYPES[pc.type].ratio ? pc.w / TYPES[pc.type].ratio : half(pc.h);
       this.draw(pc);
-    } else {
-      this.settle(pc);
+      this.markEdited();
+      return;
     }
-    this.markEdited();
+    const result = this.settle(pc);
+    if (result !== 'back') this.markEdited();
+    if (result === 'added') this.announce(`${TYPES[pc.type].label} added to the page`);
+    if (result === 'removed') this.announce('Card removed');
   }
 
   onKey(e) {
@@ -400,48 +438,31 @@ class LayoutDesk {
     if (!pc || e.target !== pc.el) return;
     const step = e.shiftKey ? 5 : 1;
     const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
-    if (moves[e.key]) {
+    if (moves[e.key] && !pc.supply) {
       e.preventDefault();
-      pc.x += moves[e.key][0];
-      pc.y += moves[e.key][1];
-      this.clampToDesk(pc);
+      pc.x = clamp(pc.x + moves[e.key][0], 0, FRAME.w - pc.w);
+      pc.y = clamp(pc.y + moves[e.key][1], FRAME.top, FRAME.h - pc.h);
       this.draw(pc);
       this.markEdited();
-    } else if (e.key === 'Delete' || e.key === 'Backspace') {
+    } else if ((e.key === 'Delete' || e.key === 'Backspace') && !pc.supply) {
       e.preventDefault();
       this.removePiece(pc);
       this.markEdited();
-      this.announce('Piece removed');
+      this.announce('Card removed');
     } else if (e.key === 'Enter') {
-      // Enter moves a loose piece onto the page (and back again).
       e.preventDefault();
-      if (pc.loose) {
+      if (pc.supply) {
+        // Enter on a desk card puts it in the middle of the page.
         pc.x = FRAME.w / 2 - pc.w / 2;
         pc.y = FRAME.h / 2 - pc.h / 2;
-      } else {
-        const slot = this.pickSlot(pc.type);
-        pc.x = slot.x - pc.w / 2;
-        pc.y = slot.y - pc.h / 2;
+        pc.z = ++this.topZ;
+        this.settle(pc);
+        this.markEdited();
+        this.announce(`${TYPES[pc.type].label} added to the page`);
+      } else if (TYPES[pc.type].editable) {
+        this.startEditing(pc);
       }
-      pc.z = ++this.topZ;
-      this.settle(pc);
-      this.markEdited();
-      this.announce(pc.loose ? 'Moved back to the desk' : 'Placed on the page');
     }
-  }
-
-  buildTray() {
-    const tray = this.root.querySelector('[data-tray]');
-    SUPPLY.forEach((type) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'tray__btn';
-      btn.style.setProperty('--pc', TYPES[type].color);
-      btn.textContent = TYPES[type].label;
-      btn.setAttribute('aria-label', `Add a ${TYPES[type].label} piece`);
-      btn.addEventListener('click', () => this.addFromTray(type));
-      tray.appendChild(btn);
-    });
   }
 
   announce(msg) { if (this.live) this.live.textContent = msg; }
@@ -460,14 +481,14 @@ class LayoutDesk {
     return window.htmlToImage;
   }
 
-  /* Only the handwritten face (latin) is used on the desk. Embedding every Google Fonts
+  /* Only the regular latin Archivo face is used on the page cards. Embedding every Google Fonts
      subset makes the export ~20x slower, so keep just that one @font-face. */
   async fontCSS(htmlToImage) {
     if (this._fontCSS != null) return this._fontCSS;
     try {
       const all = await htmlToImage.getFontEmbedCSS(this.desk);
       const faces = (all.match(/@font-face\s*{[^}]*}/g) || [])
-        .filter((f) => /font-family:\s*["']?Caveat/i.test(f) && /U\+0-FF,/i.test(f));
+        .filter((f) => /font-family:\s*["']?Archivo/i.test(f) && /font-style:\s*normal/i.test(f) && /U\+0-FF,/i.test(f));
       this._fontCSS = [...new Set(faces)].join('\n');
     } catch (e) {
       this._fontCSS = '';
@@ -487,8 +508,8 @@ class LayoutDesk {
       const scale = clamp(1200 / frameW, 1.5, 4);
       const full = await htmlToImage.toCanvas(this.desk, {
         pixelRatio: scale,
-        fontEmbedCSS: await this.fontCSS(htmlToImage),
         backgroundColor: DESK_BG,
+        fontEmbedCSS: await this.fontCSS(htmlToImage),
         filter: (node) => !(node.classList && (node.classList.contains('piece__del') || node.classList.contains('piece__resize'))),
       });
       const border = this.desk.clientLeft;
@@ -509,10 +530,11 @@ class LayoutDesk {
       ctx.fillStyle = '#111111';
       ctx.fillRect(0, sh, out.width, cap);
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#FFD233';
-      ctx.font = `700 ${Math.round(cap * 0.5)}px Caveat, cursive`;
-      const title = this.layoutName === 'Shuffled' ? 'shuffled layout' : this.layoutName.toLowerCase();
-      ctx.fillText(`my layout — ${title}${this.edited ? ' (edited)' : ''}`, cap * 0.4, sh + cap / 2);
+      const st = this.pageState;
+      ctx.fillStyle = '#B4F23E';
+      ctx.font = `800 ${Math.round(cap * 0.3)}px Archivo, sans-serif`;
+      const title = st.name === 'Shuffled' ? 'shuffled layout' : st.name;
+      ctx.fillText(`${PAGES[this.page].label} — ${title}${st.edited ? ' (edited)' : ''}`.toUpperCase(), cap * 0.4, sh + cap / 2);
       ctx.fillStyle = '#F5EFE3';
       ctx.font = `900 ${Math.round(cap * 0.3)}px Archivo, sans-serif`;
       ctx.textAlign = 'right';
@@ -530,7 +552,7 @@ class LayoutDesk {
     try {
       const canvas = await this.renderCanvas();
       const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'));
-      triggerDownload(blob, 'qonicode-layout.png');
+      triggerDownload(blob, `qonicode-${this.page}-layout.png`);
       this.announce('Layout saved as PNG');
     } catch (err) {
       console.error(err);
@@ -540,105 +562,19 @@ class LayoutDesk {
     }
   }
 
-  layoutData() {
-    return {
-      name: this.layoutName, edited: this.edited,
-      pieces: this.pieces.filter((pc) => !pc.loose).map(({ type, x, y, w, h }) => ({ type, x, y, w, h })),
-    };
+  openRequest() {
+    openDialog('request', {
+      render: () => this.renderCanvas(),
+      layout: () => ({
+        page: PAGES[this.page].label,
+        name: this.pageState.name,
+        edited: this.pageState.edited,
+        pieces: this.pagePieces.map(({ type, x, y, w, h, text }) => ({ type, x, y, w, h, ...(text ? { text } : {}) })),
+      }),
+      filename: `qonicode-${this.page}-layout.png`,
+    });
   }
 }
 
-function triggerDownload(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
-}
-
-/* ---------- Request dialog ---------- */
-
-const requestDialog = {
-  init() {
-    this.dialog = document.querySelector('[data-request-dialog]');
-    if (!this.dialog) return;
-    this.form = this.dialog.querySelector('[data-request-form]');
-    this.img = this.dialog.querySelector('[data-request-preview]');
-    this.caption = this.dialog.querySelector('[data-request-caption]');
-    this.status = this.dialog.querySelector('[data-request-status]');
-    this.submit = this.dialog.querySelector('[data-request-submit]');
-    this.dialog.querySelector('[data-close]').addEventListener('click', () => this.dialog.close());
-    this.dialog.addEventListener('click', (e) => { if (e.target === this.dialog) this.dialog.close(); });
-    this.form.addEventListener('submit', (e) => { e.preventDefault(); this.send(); });
-  },
-
-  async open(desk) {
-    this.desk = desk;
-    this.dataUrl = null;
-    this.setStatus('');
-    this.form.querySelectorAll('input, textarea, button').forEach((el) => { el.disabled = false; });
-    this.submit.disabled = true;
-    this.img.removeAttribute('src');
-    this.caption.textContent = 'rendering your layout…';
-    this.dialog.showModal();
-    try {
-      const canvas = await desk.renderCanvas();
-      this.canvas = canvas;
-      this.dataUrl = canvas.toDataURL('image/png');
-      this.img.src = this.dataUrl;
-      this.caption.textContent = 'this image will be attached';
-      this.submit.disabled = false;
-    } catch (err) {
-      console.error(err);
-      this.caption.textContent = 'could not render the image';
-      this.setStatus('The image could not be created in this browser.', 'error');
-    }
-  },
-
-  async send() {
-    if (!this.form.reportValidity() || !this.dataUrl) return;
-    const fd = new FormData(this.form);
-    const payload = {
-      name: fd.get('name').trim(), email: fd.get('email').trim(), store: fd.get('store').trim(),
-      notes: fd.get('notes').trim(), company: fd.get('company'),
-      image: this.dataUrl, layout: this.desk.layoutData(),
-    };
-    this.submit.disabled = true;
-    this.setStatus('Sending…');
-    try {
-      const res = await fetch(REQUEST_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      const body = await res.json().catch(() => ({}));
-      if (!res.ok || !body.ok) throw new Error(body.error || `HTTP ${res.status}`);
-      this.form.querySelectorAll('input, textarea').forEach((el) => { el.disabled = true; });
-      this.setStatus(`Sent! We'll reply to ${payload.email} soon.`, 'ok');
-    } catch (err) {
-      console.error(err);
-      this.submit.disabled = false;
-      this.status.dataset.state = 'error';
-      this.status.innerHTML = 'Couldn\'t send automatically. <a href="#" data-dl>Download the PNG</a> and email it to '
-        + `<a href="mailto:${MAIL_TO}?subject=${encodeURIComponent('Layout request')}">${MAIL_TO}</a>.`;
-      this.status.querySelector('[data-dl]').addEventListener('click', (e) => {
-        e.preventDefault();
-        this.canvas.toBlob((blob) => triggerDownload(blob, 'qonicode-layout.png'), 'image/png');
-      });
-    }
-  },
-
-  setStatus(text, state = '') {
-    this.status.textContent = text;
-    this.status.dataset.state = state;
-  },
-};
-
-/* ---------- boot ---------- */
-
-const root = document.getElementById('layout-desk');
-if (root) {
-  requestDialog.init();
-  window.layoutDesk = new LayoutDesk(root);
-}
-document.querySelectorAll('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
-document.querySelectorAll('.menu-drawer a').forEach((a) => a.addEventListener('click', () => a.closest('details').removeAttribute('open')));
+const root = document.getElementById('playground');
+if (root) window.playground = new Playground(root);
