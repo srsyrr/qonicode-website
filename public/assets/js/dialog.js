@@ -98,6 +98,13 @@ export async function openDialog(mode, opts = {}) {
   }
 }
 
+// Optional field: empty stays empty, a bare domain like "shop.com" becomes https://shop.com.
+function storeUrl(value) {
+  const v = String(value || '').trim();
+  if (!v) return '';
+  return /^[a-z][a-z0-9+.-]*:\/\//i.test(v) ? v : `https://${v}`;
+}
+
 async function send() {
   if (!ui.form.reportValidity()) return;
   if (state.mode === 'request' && !state.dataUrl) return;
@@ -106,7 +113,7 @@ async function send() {
     kind: state.mode,
     name: String(fd.get('name')).trim(),
     email: String(fd.get('email')).trim(),
-    store: String(fd.get('store')).trim(),
+    store: storeUrl(fd.get('store')),
     notes: String(fd.get('notes')).trim(),
     company: fd.get('company'),
   };
