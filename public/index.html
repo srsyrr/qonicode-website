@@ -173,15 +173,13 @@
     </section>
 
     <!-- ============ Playground ============ -->
-    <section class="section playground" id="playground">
-      <div class="page-width">
-        <div class="desk-head">
-          <h2 class="display display--italic h-section">Playground</h2>
-          <p class="desk-hint">Drag cards from the desk onto the page — they can overlap. Grab the yellow corner to resize, drag a card off the page to remove it.</p>
-        </div>
+    <section class="playground" id="playground">
+      <div class="page-width playground__grid">
+        <div class="playground__side">
+          <h2 class="playground__title display display--italic h-section">Playground</h2>
+          <p class="desk-hint">Drag cards onto the page — they can overlap. Grab the yellow corner to resize, drag a card off the page to remove it.</p>
 
-        <div class="desk-toolbar" role="toolbar" aria-label="Playground tools">
-          <div class="seg seg--sm" role="radiogroup" aria-label="Page type">
+          <div class="seg seg--sm playground__pages" role="radiogroup" aria-label="Page type">
             <button type="button" class="seg__item" role="radio" data-page="home">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>
               <span>Home page</span>
@@ -196,33 +194,32 @@
             </button>
           </div>
 
-          <div class="desk-toolbar__group">
-            <button type="button" class="btn btn--icon" data-action="save" title="Save as PNG" aria-label="Save as PNG">
+          <div class="playground__tools" role="toolbar" aria-label="Playground tools">
+            <button type="button" class="btn btn--icon" data-action="save" title="Download as PNG" aria-label="Download as PNG">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
             </button>
-            <button type="button" class="btn" data-action="shuffle">
+            <button type="button" class="btn btn--icon" data-action="shuffle" title="Shuffle" aria-label="Shuffle layout">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3.5c2 0 3.2 1 4.5 3l1 1.6c1.3 2 2.5 3.4 4.5 3.4H20m0 0-3-3m3 3-3 3M4 17h3.5c1.4 0 2.4-.6 3.3-1.6M20 7h-2.5c-1.4 0-2.4.6-3.3 1.6M20 7l-3-3m3 3-3 3"/></svg>
-              Shuffle
             </button>
-            <button type="button" class="btn" data-action="request">
+            <button type="button" class="btn playground__request" data-action="request">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5 16-3.5-6.5L4 12Zm7.5 1.5L20 4"/></svg>
               Request
-            </button>
-          </div>
-
-          <div class="preset-nav">
-            <button type="button" class="btn btn--icon" data-action="prev" aria-label="Previous standard wireframe">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m0 0 6-6m-6 6 6 6"/></svg>
-            </button>
-            <span class="preset-label" data-preset-label aria-live="polite"></span>
-            <button type="button" class="btn btn--icon" data-action="next" aria-label="Next standard wireframe">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg>
             </button>
           </div>
         </div>
 
         <div class="desk" data-desk>
           <div class="desk__stage" data-stage>
+            <!-- standard wireframes: ← 01/03 name → (positioned above the waiting cards) -->
+            <div class="desk__bar" data-preset-bar>
+              <button type="button" class="desk__dot" data-action="prev" aria-label="Previous standard wireframe">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+              </button>
+              <span class="preset-label" data-preset-label aria-live="polite"></span>
+              <button type="button" class="desk__dot" data-action="next" aria-label="Next standard wireframe">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
             <div class="desk__frame" data-frame aria-hidden="true">
               <div class="desk__frame-bar"><i></i><i></i><i></i><span></span></div>
             </div>

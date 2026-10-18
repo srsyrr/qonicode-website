@@ -11,17 +11,18 @@ const SLOT_TILT = [-5, 4, -3, 6, -4, 3, -6, 5, -2, 4, -5];
 
 /* Desk sizes (in frame units) for wide and narrow screens, with one slot per card type. */
 const DESKS = {
+  // Waiting cards on the left (3 columns under the wireframe bar), the page on the right.
   wide: {
     // minU: smallest scale (px per unit) before the desk scrolls instead of shrinking further
-    w: 200, h: 176, ox: 50, oy: 8, miniScale: 1, minU: 4.2,
-    slots: [
-      ...[10, 36, 62, 88, 114, 140].map((y) => ({ x: -25, y })),
-      ...[10, 36, 62, 88, 114].map((y) => ({ x: 125, y })),
-    ],
+    w: 190, h: 170, ox: 85, oy: 5, miniScale: 0.78, minU: 2.8,
+    bar: { x: 5, y: 4, w: 75 },   // in desk units from the stage's top-left
+    slots: [30, 66, 102, 138].flatMap((y) => [-67.5, -42.5, -17.5].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
   },
+  // Phones: the page on top, the bar and the waiting cards underneath.
   narrow: {
-    w: 110, h: 244, ox: 5, oy: 4, miniScale: 0.9,
-    slots: [171, 190, 209, 228].flatMap((y) => [17, 50, 83].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
+    w: 110, h: 252, ox: 5, oy: 4, miniScale: 0.9,
+    bar: { x: 5, y: 167, w: 100 },
+    slots: [184, 201, 218, 235].flatMap((y) => [17, 50, 83].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
   },
 };
 
@@ -38,6 +39,7 @@ class Playground {
     this.viewport = root.querySelector('[data-desk]');
     this.desk = root.querySelector('[data-stage]');
     this.frame = root.querySelector('[data-frame]');
+    this.presetBar = root.querySelector('[data-preset-bar]');
     this.label = root.querySelector('[data-preset-label]');
     this.live = root.querySelector('[data-live]');
     this.pageButtons = [...root.querySelectorAll('[data-page]')];
@@ -74,6 +76,8 @@ class Playground {
       left: `${this.cfg.ox * this.u}px`, top: `${this.cfg.oy * this.u}px`,
       width: `${FRAME.w * this.u}px`, height: `${FRAME.h * this.u}px`,
     });
+    const { bar } = this.cfg;
+    Object.assign(this.presetBar.style, { left: `${bar.x * this.u}px`, top: `${bar.y * this.u}px`, width: `${bar.w * this.u}px` });
     this.drawCaptions();
     if (prevMode && prevMode !== this.mode) this.pieces.filter((pc) => pc.supply).forEach((pc) => this.toSlot(pc));
   }
