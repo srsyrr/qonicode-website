@@ -9,13 +9,13 @@ const ENDPOINT = '/api/request';
 const COPY = {
   talk: {
     title: "Let's talk",
-    desc: 'Tell us about your store — we reply within one business day.',
+    desc: 'Questions about my work, or a small theme task? I usually reply within a day.',
     notes: 'Message',
     submit: 'Send message',
   },
   request: {
-    title: 'Request this layout',
-    desc: 'We’ll get your layout as an image, plus anything you add below.',
+    title: 'Send me this layout',
+    desc: 'I’ll get your layout as an image, plus anything you add below.',
     notes: 'Notes',
     submit: 'Send request',
   },
