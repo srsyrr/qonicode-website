@@ -420,6 +420,8 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .chevrons { display: flex; gap: 2px; color: var(--c-green); }
 .chevrons svg { width: 22px; height: 22px; fill: currentColor; }
 .about__media { position: relative; }
+.about__img { position: relative; overflow: hidden; }
+.about__text p + p { margin-top: 12px; }
 .about__img { aspect-ratio: 5 / 4; width: 100%; border: var(--border); border-radius: calc(var(--radius) * 1.6); background: repeating-linear-gradient(-45deg, var(--c-surface) 0 14px, var(--c-bg) 14px 28px); }
 .about__badge { position: absolute; left: -30px; top: 36%; --size: 112px; --tilt: -10deg; }
 .about__badge span { font-size: 11px; line-height: 1.1; letter-spacing: .02em; text-transform: uppercase; }
