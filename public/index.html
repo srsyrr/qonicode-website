@@ -191,10 +191,13 @@
               <p class="work-slide__text">Fictional skincare brand on a Shopify development store, Horizon theme. Done: brand settings, product metafields and product-card labels from tags (QA in progress). Next: a product-details block and a "Show more" collection description.</p>
               <ul class="tags"><li>Practice</li><li>In progress</li><li>Horizon</li></ul>
             </div>
-            <div class="work-slide__media" style="--media:#FAF7F2">
-              <div class="mock mock--a"><b>Niacinamide Serum</b><span class="mock__img" style="--mi:#A4532F"></span><span class="mock__star">✦</span></div>
-              <div class="mock mock--b"><b class="mock__big">Skin type</b><i></i><i></i><span class="mock__btn">Add to cart</span></div>
-              <div class="mock mock--c"><small>Product details</small><b>METAFIELDS</b><span class="mock__band" style="--mb:#A4532F;--mb-text:#FAF7F2">Key ingredients <em>+</em></span></div>
+            <div class="work-slide__media" style="--media:var(--c-green-soft)">
+              <div class="device device--phone" aria-hidden="true">
+                <div class="dv-img" style="--dv:#A4532F"><svg viewBox="0 0 40 80" aria-hidden="true"><rect x="14" y="2" width="12" height="15" rx="3" fill="#111111"/><rect x="6" y="15" width="28" height="62" rx="9" fill="#FAF7F2"/><rect x="11" y="36" width="18" height="18" rx="4" fill="#A4532F" opacity=".3"/></svg><span class="dv-pills"><span class="dv-pill" style="--pc:var(--c-green)">Vegan</span><span class="dv-pill" style="--pc:var(--c-yellow)">New</span></span></div>
+                <b class="dv-title">Niacinamide Serum</b>
+                <span class="dv-row">Key ingredients <em>+</em></span>
+                <span class="dv-btn">Add to cart</span>
+              </div>
             </div>
           </article>
 
@@ -205,10 +208,18 @@
               <p class="work-slide__text">The wireframe desk on this page: drag, resize, shuffle and save a layout as a PNG. Plain HTML, CSS and JavaScript.</p>
               <ul class="tags"><li>Side project</li><li>JavaScript</li><li>Wireframes</li></ul>
             </div>
-            <div class="work-slide__media" style="--media:var(--c-teal)">
-              <div class="mock mock--a"><b>Home page</b><span class="mock__img" style="--mi:var(--c-yellow)"></span><span class="mock__star">✦</span></div>
-              <div class="mock mock--b"><b class="mock__big">11</b><i></i><i></i><span class="mock__btn">Shuffle</span></div>
-              <div class="mock mock--c"><small>Drag a card</small><b>PDP</b><span class="mock__band" style="--mb:var(--c-pink)">Banner <em>↔</em></span></div>
+            <div class="work-slide__media" style="--media:var(--c-teal-soft)">
+              <div class="device device--desk" aria-hidden="true">
+                <div class="dv-bar"><i></i><b>01 / 05</b><span>Classic store</span><em>Shuffle</em></div>
+                <div class="dv-desk">
+                  <span class="dv-piece" style="--x:6%;--y:7%;--w:88%;--h:9%;--pc:var(--c-ink)"></span>
+                  <span class="dv-piece" style="--x:6%;--y:22%;--w:88%;--h:30%;--pc:var(--c-yellow)"></span>
+                  <span class="dv-piece" style="--x:8%;--y:58%;--w:38%;--h:34%;--pc:var(--c-pink);--r:-4deg"></span>
+                  <span class="dv-piece dv-piece--round" style="--x:54%;--y:58%;--w:16%;--h:22%;--pc:var(--c-purple)"></span>
+                  <span class="dv-piece" style="--x:74%;--y:60%;--w:20%;--h:6%;--pc:var(--c-green)"></span>
+                  <span class="dv-piece" style="--x:74%;--y:70%;--w:14%;--h:6%;--pc:var(--c-green)"></span>
+                </div>
+              </div>
             </div>
           </article>
         </div>
@@ -219,11 +230,19 @@
     <!-- ============ How I work ============ -->
     <section class="section services" id="process">
       <div class="page-width">
-        <h2 class="display display--italic h-section">How I work</h2>
-        <div class="svc-grid svc-grid--steps">
-          <article class="svc svc--step">
-            <div class="svc__media" style="--media:var(--c-teal)">
-              <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><rect x="18" y="30" width="58" height="62" rx="8" class="f0"/><rect x="44" y="18" width="58" height="62" rx="8" class="f2"/></svg></div>
+        <div class="section-head section-head--tight">
+          <h2 class="display display--italic h-section">How I work</h2>
+          <button type="button" class="btn proc-replay" data-proc-replay aria-label="Replay the How I work animation" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 3v5h5"/></svg>Replay</button>
+        </div>
+        <!-- One yellow layout travels through the four cards (process.js plays them in turn).
+             Without JS or with reduced motion, each panel shows its final frame. -->
+        <div class="svc-grid svc-grid--steps" data-proc>
+          <article class="svc svc--step proc proc--1">
+            <div class="svc__media" style="--media:var(--c-pink-soft)">
+              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+                <g class="proc-c1-copy proc-settle proc-last"><g transform="translate(78 22) rotate(-12) scale(1.15)"><rect x="3.4" y="3.4" width="70" height="96" rx="6" class="f2"/><rect x="0" y="0" width="70" height="96" rx="6" class="ln"/><path class="ln" d="M10 12h28"/><rect x="10" y="22" width="50" height="32" rx="4" class="f0"/><path class="ln" d="M10 64h28M10 72h18"/><g class="proc-label"><rect x="1" y="-13.5" width="26" height="11" rx="5.5" class="fi"/><text class="t t--light" x="14" y="-5.6">COPY</text></g></g></g>
+                <g transform="translate(22 42) rotate(-12) scale(1.15)"><rect x="3.4" y="3.4" width="70" height="96" rx="6" class="f6"/><rect x="0" y="0" width="70" height="96" rx="6" class="ln"/><path class="ln" d="M10 12h28"/><rect x="10" y="22" width="50" height="32" rx="4" class="f0"/><path class="ln" d="M10 64h28M10 72h18"/><g class="proc-label"><rect x="1" y="-13.5" width="24" height="11" rx="5.5" class="fi"/><text class="t t--light" x="13" y="-5.6">LIVE</text></g></g>
+              </svg></div>
             </div>
             <div class="svc__body">
               <span class="card-num">01.</span>
@@ -231,9 +250,14 @@
               <p class="svc__text">I work on a copy of your live theme, so the live store stays as it is until you publish.</p>
             </div>
           </article>
-          <article class="svc svc--step">
-            <div class="svc__media" style="--media:var(--c-yellow)">
-              <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M24 34l8 8 14-16M24 64l8 8 14-16"/><path d="M60 36h38M60 66h38"/></svg></div>
+          <article class="svc svc--step proc proc--2">
+            <div class="svc__media" style="--media:var(--c-teal-soft)">
+              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+                <g class="proc-c2-page proc-settle proc-last"><g transform="translate(28 -6) rotate(-10) scale(1.2)"><rect x="3.4" y="3.4" width="70" height="96" rx="6" class="f2"/><rect x="0" y="0" width="70" height="96" rx="6" class="ln"/><path class="ln" d="M10 12h28"/><rect x="10" y="22" width="50" height="32" rx="4" class="proc-c2-hero"/><path class="ln" d="M10 64h28M10 72h18"/><rect x="42" y="60" width="18" height="10" rx="5" class="fi proc-c2-btn"/></g></g>
+                <g class="proc-c2-box" style="--i:0"><path class="ln" d="M107 26H138"/><rect x="141" y="22" width="14" height="14" rx="4" class="f0"/><rect x="138" y="19" width="14" height="14" rx="4" class="ln"/><path class="proc-c2-tick" pathLength="1" d="M141.5 26l3 3 6-6"/></g>
+                <g class="proc-c2-box" style="--i:1"><path class="ln" d="M113 61H138"/><rect x="141" y="57" width="14" height="14" rx="4" class="f0"/><rect x="138" y="54" width="14" height="14" rx="4" class="ln"/><path class="proc-c2-tick" pathLength="1" d="M141.5 61l3 3 6-6"/></g>
+                <g class="proc-c2-box" style="--i:2"><path class="ln" d="M55 77L24 97"/><rect x="15" y="99" width="14" height="14" rx="4" class="f0"/><rect x="12" y="96" width="14" height="14" rx="4" class="ln"/><path class="proc-c2-tick" pathLength="1" d="M15.5 103l3 3 6-6"/></g>
+              </svg></div>
             </div>
             <div class="svc__body">
               <span class="card-num">02.</span>
@@ -241,9 +265,13 @@
               <p class="svc__text">Before I code, each change gets clear checks, so "done" means the same thing to both of us.</p>
             </div>
           </article>
-          <article class="svc svc--step">
-            <div class="svc__media" style="--media:var(--c-pink)">
-              <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><rect x="14" y="26" width="62" height="46" rx="6" class="f0"/><path d="M34 86h22M45 72v14"/><rect x="80" y="44" width="26" height="46" rx="6" class="f1"/></svg></div>
+          <article class="svc svc--step proc proc--3">
+            <div class="svc__media" style="--media:var(--c-yellow-soft)">
+              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+                <g class="proc-c3-desk"><rect x="39.4" y="13.4" width="150" height="54" rx="5" class="f5"/><rect x="36" y="10" width="150" height="54" rx="5" class="ln"/><path class="ln" d="M36 19h150"/><rect x="46" y="26" width="30" height="30" rx="3" class="f2"/><rect x="82" y="26" width="30" height="30" rx="3" class="f0"/><rect x="118" y="26" width="30" height="30" rx="3" class="f3"/><g class=""><rect x="7" y="32.5" width="26" height="11" rx="5.5" class="fi"/><text class="t t--light" x="20" y="40.4">1440</text></g></g>
+                <g class="proc-c3-tab"><rect x="-6.6" y="77.4" width="74" height="70" rx="5" class="f3"/><rect x="-10" y="74" width="74" height="70" rx="5" class="ln"/><rect x="0" y="84" width="24" height="22" rx="3" class="f2"/><rect x="30" y="84" width="24" height="22" rx="3" class="f4"/><rect x="0" y="112" width="54" height="20" rx="3" class="f0"/><g class=""><rect x="41" y="60.5" width="22" height="11" rx="5.5" class="fi"/><text class="t t--light" x="52" y="68.4">768</text></g></g>
+                <g class="proc-c3-phone proc-settle proc-last"><rect x="99.4" y="79.4" width="40" height="66" rx="7" class="f4"/><rect x="96" y="76" width="40" height="66" rx="7" class="ln"/><path class="ln" d="M111 82h10"/><rect x="103" y="88" width="26" height="16" rx="3" class="f2"/><rect x="103" y="108" width="26" height="16" rx="3" class="f0"/><g class=""><rect x="138" y="78.5" width="20" height="11" rx="5.5" class="fi"/><text class="t t--light" x="148" y="86.4">390</text></g></g>
+              </svg></div>
             </div>
             <div class="svc__body">
               <span class="card-num">03.</span>
@@ -251,9 +279,16 @@
               <p class="svc__text">Phone, tablet and desktop, with before/after screenshots and a QA checklist.</p>
             </div>
           </article>
-          <article class="svc svc--step">
-            <div class="svc__media" style="--media:var(--c-purple)">
-              <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M30 16h44l18 18v70H30Z" class="f0"/><path d="M42 50h36M42 66h36M42 82h22"/></svg></div>
+          <article class="svc svc--step proc proc--4">
+            <div class="svc__media" style="--media:var(--c-purple-soft)">
+              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
+                <g class="proc-c4-page"><g transform="translate(80 -40) rotate(-14) scale(1.1)"><rect x="3.4" y="3.4" width="70" height="96" rx="6" class="f2"/><rect x="0" y="0" width="70" height="96" rx="6" class="ln"/><path class="ln" d="M10 28h40M10 36h30"/><rect x="10" y="48" width="50" height="28" rx="4" class="proc-c4-hero"/><rect x="40" y="82" width="20" height="9" rx="4.5" class="fi"/></g></g>
+                <g class="proc-c4-row" style="--i:0"><circle cx="17.5" cy="55.5" r="4.5" class="proc-c4-dot"/><circle cx="16" cy="54" r="4.5" class="ln"/><text class="t t--row" x="26" y="56.8">Files changed</text></g>
+                <g class="proc-c4-row" style="--i:1"><circle cx="17.5" cy="71.5" r="4.5" class="proc-c4-dot"/><circle cx="16" cy="70" r="4.5" class="ln"/><text class="t t--row" x="26" y="72.8">Why</text></g>
+                <g class="proc-c4-row" style="--i:2"><circle cx="17.5" cy="87.5" r="4.5" class="proc-c4-dot"/><circle cx="16" cy="86" r="4.5" class="ln"/><text class="t t--row" x="26" y="88.8">How to edit</text></g>
+                <g class="proc-c4-toggle"><rect x="104" y="72" width="34" height="18" rx="9" class="proc-c4-track"/><rect x="102" y="70" width="34" height="18" rx="9" class="ln"/><circle cx="127" cy="79" r="6" class="fi proc-c4-knob"/></g>
+                <path class="fi proc-c4-cursor proc-last" d="M124 83v21l6-5 5 9 5-3-5-9h8Z"/>
+              </svg></div>
             </div>
             <div class="svc__body">
               <span class="card-num">04.</span>
