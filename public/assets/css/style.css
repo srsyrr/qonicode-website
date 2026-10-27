@@ -16,7 +16,12 @@
   --c-pink: #FFC0CB;
   --c-purple: #C4A1FF;
   --c-desk: #EFE7D8;          /* playground surface (background family) */
-  --c-sand: #F4D7BD;          /* natural base under the line-and-fill illustrations (background family) */
+  /* soft tints for illustration panels: quieter than the shapes drawn on them */
+  --c-teal-soft: color-mix(in srgb, var(--c-teal) 55%, var(--c-bg));
+  --c-yellow-soft: color-mix(in srgb, var(--c-yellow) 55%, var(--c-bg));
+  --c-pink-soft: color-mix(in srgb, var(--c-pink) 55%, var(--c-bg));
+  --c-purple-soft: color-mix(in srgb, var(--c-purple) 55%, var(--c-bg));
+  --c-green-soft: color-mix(in srgb, var(--c-green) 55%, var(--c-bg));
   --c-error: #B4231B;         /* form errors only — functional, not decorative */
 
   --border: 2px solid var(--c-ink);
@@ -508,7 +513,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .about__media { position: relative; }
 .about__img { position: relative; overflow: hidden; }
 .about__text p + p { margin-top: 12px; }
-.about__img { aspect-ratio: 5 / 4; width: 100%; border: var(--border); border-radius: calc(var(--radius) * 1.6); background: var(--c-sand); }
+.about__img { aspect-ratio: 5 / 4; width: 100%; border: var(--border); border-radius: calc(var(--radius) * 1.6); background: var(--c-purple-soft); }
 .about__badge { position: absolute; left: -30px; top: 36%; --size: 112px; --tilt: -10deg; }
 .about__badge span { font-size: 11px; line-height: 1.1; letter-spacing: .02em; text-transform: uppercase; }
 .about__badge strong { display: block; margin-bottom: 2px; font-size: 21px; font-weight: 900; font-stretch: 112%; line-height: 1; }
@@ -566,7 +571,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .mock, .device { isolation: isolate; }
 .mock::before, .device::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  border-radius: inherit; background: var(--fill); transform: translate(10px, 10px);
+  border-radius: inherit; background: var(--fill); transform: translate(7px, 7px);
 }
 .mock::after, .device::after { content: ""; position: absolute; inset: 0; border: var(--line); border-radius: inherit; pointer-events: none; }
 .mock {
