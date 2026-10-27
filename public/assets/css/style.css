@@ -385,10 +385,17 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .svc__price { margin-top: auto; }
 .svc__price small { display: block; font-size: 13px; font-weight: 500; color: var(--c-muted); }
 .svc__price strong { font-size: clamp(18px, 1.6vw, 22px); font-weight: 800; white-space: nowrap; }
+.svc-grid--steps { grid-template-columns: repeat(4, 1fr); }
+.svc--step { grid-template-columns: 1fr; grid-template-rows: 150px auto; }
+.svc--step .svc__media { border-right: 0; border-bottom: var(--border); }
+.svc__text { color: #3A3A3A; font-size: 15px; line-height: 1.6; }
 @media (max-width: 1099px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 1099px) { .svc-grid--steps { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 639px) {
   .svc-grid { grid-template-columns: 1fr; }
   .svc { grid-template-columns: 34% 1fr; min-height: 200px; }
+  .svc--step { grid-template-rows: auto; min-height: 150px; }
+  .svc--step .svc__media { border-bottom: 0; border-right: var(--border); }
 }
 
 /* ---------- Testimonials ---------- */
