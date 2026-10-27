@@ -386,7 +386,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .svc__price small { display: block; font-size: 13px; font-weight: 500; color: var(--c-muted); }
 .svc__price strong { font-size: clamp(18px, 1.6vw, 22px); font-weight: 800; white-space: nowrap; }
 .svc-grid--steps { grid-template-columns: repeat(4, 1fr); }
-.svc--step { grid-template-columns: 1fr; grid-template-rows: 150px auto; }
+.svc--step { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
 .svc--step .svc__media { border-right: 0; border-bottom: var(--border); }
 .svc__text { color: #3A3A3A; font-size: 15px; line-height: 1.6; }
 @media (max-width: 1099px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -394,40 +394,37 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 @media (max-width: 639px) {
   .svc-grid { grid-template-columns: 1fr; }
   .svc { grid-template-columns: 34% 1fr; min-height: 200px; }
-  .svc--step { grid-template-rows: auto; min-height: 150px; }
-  .svc--step .svc__media { border-bottom: 0; border-right: var(--border); }
+  .svc--step { grid-template-columns: 1fr; min-height: 0; }
 }
 
 /* ---------- How I work: one layout travels through the four step cards ----------
-   Base styles are each sticker's final frame. process.js adds .is-ready (paused at 0%),
+   Each colored panel holds one large scene that bleeds past its edges (like the Work so far mocks).
+   Base styles are the final frame. process.js adds .is-ready (paused at 0%),
    .is-playing (runs, delayed by --d for the relay), then .is-done (final frame again). */
 .section-head--tight { margin-bottom: 0; }
 .proc-replay { min-height: 38px; padding: 8px 16px; font-size: 13px; box-shadow: 3px 3px 0 var(--c-ink); }
 .proc-replay:hover { transform: translate(3px, 3px); }
 .proc-replay[hidden] { display: none; }
-/* the layout enters from the left and leaves to the right, far enough to cross the colored panel */
-.proc { --en: -240px, 0px; --ex: 240px, 0px; }
-/* no white sticker here: the scene sits on the card's colored panel, which clips the travelling layout */
-.proc .svc__media { padding: 6px; overflow: hidden; }
-.svc__sticker--anim { width: 100%; max-width: 138px; background: none; border: 0; border-radius: 0; transform: none; }
-@media (max-width: 639px) {
-  .proc { --en: 0px, -320px; --ex: 0px, 320px; }   /* one column: from above, out below */
-}
-/* thin marker lines: a fixed screen width, so they stay crisp at any sticker size and don't stretch when a frame scales */
-.svc__sticker--anim svg { width: 100%; height: 100%; stroke-width: 1.6px; overflow: visible; }
+/* the layout enters from the left and leaves to the right (scene units, ~2px each) */
+.proc { --en: -190px, 0px; --ex: 190px, 0px; }
+@media (max-width: 639px) { .proc { --en: 0px, -150px; --ex: 0px, 150px; } }   /* one column: from above, out below */
+.proc .svc__media { position: relative; overflow: hidden; padding: 0; aspect-ratio: 4 / 3; }
+@media (max-width: 639px) { .proc .svc__media { aspect-ratio: 3 / 2; } }
+/* the scene fills the panel; key parts stay inside y 8–112 so the 3:2 crop keeps them */
+.svc__sticker--anim { position: absolute; inset: 0; width: auto; max-width: none; aspect-ratio: auto; background: none; border: 0; border-radius: 0; transform: none; }
+/* thin marker lines: a fixed screen width, so they stay crisp at any size and don't stretch when a frame scales */
+.svc__sticker--anim svg { width: 100%; height: 100%; stroke-width: 1.6px; }
 .svc__sticker--anim * { transform-box: fill-box; transform-origin: center; vector-effect: non-scaling-stroke; }
-.svc__sticker .t { fill: var(--c-ink); stroke: none; font: 700 8.5px var(--font-body); letter-spacing: .06em; text-anchor: middle; }
-.proc-play { opacity: 0; }
+.svc__sticker .t { fill: var(--c-ink); stroke: none; font: 700 7px var(--font-body); letter-spacing: .06em; text-anchor: middle; }
+.svc__sticker .t--start { text-anchor: start; }
 .proc-c2-hero { fill: var(--c-pink); }
 .proc-c4-hero { fill: var(--c-teal); }
-.proc-c2-tick { stroke-dasharray: 14; }
+.proc-c2-tick { stroke-dasharray: 1; vector-effect: none; stroke-width: 1; }
 .proc-c4-track { fill: var(--c-green); }
 .proc-c4-row { transform-origin: left center; }
 .proc-c4-cursor { transform-origin: left top; }
 
-.proc.is-ready .proc-rest { opacity: 0; }
 .proc.is-ready:not(.is-playing) * { animation-play-state: paused !important; }
-.proc.is-ready .proc-c1-live { animation: proc-c1-live 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c1-copy { animation: proc-c1-copy 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-label { animation: proc-label 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c2-page { animation: proc-enter-exit 3s ease-in-out var(--d, 0s) both; }
@@ -435,7 +432,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .proc.is-ready .proc-c2-hero { animation: proc-c2-hero 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c2-btn { animation: proc-c2-btn 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c2-tick { animation: proc-c2-tick 3s ease-in-out calc(var(--d, 0s) + var(--i) * .12s) both; }
-.proc.is-ready .proc-c3-desk { animation: proc-c3-desk 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c3-desk { animation: proc-enter 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c3-tab { animation: proc-c3-tab 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c3-phone { animation: proc-c3-phone 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c4-page { animation: proc-enter 3s ease-in-out var(--d, 0s) both; }
@@ -448,9 +445,8 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 /* after its turn, a card fades back to its final frame */
 .proc.is-done .proc-settle { animation: proc-settle .6s ease-out .3s both; }
 
-/* 01: the live layout splits in two; the copy moves on */
-@keyframes proc-c1-live { 0%, 18% { transform: translateX(28px); } 40%, 100% { transform: none; } }
-@keyframes proc-c1-copy { 0%, 18% { transform: translateX(-28px); } 40%, 78% { transform: none; } 100% { transform: translate(var(--ex)); } }
+/* 01: the copy grows out of the live layout, then moves on */
+@keyframes proc-c1-copy { 0%, 14% { transform: translate(-56px, 20px); } 40%, 80% { transform: none; } 100% { transform: translate(var(--ex)); } }
 @keyframes proc-label { 0%, 40% { opacity: 0; } 52%, 100% { opacity: 1; } }
 @keyframes proc-enter { 0% { transform: translate(var(--en)); } 16%, 100% { transform: none; } }
 @keyframes proc-enter-exit { 0% { transform: translate(var(--en)); } 16%, 80% { transform: none; } 100% { transform: translate(var(--ex)); } }
@@ -458,16 +454,15 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 @keyframes proc-c2-box { 0%, 16% { opacity: 0; transform: scale(.4); } 26%, 100% { opacity: 1; transform: none; } }
 @keyframes proc-c2-hero { 0%, 32% { fill: var(--c-paper); } 44%, 100% { fill: var(--c-pink); } }
 @keyframes proc-c2-btn { 0%, 38% { transform: scale(0); } 50%, 100% { transform: none; } }
-@keyframes proc-c2-tick { 0%, 54% { stroke-dashoffset: 14; } 64%, 100% { stroke-dashoffset: 0; } }
-/* 03: the same layout at desktop, tablet and phone width */
-@keyframes proc-c3-desk { 0% { opacity: 1; transform: translate(var(--en)); } 14%, 28% { opacity: 1; transform: none; } 34%, 100% { opacity: 0; transform: scaleX(.6); } }
-@keyframes proc-c3-tab { 0%, 28% { opacity: 0; transform: scaleX(1.6); } 36%, 52% { opacity: 1; transform: none; } 58%, 100% { opacity: 0; transform: scaleX(.6); } }
-@keyframes proc-c3-phone { 0%, 52% { opacity: 0; transform: scaleX(1.6); } 60%, 82% { opacity: 1; transform: none; } 100% { opacity: 1; transform: translate(var(--ex)); } }
+@keyframes proc-c2-tick { 0%, 54% { stroke-dashoffset: 1; } 64%, 100% { stroke-dashoffset: 0; } }
+/* 03: desktop, then tablet, then phone */
+@keyframes proc-c3-tab { 0%, 28% { opacity: 0; transform: scale(.8); } 40%, 100% { opacity: 1; transform: none; } }
+@keyframes proc-c3-phone { 0%, 50% { opacity: 0; transform: scale(.8); } 62%, 82% { opacity: 1; transform: none; } 100% { opacity: 1; transform: translate(var(--ex)); } }
 /* 04: change log lines, then a click on a setting changes the layout */
 @keyframes proc-c4-row { 0%, 16% { transform: scaleX(0); } 28%, 100% { transform: none; } }
 @keyframes proc-c4-toggle { 0%, 40% { opacity: 0; } 48%, 100% { opacity: 1; } }
 @keyframes proc-c4-cursor { 0%, 44% { opacity: 0; transform: translate(26px, 26px); } 50% { opacity: 1; } 62% { transform: none; } 67% { transform: scale(.8); } 72%, 100% { opacity: 1; transform: none; } }
-@keyframes proc-c4-knob { 0%, 67% { transform: translateX(-14px); } 76%, 100% { transform: none; } }
+@keyframes proc-c4-knob { 0%, 67% { transform: translateX(-16px); } 76%, 100% { transform: none; } }
 @keyframes proc-c4-track { 0%, 67% { fill: var(--c-paper); } 76%, 100% { fill: var(--c-green); } }
 @keyframes proc-c4-hero { 0%, 70% { fill: var(--c-pink); } 82%, 100% { fill: var(--c-teal); } }
 @keyframes proc-settle { from { opacity: 0; transform: scale(.92); } }
@@ -703,5 +698,4 @@ textarea.nb-input { resize: vertical; min-height: 88px; }
   .piece, .btn, .seg__item { transition: none; }
   .nb-dialog[open] { animation: none; }
   .proc * { animation: none !important; }
-  .proc .proc-rest { opacity: 1 !important; }
 }
