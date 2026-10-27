@@ -405,16 +405,18 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .proc-replay { min-height: 38px; padding: 8px 16px; font-size: 13px; box-shadow: 3px 3px 0 var(--c-ink); }
 .proc-replay:hover { transform: translate(3px, 3px); }
 .proc-replay[hidden] { display: none; }
-.proc { --en: -140px, 0px; --ex: 140px, 0px; }   /* the layout enters from the left, leaves to the right */
+/* the layout enters from the left and leaves to the right, far enough to cross the colored panel */
+.proc { --en: -240px, 0px; --ex: 240px, 0px; }
+/* no white sticker here: the scene sits on the card's colored panel, which clips the travelling layout */
+.proc .svc__media { padding: 6px; overflow: hidden; }
+.svc__sticker--anim { width: 100%; max-width: 138px; background: none; border: 0; border-radius: 0; transform: none; }
 @media (max-width: 639px) {
-  .proc { --en: 0px, -140px; --ex: 0px, 140px; }   /* one column: from above, out below */
-  .proc .svc__media { padding: 10px; }
-  .proc .svc__sticker { width: 100%; }
+  .proc { --en: 0px, -320px; --ex: 0px, 320px; }   /* one column: from above, out below */
 }
-.svc__sticker--anim { overflow: hidden; }
-.svc__sticker--anim svg { width: 92%; height: 92%; stroke-width: 3; overflow: visible; }
-.svc__sticker--anim * { transform-box: fill-box; transform-origin: center; }
-.svc__sticker .t { fill: var(--c-ink); stroke: none; font: 800 10px var(--font-body); letter-spacing: .04em; text-anchor: middle; }
+/* thin marker lines: a fixed screen width, so they stay crisp at any sticker size and don't stretch when a frame scales */
+.svc__sticker--anim svg { width: 100%; height: 100%; stroke-width: 1.6px; overflow: visible; }
+.svc__sticker--anim * { transform-box: fill-box; transform-origin: center; vector-effect: non-scaling-stroke; }
+.svc__sticker .t { fill: var(--c-ink); stroke: none; font: 700 8.5px var(--font-body); letter-spacing: .06em; text-anchor: middle; }
 .proc-play { opacity: 0; }
 .proc-c2-hero { fill: var(--c-pink); }
 .proc-c4-hero { fill: var(--c-teal); }
