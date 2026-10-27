@@ -398,6 +398,78 @@ h1, h2, h3, p, figure, ul { margin: 0; }
   .svc--step .svc__media { border-bottom: 0; border-right: var(--border); }
 }
 
+/* ---------- How I work: one layout travels through the four step cards ----------
+   Base styles are each sticker's final frame. process.js adds .is-ready (paused at 0%),
+   .is-playing (runs, delayed by --d for the relay), then .is-done (final frame again). */
+.section-head--tight { margin-bottom: 0; }
+.proc-replay { min-height: 38px; padding: 8px 16px; font-size: 13px; box-shadow: 3px 3px 0 var(--c-ink); }
+.proc-replay:hover { transform: translate(3px, 3px); }
+.proc-replay[hidden] { display: none; }
+.proc { --en: -140px, 0px; --ex: 140px, 0px; }   /* the layout enters from the left, leaves to the right */
+@media (max-width: 639px) {
+  .proc { --en: 0px, -140px; --ex: 0px, 140px; }   /* one column: from above, out below */
+  .proc .svc__media { padding: 10px; }
+  .proc .svc__sticker { width: 100%; }
+}
+.svc__sticker--anim { overflow: hidden; }
+.svc__sticker--anim svg { width: 92%; height: 92%; stroke-width: 3; overflow: visible; }
+.svc__sticker--anim * { transform-box: fill-box; transform-origin: center; }
+.svc__sticker .t { fill: var(--c-ink); stroke: none; font: 800 10px var(--font-body); letter-spacing: .04em; text-anchor: middle; }
+.proc-play { opacity: 0; }
+.proc-c2-hero { fill: var(--c-pink); }
+.proc-c4-hero { fill: var(--c-teal); }
+.proc-c2-tick { stroke-dasharray: 14; }
+.proc-c4-track { fill: var(--c-green); }
+.proc-c4-row { transform-origin: left center; }
+.proc-c4-cursor { transform-origin: left top; }
+
+.proc.is-ready .proc-rest { opacity: 0; }
+.proc.is-ready:not(.is-playing) * { animation-play-state: paused !important; }
+.proc.is-ready .proc-c1-live { animation: proc-c1-live 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c1-copy { animation: proc-c1-copy 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-label { animation: proc-label 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c2-page { animation: proc-enter-exit 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c2-box { animation: proc-c2-box 3s ease-in-out calc(var(--d, 0s) + var(--i) * .1s) both; }
+.proc.is-ready .proc-c2-hero { animation: proc-c2-hero 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c2-btn { animation: proc-c2-btn 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c2-tick { animation: proc-c2-tick 3s ease-in-out calc(var(--d, 0s) + var(--i) * .12s) both; }
+.proc.is-ready .proc-c3-desk { animation: proc-c3-desk 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c3-tab { animation: proc-c3-tab 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c3-phone { animation: proc-c3-phone 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c4-page { animation: proc-enter 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c4-row { animation: proc-c4-row 3s ease-in-out calc(var(--d, 0s) + var(--i) * .2s) both; }
+.proc.is-ready .proc-c4-toggle { animation: proc-c4-toggle 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c4-cursor { animation: proc-c4-cursor 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c4-knob { animation: proc-c4-knob 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c4-track { animation: proc-c4-track 3s ease-in-out var(--d, 0s) both; }
+.proc.is-ready .proc-c4-hero { animation: proc-c4-hero 3s ease-in-out var(--d, 0s) both; }
+/* after its turn, a card fades back to its final frame */
+.proc.is-done .proc-settle { animation: proc-settle .6s ease-out .3s both; }
+
+/* 01: the live layout splits in two; the copy moves on */
+@keyframes proc-c1-live { 0%, 18% { transform: translateX(28px); } 40%, 100% { transform: none; } }
+@keyframes proc-c1-copy { 0%, 18% { transform: translateX(-28px); } 40%, 78% { transform: none; } 100% { transform: translate(var(--ex)); } }
+@keyframes proc-label { 0%, 40% { opacity: 0; } 52%, 100% { opacity: 1; } }
+@keyframes proc-enter { 0% { transform: translate(var(--en)); } 16%, 100% { transform: none; } }
+@keyframes proc-enter-exit { 0% { transform: translate(var(--en)); } 16%, 80% { transform: none; } 100% { transform: translate(var(--ex)); } }
+/* 02: empty checks first, then the change, then the ticks */
+@keyframes proc-c2-box { 0%, 16% { opacity: 0; transform: scale(.4); } 26%, 100% { opacity: 1; transform: none; } }
+@keyframes proc-c2-hero { 0%, 32% { fill: var(--c-paper); } 44%, 100% { fill: var(--c-pink); } }
+@keyframes proc-c2-btn { 0%, 38% { transform: scale(0); } 50%, 100% { transform: none; } }
+@keyframes proc-c2-tick { 0%, 54% { stroke-dashoffset: 14; } 64%, 100% { stroke-dashoffset: 0; } }
+/* 03: the same layout at desktop, tablet and phone width */
+@keyframes proc-c3-desk { 0% { opacity: 1; transform: translate(var(--en)); } 14%, 28% { opacity: 1; transform: none; } 34%, 100% { opacity: 0; transform: scaleX(.6); } }
+@keyframes proc-c3-tab { 0%, 28% { opacity: 0; transform: scaleX(1.6); } 36%, 52% { opacity: 1; transform: none; } 58%, 100% { opacity: 0; transform: scaleX(.6); } }
+@keyframes proc-c3-phone { 0%, 52% { opacity: 0; transform: scaleX(1.6); } 60%, 82% { opacity: 1; transform: none; } 100% { opacity: 1; transform: translate(var(--ex)); } }
+/* 04: change log lines, then a click on a setting changes the layout */
+@keyframes proc-c4-row { 0%, 16% { transform: scaleX(0); } 28%, 100% { transform: none; } }
+@keyframes proc-c4-toggle { 0%, 40% { opacity: 0; } 48%, 100% { opacity: 1; } }
+@keyframes proc-c4-cursor { 0%, 44% { opacity: 0; transform: translate(26px, 26px); } 50% { opacity: 1; } 62% { transform: none; } 67% { transform: scale(.8); } 72%, 100% { opacity: 1; transform: none; } }
+@keyframes proc-c4-knob { 0%, 67% { transform: translateX(-14px); } 76%, 100% { transform: none; } }
+@keyframes proc-c4-track { 0%, 67% { fill: var(--c-paper); } 76%, 100% { fill: var(--c-green); } }
+@keyframes proc-c4-hero { 0%, 70% { fill: var(--c-pink); } 82%, 100% { fill: var(--c-teal); } }
+@keyframes proc-settle { from { opacity: 0; transform: scale(.92); } }
+
 /* ---------- Testimonials ---------- */
 .tst-track {
   display: grid; grid-auto-flow: column; grid-auto-columns: minmax(260px, calc((100% - 3 * 22px) / 4)); gap: 22px;
@@ -628,4 +700,6 @@ textarea.nb-input { resize: vertical; min-height: 88px; }
   html { scroll-behavior: auto; }
   .piece, .btn, .seg__item { transition: none; }
   .nb-dialog[open] { animation: none; }
+  .proc * { animation: none !important; }
+  .proc .proc-rest { opacity: 1 !important; }
 }

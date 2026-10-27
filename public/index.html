@@ -219,11 +219,25 @@
     <!-- ============ How I work ============ -->
     <section class="section services" id="process">
       <div class="page-width">
-        <h2 class="display display--italic h-section">How I work</h2>
-        <div class="svc-grid svc-grid--steps">
-          <article class="svc svc--step">
+        <div class="section-head section-head--tight">
+          <h2 class="display display--italic h-section">How I work</h2>
+          <button type="button" class="btn proc-replay" data-proc-replay aria-label="Replay the How I work animation" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 3v5h5"/></svg>Replay</button>
+        </div>
+        <!-- One yellow layout travels through the four cards (process.js plays them in turn).
+             Without JS or with reduced motion, each sticker shows its final frame. -->
+        <div class="svc-grid svc-grid--steps" data-proc>
+          <article class="svc svc--step proc proc--1">
             <div class="svc__media" style="--media:var(--c-teal)">
-              <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><rect x="18" y="30" width="58" height="62" rx="8" class="f0"/><rect x="44" y="18" width="58" height="62" rx="8" class="f2"/></svg></div>
+              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 120 120">
+                <g class="proc-c1-copy proc-settle proc-last">
+                  <g transform="translate(70 42)"><rect width="36" height="46" rx="4" class="f2"/><path d="M7 9h22M7 34h10M7 40h7"/><rect x="7" y="15" width="22" height="12" rx="2" class="f0"/></g>
+                  <text class="t proc-label" x="88" y="34">COPY</text>
+                </g>
+                <g class="proc-c1-live">
+                  <g transform="translate(14 42)"><rect width="36" height="46" rx="4" class="f0"/><path d="M7 9h22M7 34h10M7 40h7"/><rect x="7" y="15" width="22" height="12" rx="2" class="f0"/></g>
+                  <text class="t proc-label" x="32" y="34">LIVE</text>
+                </g>
+              </svg></div>
             </div>
             <div class="svc__body">
               <span class="card-num">01.</span>
@@ -231,9 +245,16 @@
               <p class="svc__text">I work on a copy of your live theme, so the live store stays as it is until you publish.</p>
             </div>
           </article>
-          <article class="svc svc--step">
+          <article class="svc svc--step proc proc--2">
             <div class="svc__media" style="--media:var(--c-yellow)">
-              <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M24 34l8 8 14-16M24 64l8 8 14-16"/><path d="M60 36h38M60 66h38"/></svg></div>
+              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 120 120">
+                <g class="proc-c2-box" style="--i:0"><rect x="74" y="38" width="14" height="12" rx="2" class="f0"/><path class="proc-c2-tick" d="M77 44l3 3 6-6"/></g>
+                <g class="proc-c2-box" style="--i:1"><rect x="74" y="54" width="14" height="12" rx="2" class="f0"/><path class="proc-c2-tick" d="M77 60l3 3 6-6"/></g>
+                <g class="proc-c2-box" style="--i:2"><rect x="74" y="70" width="14" height="12" rx="2" class="f0"/><path class="proc-c2-tick" d="M77 76l3 3 6-6"/></g>
+                <g class="proc-c2-page proc-settle proc-last">
+                  <g transform="translate(24 37)"><rect width="36" height="46" rx="4" class="f2"/><path d="M7 9h22M7 34h10M7 40h7"/><rect x="7" y="15" width="22" height="12" rx="2" class="proc-c2-hero"/><rect x="20" y="33" width="9" height="8" rx="4" class="f1 proc-c2-btn"/></g>
+                </g>
+              </svg></div>
             </div>
             <div class="svc__body">
               <span class="card-num">02.</span>
@@ -241,9 +262,27 @@
               <p class="svc__text">Before I code, each change gets clear checks, so "done" means the same thing to both of us.</p>
             </div>
           </article>
-          <article class="svc svc--step">
+          <article class="svc svc--step proc proc--3">
             <div class="svc__media" style="--media:var(--c-pink)">
-              <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><rect x="14" y="26" width="62" height="46" rx="6" class="f0"/><path d="M34 86h22M45 72v14"/><rect x="80" y="44" width="26" height="46" rx="6" class="f1"/></svg></div>
+              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 120 120">
+                <g class="proc-rest proc-settle">
+                  <rect x="6" y="42" width="50" height="34" rx="4" class="f0"/><path d="M6 50h50"/><rect x="12" y="56" width="10" height="14" class="f2"/><rect x="26" y="56" width="10" height="14" class="f2"/><rect x="40" y="56" width="10" height="14" class="f2"/>
+                  <rect x="62" y="38" width="28" height="42" rx="4" class="f0"/><rect x="67" y="46" width="8" height="12" class="f2"/><rect x="77" y="46" width="8" height="12" class="f2"/><rect x="67" y="62" width="18" height="10" class="f2"/>
+                  <rect x="96" y="44" width="18" height="32" rx="4" class="f0"/><rect x="100" y="50" width="10" height="8" class="f2"/><rect x="100" y="62" width="10" height="8" class="f2"/>
+                </g>
+                <g class="proc-play proc-c3-desk">
+                  <rect x="12" y="30" width="96" height="56" rx="5" class="f0"/><path d="M12 40h96"/><rect x="21" y="48" width="22" height="30" class="f2"/><rect x="49" y="48" width="22" height="30" class="f2"/><rect x="77" y="48" width="22" height="30" class="f2"/>
+                  <text class="t" x="60" y="104">1440</text>
+                </g>
+                <g class="proc-play proc-c3-tab">
+                  <rect x="32" y="22" width="56" height="70" rx="5" class="f0"/><rect x="40" y="32" width="18" height="24" class="f2"/><rect x="62" y="32" width="18" height="24" class="f2"/><rect x="40" y="62" width="40" height="22" class="f2"/>
+                  <text class="t" x="60" y="108">768</text>
+                </g>
+                <g class="proc-play proc-c3-phone proc-last">
+                  <rect x="44" y="18" width="32" height="78" rx="6" class="f0"/><path d="M56 25h8"/><rect x="50" y="33" width="20" height="16" class="f2"/><rect x="50" y="53" width="20" height="16" class="f2"/><rect x="50" y="73" width="20" height="16" class="f2"/>
+                  <text class="t" x="60" y="112">390</text>
+                </g>
+              </svg></div>
             </div>
             <div class="svc__body">
               <span class="card-num">03.</span>
@@ -251,9 +290,18 @@
               <p class="svc__text">Phone, tablet and desktop, with before/after screenshots and a QA checklist.</p>
             </div>
           </article>
-          <article class="svc svc--step">
+          <article class="svc svc--step proc proc--4">
             <div class="svc__media" style="--media:var(--c-purple)">
-              <div class="svc__sticker" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M30 16h44l18 18v70H30Z" class="f0"/><path d="M42 50h36M42 66h36M42 82h22"/></svg></div>
+              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 120 120">
+                <g class="proc-c4-page">
+                  <g transform="translate(8 30)"><rect width="36" height="46" rx="4" class="f2"/><path d="M7 9h22M7 34h10M7 40h7"/><rect x="7" y="15" width="22" height="12" rx="2" class="proc-c4-hero"/><rect x="20" y="33" width="9" height="8" rx="4" class="f1"/></g>
+                </g>
+                <g class="proc-c4-row" style="--i:0"><path d="M54 36h6M57 33v6M66 36h40"/></g>
+                <g class="proc-c4-row" style="--i:1"><path d="M54 48h6M57 45v6M66 48h30"/></g>
+                <g class="proc-c4-row" style="--i:2"><path d="M54 60h6M57 57v6M66 60h36"/></g>
+                <g class="proc-c4-toggle"><rect x="56" y="76" width="30" height="16" rx="8" class="proc-c4-track"/><circle cx="78" cy="84" r="5" class="f0 proc-c4-knob"/></g>
+                <path class="f0 proc-c4-cursor proc-last" d="M80 86v21l6-5 5 9 5-3-5-9h8Z"/>
+              </svg></div>
             </div>
             <div class="svc__body">
               <span class="card-num">04.</span>
