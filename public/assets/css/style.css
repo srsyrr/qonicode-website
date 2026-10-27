@@ -424,11 +424,12 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .svc__sticker--anim .f6 { fill: var(--c-teal); }
 .svc__sticker .t { fill: var(--c-ink); stroke: none; font: 700 6px var(--font-body); letter-spacing: .08em; text-anchor: middle; }
 .svc__sticker .t--light { fill: var(--c-paper); }
+.svc__sticker .t--row { font-size: 8px; font-weight: 600; letter-spacing: 0; text-anchor: start; }
+.proc-c4-dot { fill: var(--c-green); }
 .proc-c2-hero { fill: var(--c-pink); }
 .proc-c4-hero { fill: var(--c-teal); }
 .proc-c2-tick { fill: none; stroke: var(--c-ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; }
 .proc-c4-track { fill: var(--c-green); }
-.proc-c4-row { transform-origin: left center; }
 .proc-c4-cursor { transform-origin: left top; }
 
 .proc.is-ready:not(.is-playing) * { animation-play-state: paused !important; }
@@ -444,6 +445,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .proc.is-ready .proc-c3-phone { animation: proc-c3-phone 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c4-page { animation: proc-enter 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c4-row { animation: proc-c4-row 3s ease-in-out calc(var(--d, 0s) + var(--i) * .2s) both; }
+.proc.is-ready .proc-c4-dot { animation: proc-c4-dot 3s ease-in-out calc(var(--d, 0s) + var(--i) * .2s) both; }
 .proc.is-ready .proc-c4-toggle { animation: proc-c4-toggle 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c4-cursor { animation: proc-c4-cursor 3s ease-in-out var(--d, 0s) both; }
 .proc.is-ready .proc-c4-knob { animation: proc-c4-knob 3s ease-in-out var(--d, 0s) both; }
@@ -458,21 +460,22 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 @keyframes proc-enter { 0% { transform: translate(var(--en)); } 16%, 100% { transform: none; } }
 @keyframes proc-enter-exit { 0% { transform: translate(var(--en)); } 16%, 80% { transform: none; } 100% { transform: translate(var(--ex)); } }
 /* 02: empty checks first, then the change, then the ticks */
-@keyframes proc-c2-box { 0%, 16% { opacity: 0; transform: scale(.4); } 26%, 100% { opacity: 1; transform: none; } }
+@keyframes proc-c2-box { 0%, 16% { opacity: 0; transform: translateY(4px); } 26%, 100% { opacity: 1; transform: none; } }
 @keyframes proc-c2-hero { 0%, 32% { fill: var(--c-paper); } 44%, 100% { fill: var(--c-pink); } }
-@keyframes proc-c2-btn { 0%, 38% { transform: scale(0); } 50%, 100% { transform: none; } }
+@keyframes proc-c2-btn { 0%, 38% { opacity: 0; } 50%, 100% { opacity: 1; } }
 @keyframes proc-c2-tick { 0%, 54% { stroke-dashoffset: 1; } 64%, 100% { stroke-dashoffset: 0; } }
 /* 03: desktop, then tablet, then phone */
-@keyframes proc-c3-tab { 0%, 28% { opacity: 0; transform: scale(.8); } 40%, 100% { opacity: 1; transform: none; } }
-@keyframes proc-c3-phone { 0%, 50% { opacity: 0; transform: scale(.8); } 62%, 82% { opacity: 1; transform: none; } 100% { opacity: 1; transform: translate(var(--ex)); } }
-/* 04: change log lines, then a click on a setting changes the layout */
-@keyframes proc-c4-row { 0%, 16% { transform: scaleX(0); } 28%, 100% { transform: none; } }
+@keyframes proc-c3-tab { 0%, 28% { opacity: 0; transform: translateY(8px); } 40%, 100% { opacity: 1; transform: none; } }
+@keyframes proc-c3-phone { 0%, 50% { opacity: 0; transform: translateY(8px); } 62%, 82% { opacity: 1; transform: none; } 100% { opacity: 1; transform: translate(var(--ex)); } }
+/* 04: the change log items light up one by one, then a click on a setting changes the layout */
+@keyframes proc-c4-row { 0%, 14% { opacity: 0; transform: translateX(-6px); } 22%, 100% { opacity: 1; transform: none; } }
+@keyframes proc-c4-dot { 0%, 26% { fill: var(--c-paper); } 32%, 100% { fill: var(--c-green); } }
 @keyframes proc-c4-toggle { 0%, 40% { opacity: 0; } 48%, 100% { opacity: 1; } }
-@keyframes proc-c4-cursor { 0%, 44% { opacity: 0; transform: translate(26px, 26px); } 50% { opacity: 1; } 62% { transform: none; } 67% { transform: scale(.8); } 72%, 100% { opacity: 1; transform: none; } }
+@keyframes proc-c4-cursor { 0%, 44% { opacity: 0; transform: translate(26px, 26px); } 50% { opacity: 1; } 62% { transform: none; } 67% { transform: translate(1.5px, 1.5px); } 72%, 100% { opacity: 1; transform: none; } }
 @keyframes proc-c4-knob { 0%, 67% { transform: translateX(-16px); } 76%, 100% { transform: none; } }
 @keyframes proc-c4-track { 0%, 67% { fill: var(--c-paper); } 76%, 100% { fill: var(--c-green); } }
 @keyframes proc-c4-hero { 0%, 70% { fill: var(--c-pink); } 82%, 100% { fill: var(--c-teal); } }
-@keyframes proc-settle { from { opacity: 0; transform: scale(.92); } }
+@keyframes proc-settle { from { opacity: 0; } }
 
 /* ---------- Testimonials ---------- */
 .tst-track {
@@ -560,13 +563,16 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 
 .work-slide__media { position: relative; overflow: hidden; background: var(--media); border-left: var(--border); min-height: 320px; }
 /* Line-and-fill illustration style: a thin ink outline, with the flat fill shifted down-right inside it */
-.mock, .device {
-  border: var(--line); background: linear-gradient(var(--fill), var(--fill)) 10px 10px / 100% 100% no-repeat;
+.mock, .device { isolation: isolate; }
+.mock::before, .device::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  border-radius: inherit; background: var(--fill); transform: translate(10px, 10px);
 }
+.mock::after, .device::after { content: ""; position: absolute; inset: 0; border: var(--line); border-radius: inherit; pointer-events: none; }
 .mock {
   --fill: var(--c-paper);
   position: absolute; display: flex; flex-direction: column; gap: 8px;
-  padding: 16px; border-radius: 18px; overflow: hidden;
+  padding: 16px; border-radius: 18px;
 }
 .mock b { font-size: clamp(18px, 2.2vw, 28px); font-weight: 600; line-height: 1.1; }
 .mock small { font-size: 13px; font-weight: 600; }
@@ -579,7 +585,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .mock--b i + i { width: 70%; }
 .mock__btn { margin-top: auto; align-self: start; padding: 8px 16px; border-radius: 999px; background: var(--c-ink); color: var(--c-paper); font-size: 12px; font-weight: 700; }
 .mock--c { left: 3%; bottom: -5%; width: 46%; height: 42%; }
-.mock__band { margin: auto -16px -16px; padding: 12px 16px 18px; background: var(--mb); color: var(--mb-text, inherit); display: flex; justify-content: space-between; font-weight: 600; text-transform: uppercase; }
+.mock__band { margin: auto -16px -16px; border-radius: 0 0 17px 17px; padding: 12px 16px 18px; background: var(--mb); color: var(--mb-text, inherit); display: flex; justify-content: space-between; font-weight: 600; text-transform: uppercase; }
 .mock__band em { font-style: normal; font-size: 12px; }
 
 /* Work so far: one big tilted device per slide that runs off the panel */
