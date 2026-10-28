@@ -521,6 +521,8 @@ h1, h2, h3, p, figure, ul { margin: 0; }
   .about { grid-template-columns: 1fr; }
   .about__badge { left: auto; right: -6px; top: -32px; --size: 100px; }
 }
+/* tablet: one column, so a wider, shorter panel keeps it from towering over the text */
+@media (min-width: 640px) and (max-width: 849px) { .about__img { aspect-ratio: 16 / 10; } }
 
 /* ---------- Stats ---------- */
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); border-block: var(--border); }
@@ -589,8 +591,8 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .mock--b i { display: block; height: 1.5px; background: var(--c-ink); }
 .mock--b i + i { width: 70%; }
 .mock__btn { margin-top: auto; align-self: start; padding: 8px 16px; border-radius: 999px; background: var(--c-ink); color: var(--c-paper); font-size: 12px; font-weight: 700; }
-.mock--c { left: 3%; bottom: -5%; width: 46%; height: 42%; }
-.mock__band { margin: auto -16px -16px; border-radius: 0 0 17px 17px; padding: 12px 16px 18px; background: var(--mb); color: var(--mb-text, inherit); display: flex; justify-content: space-between; font-weight: 600; text-transform: uppercase; }
+.mock--c { left: 3%; bottom: -2%; width: 46%; height: 42%; }
+.mock__band { margin: auto -16px -16px; border-radius: 0 0 17px 17px; gap: 8px; font-size: clamp(12px, 1.4vw, 16px); white-space: nowrap; padding: 12px 16px 18px; background: var(--mb); color: var(--mb-text, inherit); display: flex; justify-content: space-between; font-weight: 600; text-transform: uppercase; }
 .mock__band em { font-style: normal; font-size: 12px; }
 
 /* Work so far: one big tilted device per slide that runs off the panel */
