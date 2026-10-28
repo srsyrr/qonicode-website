@@ -2,6 +2,7 @@
 import { openDialog } from './dialog.js';
 import { mountTurnstile } from './turnstile.js';
 import './desk.js';
+import './process.js';
 
 /* Let's Talk buttons anywhere on the page */
 document.addEventListener('click', (e) => {
