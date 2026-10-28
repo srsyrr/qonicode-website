@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Skinhale before / after — Qonicode</title>
+  <meta name="description" content="Practice project: four change requests on Shopify's Horizon theme for a fictional skincare brand, with before / after screenshots and how each change is edited.">
+  <meta name="theme-color" content="#F5EFE3">
+  <link rel="canonical" href="https://qonicode.tech/work/skinhale/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Qonicode">
+  <meta property="og:url" content="https://qonicode.tech/work/skinhale/">
+  <meta property="og:title" content="Skinhale: before / after (practice project)">
+  <meta property="og:description" content="Four change requests on the Horizon theme: brand settings, labels from tags, product details from metafields, a Show more description.">
+  <meta property="og:image" content="https://qonicode.tech/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Qonicode: Design, brainstorm, coding. Beginner Shopify theme developer.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F5EFE3'/%3E%3Cg fill='none' stroke='%23111' stroke-linecap='round'%3E%3Cellipse cx='32' cy='27' rx='12.5' ry='16.5' stroke-width='6'/%3E%3Cpath d='M25 52c5 1.5 10 1.3 14.5-.7' stroke-width='4.5'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" crossorigin="anonymous">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script type="module" src="/assets/js/main.js"></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="seg seg--nav" aria-label="Main">
+      <a class="seg__item seg__logo" href="/" aria-label="Qonicode — back to top">
+        <svg class="logo-q" viewBox="0 0 40 56" aria-hidden="true"><ellipse cx="20" cy="22" rx="13.5" ry="18"/><path d="M12.5 49.5c5.5 1.6 11 1.4 16-.8"/></svg><span class="seg__text">qonicode</span>
+      </a>
+      <a class="seg__item" href="/#playground" data-spy="playground">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><circle cx="17" cy="7" r="4"/><path d="M7 14l4 7H3Z"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        <span class="seg__text">Playground</span>
+      </a>
+      <a class="seg__item" href="/#work" data-spy="work">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+        <span class="seg__text">Work</span>
+      </a>
+      <button type="button" class="seg__item seg__talk" data-open-talk>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"/></svg>
+        <span class="seg__text">Let's Talk</span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main" class="case">
+    <div class="page-width">
+      <a class="case__back" href="/#work">← Back to Work so far</a>
+      <header class="case__head">
+        <h1 class="display display--italic h-section">Skinhale: before / after</h1>
+        <ul class="tags"><li>Practice</li><li>Horizon 4.3.0</li><li>Liquid</li></ul>
+        <p class="case__lead">A practice project on a Shopify development store, for a fictional skincare brand. Not client work: no real customers or sales. I took four change requests (CR) from a written brief and applied them to a copy of the Horizon theme. The untouched theme stayed as it was, and nothing was published.</p>
+        <p class="case__status"><b>Checked:</b> 360 to 1440 px in Chromium, Edge and Firefox, against the acceptance criteria in the brief. <b>Not yet:</b> Safari, a real phone, and running the new settings in the Shopify theme editor.</p>
+      </header>
+
+      <h2 class="case__h2">The four change requests</h2>
+    <ol class="cr-list" aria-label="The four change requests">
+      <li class="cr">
+        <h3 class="cr__title"><b>CR-01</b> Brand settings, no code</h3>
+        <dl>
+          <dt>Request</dt><dd>Skinhale's colours, heading font and button style, from the theme editor only.</dd>
+          <dt>Before → after</dt><dd>White background, black text, sans-serif headings, black buttons → warm off-white, deep brown text, serif headings, terracotta pill buttons (10 theme settings).</dd>
+          <dt>How to edit</dt><dd>Theme settings → Colors / Typography / Buttons.</dd>
+        </dl>
+      </li>
+      <li class="cr">
+        <h3 class="cr__title"><b>CR-02</b> Product-card labels from tags</h3>
+        <dl>
+          <dt>Request</dt><dd>A product tagged <code>badge:New</code> shows “New” on its card; labels can be switched off and restyled.</dd>
+          <dt>Before → after</dt><dd>Only Sale / Sold out badges → up to 2 labels from tags, after Sale / Sold out (e.g. “Limited edition run”, “New”).</dd>
+          <dt>How to edit</dt><dd>Add or remove a <code>badge:</code> tag on the product. On/off and Filled/Outline: Theme settings → Badges.</dd>
+        </dl>
+      </li>
+      <li class="cr">
+        <h3 class="cr__title"><b>CR-03</b> Product details from metafields</h3>
+        <dl>
+          <dt>Request</dt><dd>Show Key ingredients, Skin type and How to use on the product page when filled; hide what is empty.</dd>
+          <dt>Before → after</dt><dd>Facts only inside the description → a “Product details” block below it, one row per filled field, nothing at all when all three are empty.</dd>
+          <dt>How to edit</dt><dd>Fill the three metafields on the product. Move or hide the block in the theme editor.</dd>
+        </dl>
+      </li>
+      <li class="cr">
+        <h3 class="cr__title"><b>CR-04</b> “Show more” collection description</h3>
+        <dl>
+          <dt>Request</dt><dd>Show only the start of a long collection description, with the full text still on the page for SEO.</dd>
+          <dt>Before → after</dt><dd>Full description above the products → first 30 words + “Show more” / “Show less”, no JavaScript (the long text is test data).</dd>
+          <dt>How to edit</dt><dd>Theme settings → Collection description: words shown (15–60), link labels, on/off.</dd>
+        </dl>
+      </li>
+    </ol>
+
+      <h2 class="case__h2">Screenshots</h2>
+      <p class="case__hint">Left: the untouched theme. Right: my copy after the four CRs. Product photos: Pexels. Tap an image to open it full size.</p>
+    <figure class="proof">
+        <a href="/assets/work/skinhale-collection-before-after-1440.webp" target="_blank" rel="noopener" aria-label="Open the full-size image"><img src="/assets/work/skinhale-collection-before-after-1440.webp" width="1600" height="808" loading="lazy" alt="Collection page at 1440 px, before and after: brand colours and fonts, labels on two product cards from tags, and a shortened description with a Show more link."></a>
+        <figcaption>Collection page, 1440 px. CR-01 brand settings, CR-02 labels from product tags ("Limited edition run", "New"), CR-04 description cut to 30 words with "Show more".</figcaption>
+      </figure>
+    <figure class="proof proof--tall">
+        <a href="/assets/work/skinhale-product-before-after-390.webp" target="_blank" rel="noopener" aria-label="Open the full-size image"><img src="/assets/work/skinhale-product-before-after-390.webp" width="804" height="2080" loading="lazy" alt="Product page at 390 px, before and after: serif headings, terracotta pill buttons and a new Product details list."></a>
+        <figcaption>Product page, 390 px. CR-01 serif headings and pill buttons, CR-03 "Product details" block from three metafields (it renders nothing when they are empty).</figcaption>
+      </figure>
+
+      <div class="case__cta">
+        <button type="button" class="btn btn--dark" data-open-talk data-topic="the Skinhale practice store">Ask about Skinhale</button>
+        <a class="link-btn" href="/#work">Back to the home page</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-width site-footer-wrap">
+    <div class="site-footer">
+      <div class="site-footer__grid">
+        <div class="newsletter">
+          <h2 class="newsletter__title display">Beginner Shopify<br><span>theme developer.</span></h2>
+        </div>
+
+        <ul class="footer-links">
+          <li><a href="/#playground">Playground</a></li>
+          <li><a href="/#work">Work so far</a></li>
+          <li><a href="/#process">How I work</a></li>
+          <li><a href="/#about">About</a></li>
+          <li><a href="https://www.linkedin.com/in/qfsyahirah" rel="noopener">LinkedIn</a></li>
+          <li><a href="/#contact" data-open-talk>Let's Talk</a></li>
+        </ul>
+
+        <div>
+          <ul class="footer-links">
+            <li><a href="/#playground" data-goto-page="home">Home page</a></li>
+            <li><a href="/#playground" data-goto-page="pdp">PDP</a></li>
+            <li><a href="/#playground" data-goto-page="plp">PLP</a></li>
+          </ul>
+          <span class="footer-squiggle" aria-hidden="true"><svg viewBox="0 0 140 70"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+
+        <div class="footer-contact">
+          <p class="muted-light">Surabaya, Indonesia<br>(UTC+7)</p>
+          <a class="footer-contact__mail" href="mailto:qonita@qonicode.tech">qonita@qonicode.tech</a>
+          <div class="footer-social">
+            <a class="social-btn" href="mailto:qonita@qonicode.tech" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+            <button type="button" class="social-btn" data-open-talk aria-label="Let's talk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <p class="footer-mini"><a href="/#playground">Playground</a>. <a href="/#work">Work</a>. <a href="/#about">About</a></p>
+        <span class="chevrons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg></span>
+        <p><b>©<span data-year></span> Qonicode.</b> <span class="muted-light">All rights reserved</span></p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============ Let's Talk / Request dialog ============ -->
+  <dialog class="nb-dialog" data-dialog aria-labelledby="dialog-title" aria-describedby="dialog-desc">
+    <form class="nb-dialog__content" novalidate>
+      <button type="button" class="nb-dialog__close" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <header class="nb-dialog__header">
+        <h2 class="nb-dialog__title" id="dialog-title" data-dialog-title>Let's talk</h2>
+        <p class="nb-dialog__desc" id="dialog-desc" data-dialog-desc></p>
+      </header>
+
+      <div class="nb-dialog__attachment" data-attachment hidden>
+        <img alt="Your layout" data-attachment-img>
+        <span data-attachment-text></span>
+      </div>
+
+      <div class="nb-dialog__fields">
+        <label class="nb-field"><span>Your name</span><input class="nb-input" name="name" autocomplete="name" required></label>
+        <label class="nb-field"><span>Email</span><input class="nb-input" name="email" type="email" autocomplete="email" required></label>
+        <label class="nb-field"><span>Store URL <em>(optional)</em></span><input class="nb-input" name="store" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="yourstore.com"></label>
+        <label class="nb-field"><span><span data-notes-label>Message</span> <em>(optional)</em></span><textarea class="nb-input" name="notes" rows="3" placeholder="Say hi, or ask about Skinhale…"></textarea></label>
+        <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <div class="turnstile-slot" data-turnstile></div>
+      <p class="nb-dialog__status" data-dialog-status role="status"></p>
+      <footer class="nb-dialog__footer">
+        <button type="button" class="btn" data-close>Cancel</button>
+        <button type="submit" class="btn" data-dialog-submit>Send</button>
+      </footer>
+    </form>
+  </dialog>
+</body>
+</html>
