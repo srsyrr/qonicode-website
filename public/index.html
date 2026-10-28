@@ -404,6 +404,40 @@
         <h2 class="nb-dialog__title" id="proof-title">Skinhale: before / after</h2>
         <p class="nb-dialog__desc">Practice project on a Shopify development store, fictional brand, not client work. Left: the untouched Horizon theme. Right: my copy after the four change requests (CR). Product photos: Pexels. Tap an image to open it full size.</p>
       </header>
+      <ol class="cr-list" aria-label="The four change requests">
+        <li class="cr">
+          <h3 class="cr__title"><b>CR-01</b> Brand settings, no code</h3>
+          <dl>
+            <dt>Request</dt><dd>Skinhale's colours, heading font and button style, from the theme editor only.</dd>
+            <dt>Before → after</dt><dd>White background, black text, sans-serif headings, black buttons → warm off-white, deep brown text, serif headings, terracotta pill buttons (10 theme settings).</dd>
+            <dt>How to edit</dt><dd>Theme settings → Colors / Typography / Buttons.</dd>
+          </dl>
+        </li>
+        <li class="cr">
+          <h3 class="cr__title"><b>CR-02</b> Product-card labels from tags</h3>
+          <dl>
+            <dt>Request</dt><dd>A product tagged <code>badge:New</code> shows “New” on its card; labels can be switched off and restyled.</dd>
+            <dt>Before → after</dt><dd>Only Sale / Sold out badges → up to 2 labels from tags, after Sale / Sold out (e.g. “Limited edition run”, “New”).</dd>
+            <dt>How to edit</dt><dd>Add or remove a <code>badge:</code> tag on the product. On/off and Filled/Outline: Theme settings → Badges.</dd>
+          </dl>
+        </li>
+        <li class="cr">
+          <h3 class="cr__title"><b>CR-03</b> Product details from metafields</h3>
+          <dl>
+            <dt>Request</dt><dd>Show Key ingredients, Skin type and How to use on the product page when filled; hide what is empty.</dd>
+            <dt>Before → after</dt><dd>Facts only inside the description → a “Product details” block below it, one row per filled field, nothing at all when all three are empty.</dd>
+            <dt>How to edit</dt><dd>Fill the three metafields on the product. Move or hide the block in the theme editor.</dd>
+          </dl>
+        </li>
+        <li class="cr">
+          <h3 class="cr__title"><b>CR-04</b> “Show more” collection description</h3>
+          <dl>
+            <dt>Request</dt><dd>Show only the start of a long collection description, with the full text still on the page for SEO.</dd>
+            <dt>Before → after</dt><dd>Full description above the products → first 30 words + “Show more” / “Show less”, no JavaScript (the long text is test data).</dd>
+            <dt>How to edit</dt><dd>Theme settings → Collection description: words shown (15–60), link labels, on/off.</dd>
+          </dl>
+        </li>
+      </ol>
       <figure class="proof">
         <a href="assets/work/skinhale-collection-before-after-1440.webp" target="_blank" rel="noopener" aria-label="Open the full-size image"><img src="assets/work/skinhale-collection-before-after-1440.webp" width="1600" height="808" loading="lazy" alt="Collection page at 1440 px, before and after: brand colours and fonts, labels on two product cards from tags, and a shortened description with a Show more link."></a>
         <figcaption>Collection page, 1440 px. CR-01 brand settings, CR-02 labels from product tags ("Limited edition run", "New"), CR-04 description cut to 30 words with "Show more".</figcaption>
