@@ -186,15 +186,16 @@
         <div class="work-track" data-track tabindex="0" aria-label="Projects">
           <article class="work-slide">
             <div class="work-slide__body">
-              <div class="work-slide__top"><span class="work-slide__num">01.</span><button type="button" class="arrow-btn" data-open-talk data-topic="the Skinhale practice store" aria-label="Ask about Skinhale"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button></div>
+              <div class="work-slide__top"><span class="work-slide__num">01.</span><button type="button" class="arrow-btn" data-open-proof="skinhale-proof" aria-label="See Skinhale before and after"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></button></div>
               <h3 class="work-slide__title">Skinhale practice store</h3>
-              <p class="work-slide__text">Fictional skincare brand on a Shopify development store, Horizon theme. Done: brand settings, product metafields and product-card labels from tags (QA in progress). Next: a product-details block and a "Show more" collection description.</p>
-              <ul class="tags"><li>Practice</li><li>In progress</li><li>Horizon</li></ul>
+              <p class="work-slide__text">Fictional skincare brand on a Shopify development store, Horizon theme. Four change requests from a written brief, on a copy of the theme: brand settings, product-card labels from tags, a product-details block from metafields and a "Show more" collection description. Checked at 360 to 1440 px in Chromium, Edge and Firefox. Not yet: Safari and a real phone.</p>
+              <ul class="tags"><li>Practice</li><li>Horizon</li><li>Liquid</li></ul>
+              <button type="button" class="link-btn" data-open-proof="skinhale-proof">See before / after</button>
             </div>
             <div class="work-slide__media" style="--media:var(--c-green-soft)">
               <div class="device device--phone" aria-hidden="true">
-                <div class="dv-img" style="--dv:#A4532F"><svg viewBox="0 0 40 80" aria-hidden="true"><rect x="14" y="2" width="12" height="15" rx="3" fill="#111111"/><rect x="6" y="15" width="28" height="62" rx="9" fill="#FAF7F2"/><rect x="11" y="36" width="18" height="18" rx="4" fill="#A4532F" opacity=".3"/></svg><span class="dv-pills"><span class="dv-pill" style="--pc:var(--c-green)">Vegan</span><span class="dv-pill" style="--pc:var(--c-yellow)">New</span></span></div>
-                <b class="dv-title">Niacinamide Serum</b>
+                <div class="dv-img" style="--dv:#A4532F"><svg viewBox="0 0 40 80" aria-hidden="true"><rect x="14" y="2" width="12" height="15" rx="3" fill="#111111"/><rect x="6" y="15" width="28" height="62" rx="9" fill="#FAF7F2"/><rect x="11" y="36" width="18" height="18" rx="4" fill="#A4532F" opacity=".3"/></svg><span class="dv-pills"><span class="dv-pill" style="--pc:var(--c-green)">Limited edition run</span><span class="dv-pill" style="--pc:var(--c-yellow)">New</span></span></div>
+                <b class="dv-title">Body Wash</b>
                 <span class="dv-row">Key ingredients <em>+</em></span>
                 <span class="dv-btn">Add to cart</span>
               </div>
@@ -390,6 +391,31 @@
         <button type="button" class="btn" data-close>Cancel</button>
         <button type="submit" class="btn" data-dialog-submit>Send</button>
       </footer>
+    </form>
+  </dialog>
+
+  <!-- ============ Skinhale before / after ============ -->
+  <dialog class="nb-dialog proof-dialog" id="skinhale-proof" aria-labelledby="proof-title">
+    <form class="nb-dialog__content" method="dialog">
+      <button class="nb-dialog__close" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <header class="nb-dialog__header">
+        <h2 class="nb-dialog__title" id="proof-title">Skinhale: before / after</h2>
+        <p class="nb-dialog__desc">Practice project on a Shopify development store, fictional brand, not client work. Left: the untouched Horizon theme. Right: my copy after the four change requests (CR). Product photos: Pexels. Tap an image to open it full size.</p>
+      </header>
+      <figure class="proof">
+        <a href="assets/work/skinhale-collection-before-after-1440.webp" target="_blank" rel="noopener" aria-label="Open the full-size image"><img src="assets/work/skinhale-collection-before-after-1440.webp" width="1600" height="808" loading="lazy" alt="Collection page at 1440 px, before and after: brand colours and fonts, labels on two product cards from tags, and a shortened description with a Show more link."></a>
+        <figcaption>Collection page, 1440 px. CR-01 brand settings, CR-02 labels from product tags ("Limited edition run", "New"), CR-04 description cut to 30 words with "Show more".</figcaption>
+      </figure>
+      <figure class="proof proof--tall">
+        <a href="assets/work/skinhale-product-before-after-390.webp" target="_blank" rel="noopener" aria-label="Open the full-size image"><img src="assets/work/skinhale-product-before-after-390.webp" width="804" height="2080" loading="lazy" alt="Product page at 390 px, before and after: serif headings, terracotta pill buttons and a new Product details list."></a>
+        <figcaption>Product page, 390 px. CR-01 serif headings and pill buttons, CR-03 "Product details" block from three metafields (it renders nothing when they are empty).</figcaption>
+      </figure>
+      <p class="proof__note">Not tested yet: Safari and a real phone. Theme-editor checks of the new settings are still to do.</p>
+      <div class="nb-dialog__footer">
+        <button type="button" class="btn" data-open-talk data-topic="the Skinhale practice store">Ask about Skinhale</button>
+      </div>
     </form>
   </dialog>
 </body>

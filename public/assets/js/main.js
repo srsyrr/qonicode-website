@@ -9,8 +9,17 @@ document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-open-talk]');
   if (!btn) return;
   e.preventDefault();
+  btn.closest('.proof-dialog')?.close();
   openDialog('talk', { topic: btn.dataset.topic });
 });
+
+/* Before / after dialogs in Work so far; a click on the backdrop closes them */
+document.querySelectorAll('[data-open-proof]').forEach((btn) => btn.addEventListener('click', () => {
+  document.getElementById(btn.dataset.openProof)?.showModal();
+}));
+document.querySelectorAll('.proof-dialog').forEach((dlg) => dlg.addEventListener('click', (e) => {
+  if (e.target === dlg) dlg.close();
+}));
 
 /* Footer links that open the playground on a given page type */
 document.querySelectorAll('[data-goto-page]').forEach((a) => a.addEventListener('click', () => {
