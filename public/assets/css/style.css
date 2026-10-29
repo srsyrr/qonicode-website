@@ -757,7 +757,7 @@ textarea.nb-input { resize: vertical; min-height: 88px; }
 
 /* Case page (work/skinhale/): step-by-step, change-request picker, before / after slider */
 .case { padding: clamp(16px, 3vw, 40px) 0 var(--section-gap); }
-.case > .page-width { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4vw, 48px); max-width: calc(1080px + var(--gutter) * 2); }
+.case > .page-width { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4vw, 48px); }
 .case__back { justify-self: start; }
 .case code { padding: 0 4px; border-radius: 4px; background: var(--c-desk); font-size: .9em; }
 
@@ -765,7 +765,7 @@ textarea.nb-input { resize: vertical; min-height: 88px; }
 .case__hero { display: grid; gap: 16px; }
 .case__kicker { font-size: clamp(14px, 1.4vw, 18px); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 /* "SKINHALE" is ~6.7em wide at this stretch, so size it to always fit the column */
-.case__title { font-size: min(168px, calc((100vw - 2 * var(--gutter)) / 7.2)); line-height: .85; }
+.case__title { font-size: min(184px, calc((100vw - 2 * var(--gutter)) / 7.2)); line-height: .85; }
 .case__lead { font-size: clamp(16px, 1.5vw, 19px); line-height: 1.65; color: #3A3A3A; }
 .case__hero .tags { margin-top: 0; }
 /* the same stats strip as the home page, inside the page column */
