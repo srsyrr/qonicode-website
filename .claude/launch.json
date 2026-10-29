@@ -6,6 +6,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "5179", "--directory", "D:/Claude/Email Marketing/TBH/public"],
       "port": 5179
+    },
+    {
+      "name": "qonicode",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5181", "--directory", "public"],
+      "port": 5181
     }
   ]
 }
