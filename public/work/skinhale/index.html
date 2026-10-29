@@ -18,11 +18,10 @@
   <meta property="og:image:alt" content="Qonicode: Design, brainstorm, coding. Beginner Shopify theme developer.">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F5EFE3'/%3E%3Cg fill='none' stroke='%23111' stroke-linecap='round'%3E%3Cellipse cx='32' cy='27' rx='12.5' ry='16.5' stroke-width='6'/%3E%3Cpath d='M25 52c5 1.5 10 1.3 14.5-.7' stroke-width='4.5'/%3E%3C/g%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" crossorigin="anonymous">
+  <link rel="preload" href="/assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/style.css">
   <script type="module" src="/assets/js/main.js"></script>
+  <script type="module" src="/assets/js/case.js"></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -49,65 +48,300 @@
 
   <main id="main" class="case">
     <div class="page-width">
-      <a class="case__back" href="/#work">← Back to Work so far</a>
-      <header class="case__head">
-        <h1 class="display display--italic h-section">Skinhale: before / after</h1>
-        <ul class="tags"><li>Practice</li><li>Horizon 4.3.0</li><li>Liquid</li></ul>
-        <p class="case__lead">A practice project on a Shopify development store, for a fictional skincare brand. Not client work: no real customers or sales. I took four change requests (CR) from a written brief and applied them to a copy of the Horizon theme. The untouched theme stayed as it was, and nothing was published.</p>
-        <p class="case__status"><b>Checked:</b> 360 to 1440 px in Chromium, Edge and Firefox, against the acceptance criteria in the brief. <b>Not yet:</b> Safari, a real phone, and running the new settings in the Shopify theme editor.</p>
+      <a class="btn case__back" href="/#work"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>Back to Work so far</a>
+
+      <header class="case__hero">
+        <p class="case__kicker">Step-by-step</p>
+        <h1 class="case__title display display--italic">Skinhale</h1>
+        <p class="case__lead">A fictional skincare brand on a Shopify development store. I took four change requests from a written brief and built them on a copy of the Horizon theme, the same way I'd work on your store.</p>
+        <ul class="tags"><li>Practice project</li><li>Not client work</li><li>Horizon 4.3.0</li></ul>
+        <dl class="stats stats--case">
+          <div class="stats__item"><dt class="stats__num display display--italic">4</dt><dd class="stats__label">Change requests</dd></div>
+          <div class="stats__item"><dt class="stats__num display display--italic">35/35</dt><dd class="stats__label">Page checks, 7 pages × 5 widths</dd></div>
+          <div class="stats__item"><dt class="stats__num display display--italic">0</dt><dd class="stats__label">Edits to the original theme</dd></div>
+        </dl>
       </header>
 
-      <h2 class="case__h2">The four change requests</h2>
-    <ol class="cr-list" aria-label="The four change requests">
-      <li class="cr">
-        <h3 class="cr__title"><b>CR-01</b> Brand settings, no code</h3>
-        <dl>
-          <dt>Request</dt><dd>Skinhale's colours, heading font and button style, from the theme editor only.</dd>
-          <dt>Before → after</dt><dd>White background, black text, sans-serif headings, black buttons → warm off-white, deep brown text, serif headings, terracotta pill buttons (10 theme settings).</dd>
-          <dt>How to edit</dt><dd>Theme settings → Colors / Typography / Buttons.</dd>
-        </dl>
-      </li>
-      <li class="cr">
-        <h3 class="cr__title"><b>CR-02</b> Product-card labels from tags</h3>
-        <dl>
-          <dt>Request</dt><dd>A product tagged <code>badge:New</code> shows “New” on its card; labels can be switched off and restyled.</dd>
-          <dt>Before → after</dt><dd>Only Sale / Sold out badges → up to 2 labels from tags, after Sale / Sold out (e.g. “Limited edition run”, “New”).</dd>
-          <dt>How to edit</dt><dd>Add or remove a <code>badge:</code> tag on the product. On/off and Filled/Outline: Theme settings → Badges.</dd>
-        </dl>
-      </li>
-      <li class="cr">
-        <h3 class="cr__title"><b>CR-03</b> Product details from metafields</h3>
-        <dl>
-          <dt>Request</dt><dd>Show Key ingredients, Skin type and How to use on the product page when filled; hide what is empty.</dd>
-          <dt>Before → after</dt><dd>Facts only inside the description → a “Product details” block below it, one row per filled field, nothing at all when all three are empty.</dd>
-          <dt>How to edit</dt><dd>Fill the three metafields on the product. Move or hide the block in the theme editor.</dd>
-        </dl>
-      </li>
-      <li class="cr">
-        <h3 class="cr__title"><b>CR-04</b> “Show more” collection description</h3>
-        <dl>
-          <dt>Request</dt><dd>Show only the start of a long collection description, with the full text still on the page for SEO.</dd>
-          <dt>Before → after</dt><dd>Full description above the products → first 30 words + “Show more” / “Show less”, no JavaScript (the long text is test data).</dd>
-          <dt>How to edit</dt><dd>Theme settings → Collection description: words shown (15–60), link labels, on/off.</dd>
-        </dl>
-      </li>
-    </ol>
 
-      <h2 class="case__h2">Screenshots</h2>
-      <p class="case__hint">Left: the untouched theme. Right: my copy after the four CRs. Product photos: Pexels. Tap an image to open it full size.</p>
-    <figure class="proof">
-        <a href="/assets/work/skinhale-collection-before-after-1440.webp" target="_blank" rel="noopener" aria-label="Open the full-size image"><img src="/assets/work/skinhale-collection-before-after-1440.webp" width="1600" height="808" loading="lazy" alt="Collection page at 1440 px, before and after: brand colours and fonts, labels on two product cards from tags, and a shortened description with a Show more link."></a>
-        <figcaption>Collection page, 1440 px. CR-01 brand settings, CR-02 labels from product tags ("Limited edition run", "New"), CR-04 description cut to 30 words with "Show more".</figcaption>
-      </figure>
-    <figure class="proof proof--tall">
-        <a href="/assets/work/skinhale-product-before-after-390.webp" target="_blank" rel="noopener" aria-label="Open the full-size image"><img src="/assets/work/skinhale-product-before-after-390.webp" width="804" height="2080" loading="lazy" alt="Product page at 390 px, before and after: serif headings, terracotta pill buttons and a new Product details list."></a>
-        <figcaption>Product page, 390 px. CR-01 serif headings and pill buttons, CR-03 "Product details" block from three metafields (it renders nothing when they are empty).</figcaption>
-      </figure>
+      <section class="case__crs" aria-labelledby="crs-title">
+        <h2 class="display display--italic h-section" id="crs-title">Request by request</h2>
+        <div class="cr-tabs" role="group" aria-label="Change requests">
+          <button type="button" class="cr-tab" data-cr-pick="cr01" aria-pressed="true" aria-label="CR-01: Brand settings, no code">CR-01</button>
+          <button type="button" class="cr-tab" data-cr-pick="cr02" aria-pressed="false" aria-label="CR-02: Product-card labels from tags">CR-02</button>
+          <button type="button" class="cr-tab" data-cr-pick="cr03" aria-pressed="false" aria-label="CR-03: Product details from metafields">CR-03</button>
+          <button type="button" class="cr-tab" data-cr-pick="cr04" aria-pressed="false" aria-label="CR-04: “Show more” collection description">CR-04</button>
+        </div>
+        <article class="cr-frame" data-cr="cr01" aria-labelledby="cr01-title">
+          <header class="cr-frame__head">
+            <h3 class="cr-frame__title" id="cr01-title"><b>CR-01</b> Brand settings, no code</h3>
+            <span class="cr-frame__meta">6 criteria · settings only, not timed</span>
+          </header>
+          <div class="cr-frame__grid">
+            <div class="cr-frame__brief">
+              <h4>Brief</h4>
+              <p>Apply Skinhale's colours, heading font and button style with theme settings only.</p>
+              <h4>Acceptance criteria</h4>
+              <ul class="ac-list">
+              <li class="ac">Page background #FAF7F2 and body text #2B2622</li>
+            <li class="ac">Page and product titles use the new serif; body text stays Inter</li>
+            <li class="ac">“Add to cart”: terracotta fill, white text, pill shape</li>
+            <li class="ac">Every text and background pair measures at least 4.5:1 contrast</li>
+            <li class="ac">No theme code changed: only the settings file</li>
+            <li class="ac">Every changed setting listed old → new</li>
+              </ul>
+            </div>
+            <div class="cr-frame__shot">
+              <div class="widths" role="group" aria-label="Screen width for CR-01">
+                <button type="button" data-width="390" aria-pressed="false">Phone 390</button>
+                <button type="button" data-width="768" aria-pressed="false">Tablet 768</button>
+                <button type="button" data-width="1440" aria-pressed="true">Desktop 1440</button>
+              </div>
+                <figure class="ba" data-w="390">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr01-390-after.webp" width="390" height="600" alt="After: product page at 390 px with CR-01" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr01-390-before.webp" width="390" height="600" alt="Before: the untouched theme, same spot at 390 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-01 at 390 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="768">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr01-768-after.webp" width="768" height="420" alt="After: product page at 768 px with CR-01" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr01-768-before.webp" width="768" height="420" alt="Before: the untouched theme, same spot at 768 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-01 at 768 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="1440">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr01-1440-after.webp" width="1200" height="400" alt="After: product page at 1440 px with CR-01" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr01-1440-before.webp" width="1200" height="400" alt="Before: the untouched theme, same spot at 1440 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-01 at 1440 px">
+                  </div>
+                </figure>
+              <p class="ba__cap">Top of the product page: warm background, serif title, terracotta pill buttons.</p>
+            </div>
+          </div>
+            <details class="cr-more">
+              <summary>Change log, how to edit and what else was tested</summary>
+              <div class="handover">
+                <div class="handover__col"><h4>Change log</h4><ul class="file-list"><li><code>config/settings_data.json</code><span>10 theme settings: 5 palette colours, the heading font, 4 primary-button settings. No code files.</span></li></ul></div>
+                <div class="handover__col handover__col--edit"><h4>How to edit</h4><ol class="edit-list"><li>Online Store → Themes → Customize → Theme settings → Colors, Typography or Buttons.</li><li>Changing a palette colour updates every place that uses it.</li></ol></div>
+              </div>
+              <div class="also"><h4>Also tested</h4><ul class="edge-list"><li>Button hover text measured 4.22:1 at first; adding white to the palette lifted it to 4.51:1</li><li>One palette change re-colours the whole theme, not one page</li></ul></div>
+            </details>
+        </article>
+        <article class="cr-frame" data-cr="cr02" aria-labelledby="cr02-title">
+          <header class="cr-frame__head">
+            <h3 class="cr-frame__title" id="cr02-title"><b>CR-02</b> Product-card labels from tags</h3>
+            <span class="cr-frame__meta">7 criteria · 3.5 h logged</span>
+          </header>
+          <div class="cr-frame__grid">
+            <div class="cr-frame__brief">
+              <h4>Brief</h4>
+              <p>Products tagged <code>badge:New</code> show “New” as a small label on product cards. The labels can be switched off and restyled.</p>
+              <h4>Acceptance criteria</h4>
+              <ul class="ac-list">
+              <li class="ac">Daily Hand Cream shows one “New” label; a product without a badge tag shows no label and no empty markup</li>
+            <li class="ac">Body Wash shows “Limited edition run” and “New” without overlapping</li>
+            <li class="ac">A long label wraps inside the card at 360 px, no horizontal scroll</li>
+            <li class="ac ac--todo">Switching “Show tag badges” off removes the labels; Sale and Sold out stay <em>Passed in preview; editor check to do</em></li>
+            <li class="ac ac--todo">Switching Filled ↔ Outline restyles every label without code <em>Passed in preview; editor check to do</em></li>
+            <li class="ac">A card with labels still opens the right product</li>
+            <li class="ac">Theme Check: no new errors</li>
+              </ul>
+            </div>
+            <div class="cr-frame__shot">
+              <div class="widths" role="group" aria-label="Screen width for CR-02">
+                <button type="button" data-width="390" aria-pressed="false">Phone 390</button>
+                <button type="button" data-width="768" aria-pressed="false">Tablet 768</button>
+                <button type="button" data-width="1440" aria-pressed="true">Desktop 1440</button>
+              </div>
+                <figure class="ba" data-w="390">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr02-390-after.webp" width="390" height="640" alt="After: collection page at 390 px with CR-02" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr02-390-before.webp" width="390" height="640" alt="Before: the untouched theme, same spot at 390 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-02 at 390 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="768">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr02-768-after.webp" width="768" height="800" alt="After: collection page at 768 px with CR-02" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr02-768-before.webp" width="768" height="800" alt="Before: the untouched theme, same spot at 768 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-02 at 768 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="1440">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr02-1440-after.webp" width="920" height="510" alt="After: collection page at 1440 px with CR-02" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr02-1440-before.webp" width="920" height="510" alt="Before: the untouched theme, same spot at 1440 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-02 at 1440 px">
+                  </div>
+                </figure>
+              <p class="ba__cap">Collection page, product cards: “Limited edition run” and “New” come from product tags.</p>
+            </div>
+          </div>
+            <details class="cr-more">
+              <summary>Change log, how to edit and what else was tested</summary>
+              <div class="handover">
+                <div class="handover__col"><h4>Change log</h4><ul class="file-list"><li><code>blocks/_product-card-gallery.liquid</code><span>Loops over the product tags; a tag starting with badge: adds a label, at most 2</span></li><li><code>snippets/product-badges-styles.liquid</code><span>Labels stack and wrap; Filled and Outline follow the brand button colour</span></li><li><code>snippets/card-gallery.liquid</code><span>Tag labels count as badges, so a card without an image keeps its title clear</span></li><li><code>config/settings_schema.json + locales</code><span>“Show tag badges” and “Tag badge style” under Theme settings → Badges</span></li></ul></div>
+                <div class="handover__col handover__col--edit"><h4>How to edit</h4><ol class="edit-list"><li>Add a label: open the product → Tags → add <code>badge:Your text</code> (1 to 3 words).</li><li>Remove it: delete the tag.</li><li>All labels off, or another style: Customize → Theme settings → Badges.</li></ol></div>
+              </div>
+              <div class="also"><h4>Also tested</h4><ul class="edge-list"><li>3 or more badge tags → only the first 2 show</li><li><code>Badge:</code> in capitals works; an empty <code>badge:</code> and a <code>notbadge:</code> tag are ignored</li><li>Sale or Sold out plus a tag label → the theme badge comes first</li><li>The outline style was unreadable on a red photo; the label now has a background fill (5.10:1 on any photo)</li></ul></div>
+              <figure class="code">
+                <figcaption>Excerpt from <code>blocks/_product-card-gallery.liquid</code></figcaption>
+                <pre><code>{%- for tag in product.tags -%}
+  {%- assign tag_prefix = tag | slice: 0, 6 | downcase -%}
+  {%- assign tag_text = tag | slice: 6, tag.size | strip -%}
+  {%- if tag_prefix == &#x27;badge:&#x27; and tag_text != blank -%}
+    &lt;div class=&quot;product-badges__badge ...&quot;&gt;{{- tag_text | escape -}}&lt;/div&gt;
+    {%- assign tag_badge_count = tag_badge_count | plus: 1 -%}
+    {%- if tag_badge_count == 2 -%}{%- break -%}{%- endif -%}
+  {%- endif -%}
+{%- endfor -%}</code></pre>
+                <p>It checks the first 6 letters of each tag instead of using <code>contains</code>: a small test showed <code>contains 'badge:'</code> also matches a tag like <code>notbadge:Trap</code>.</p>
+              </figure>
+            </details>
+        </article>
+        <article class="cr-frame" data-cr="cr03" aria-labelledby="cr03-title">
+          <header class="cr-frame__head">
+            <h3 class="cr-frame__title" id="cr03-title"><b>CR-03</b> Product details from metafields</h3>
+            <span class="cr-frame__meta">7 criteria · 1.5 h logged</span>
+          </header>
+          <div class="cr-frame__grid">
+            <div class="cr-frame__brief">
+              <h4>Brief</h4>
+              <p>Show Key ingredients, Skin type and How to use on the product page when they are filled, and hide what is empty.</p>
+              <h4>Acceptance criteria</h4>
+              <ul class="ac-list">
+              <li class="ac">Heading and 3 rows with the right values on a product with all data</li>
+            <li class="ac">Only the filled row shows on a product with 1 field</li>
+            <li class="ac">Nothing from the block in the HTML on a product with no data</li>
+            <li class="ac ac--todo">Changing a label in the editor changes the page, not the data <em>Passed in preview; editor check to do</em></li>
+            <li class="ac">A long value wraps at 360 px, no horizontal scroll</li>
+            <li class="ac">Changing variant still updates price and image; add to cart adds that variant</li>
+            <li class="ac">Theme Check: no new errors</li>
+              </ul>
+            </div>
+            <div class="cr-frame__shot">
+              <div class="widths" role="group" aria-label="Screen width for CR-03">
+                <button type="button" data-width="390" aria-pressed="false">Phone 390</button>
+                <button type="button" data-width="768" aria-pressed="false">Tablet 768</button>
+                <button type="button" data-width="1440" aria-pressed="true">Desktop 1440</button>
+              </div>
+                <figure class="ba" data-w="390">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr03-390-after.webp" width="390" height="500" alt="After: product page at 390 px with CR-03" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr03-390-before.webp" width="390" height="500" alt="Before: the untouched theme, same spot at 390 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-03 at 390 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="768">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr03-768-after.webp" width="768" height="350" alt="After: product page at 768 px with CR-03" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr03-768-before.webp" width="768" height="350" alt="Before: the untouched theme, same spot at 768 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-03 at 768 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="1440">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr03-1440-after.webp" width="700" height="400" alt="After: product page at 1440 px with CR-03" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr03-1440-before.webp" width="700" height="400" alt="Before: the untouched theme, same spot at 1440 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-03 at 1440 px">
+                  </div>
+                </figure>
+              <p class="ba__cap">Same spot on the product page: the new “Product details” block from three metafields.</p>
+            </div>
+          </div>
+            <details class="cr-more">
+              <summary>Change log, how to edit and what else was tested</summary>
+              <div class="handover">
+                <div class="handover__col"><h4>Change log</h4><ul class="file-list"><li><code>blocks/product-details-list.liquid (new)</code><span>Reads the 3 metafields; one row per filled field; nothing at all when all are empty</span></li><li><code>templates/product.json</code><span>Block placed after the description; the merchant can move or hide it</span></li><li><code>locales/*.schema.json</code><span>8 editor labels, in every language file so Theme Check passes</span></li></ul></div>
+                <div class="handover__col handover__col--edit"><h4>How to edit</h4><ol class="edit-list"><li>Fill the data: open the product → Metafields: Key ingredients (one per line), Skin type, How to use (one step per line).</li><li>Change the labels: Customize → Products → Product details list.</li><li>Move or hide the block: drag it in the left panel, or click the eye icon.</li></ol></div>
+              </div>
+              <div class="also"><h4>Also tested</h4><ul class="edge-list"><li>All 3 fields, 1 field and no fields tested on 3 different products</li><li>A 435-character value at 360 px wraps with no horizontal scroll</li><li>Variant change and add to cart still correct on a 12-variant product</li></ul></div>
+            </details>
+        </article>
+        <article class="cr-frame" data-cr="cr04" aria-labelledby="cr04-title">
+          <header class="cr-frame__head">
+            <h3 class="cr-frame__title" id="cr04-title"><b>CR-04</b> “Show more” collection description</h3>
+            <span class="cr-frame__meta">8 criteria · 1.75 h logged</span>
+          </header>
+          <div class="cr-frame__grid">
+            <div class="cr-frame__brief">
+              <h4>Brief</h4>
+              <p>Show only the start of a long collection description with a “Show more” link, so shoppers see products first. The full text stays on the page for SEO.</p>
+              <h4>Acceptance criteria</h4>
+              <ul class="ac-list">
+              <li class="ac">“Shop all” shows the first 30 words + “…” and a centred “Show more” link</li>
+            <li class="ac">“Show more” opens the full text and reads “Show less”; clicking again closes it</li>
+            <li class="ac">Tab reaches the link; Enter or Space toggles it; focus outline visible</li>
+            <li class="ac">The full text is in the page source while collapsed</li>
+            <li class="ac">A short description shows in full with no link; an empty one has no markup</li>
+            <li class="ac ac--todo">Switching it off, or changing words shown or labels, works from the editor <em>Passed in preview; editor check to do</em></li>
+            <li class="ac">No horizontal scroll and no overlap at 360 px</li>
+            <li class="ac">Theme Check: no new errors</li>
+              </ul>
+            </div>
+            <div class="cr-frame__shot">
+              <div class="widths" role="group" aria-label="Screen width for CR-04">
+                <button type="button" data-width="390" aria-pressed="false">Phone 390</button>
+                <button type="button" data-width="768" aria-pressed="false">Tablet 768</button>
+                <button type="button" data-width="1440" aria-pressed="true">Desktop 1440</button>
+              </div>
+                <figure class="ba" data-w="390">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr04-390-after.webp" width="390" height="440" alt="After: collection page at 390 px with CR-04" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr04-390-before.webp" width="390" height="440" alt="Before: the untouched theme, same spot at 390 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-04 at 390 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="768">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr04-768-after.webp" width="768" height="380" alt="After: collection page at 768 px with CR-04" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr04-768-before.webp" width="768" height="380" alt="Before: the untouched theme, same spot at 768 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-04 at 768 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="1440">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/skinhale/cr04-1440-after.webp" width="1200" height="200" alt="After: collection page at 1440 px with CR-04" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/skinhale/cr04-1440-before.webp" width="1200" height="200" alt="Before: the untouched theme, same spot at 1440 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, CR-04 at 1440 px">
+                  </div>
+                </figure>
+              <p class="ba__cap">Top of the collection page. The long description is test data; before, it was 6 words.</p>
+            </div>
+          </div>
+            <details class="cr-more">
+              <summary>Change log, how to edit and what else was tested</summary>
+              <div class="handover">
+                <div class="handover__col"><h4>Change log</h4><ul class="file-list"><li><code>blocks/collection-description.liquid (new)</code><span>Wraps the theme's own text block: first N words + “…” and a native toggle; otherwise renders exactly as before</span></li><li><code>templates/collection.json</code><span>Only the collection page uses the new block; other text on the site is untouched</span></li><li><code>config/settings_schema.json + locales</code><span>Theme settings → Collection description: on/off, words shown (15–60), both link labels</span></li></ul></div>
+                <div class="handover__col handover__col--edit"><h4>How to edit</h4><ol class="edit-list"><li>Write the description: Products → Collections → open a collection → Description.</li><li>Length, labels or off: Customize → Theme settings → Collection description.</li><li>A description shorter than the word count shows in full, with no link.</li></ol></div>
+              </div>
+              <div class="also"><h4>Also tested</h4><ul class="edge-list"><li>Long (119 words), short (11 words) and empty descriptions tested</li><li>Mouse, Enter and Space all toggle it</li><li>No JavaScript added: a native <code>&lt;details&gt;</code> element</li></ul></div>
+            </details>
+        </article>
+        <p class="case__note">Hours logged on this practice project, including learning and QA.</p>
+      </section>
 
-      <div class="case__cta">
-        <button type="button" class="btn btn--dark" data-open-talk data-topic="the Skinhale practice store">Ask about Skinhale</button>
-        <a class="link-btn" href="/#work">Back to the home page</a>
-      </div>
+      <section class="case__end" aria-labelledby="end-title">
+        <h2 class="case__h2" id="end-title">Not tested yet</h2>
+        <p>Safari, a real phone, and running the new settings in the Shopify theme editor (they pass in a local preview).</p>
+        <div class="case__cta">
+          <button type="button" class="btn" data-open-talk data-topic="the Skinhale practice store">Ask about Skinhale</button>
+        </div>
+      </section>
     </div>
   </main>
 
