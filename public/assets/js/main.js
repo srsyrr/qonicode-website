@@ -19,6 +19,14 @@ document.querySelectorAll('[data-goto-page]').forEach((a) => a.addEventListener(
   if (btn) btn.click();
 }));
 
+/* Nav shrinks to icons once the page is scrolled */
+const header = document.querySelector('.site-header');
+if (header) {
+  const compact = () => header.classList.toggle('is-compact', window.scrollY > 120);
+  window.addEventListener('scroll', compact, { passive: true });
+  compact();
+}
+
 /* Highlight the nav segment of the section in view */
 const navLinks = [...document.querySelectorAll('[data-spy]')];
 const spied = navLinks.map((a) => document.getElementById(a.dataset.spy)).filter(Boolean);
