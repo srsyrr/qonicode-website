@@ -12,6 +12,7 @@ document.addEventListener('click', (e) => {
   openDialog('talk', { topic: btn.dataset.topic });
 });
 
+
 /* Footer links that open the playground on a given page type */
 document.querySelectorAll('[data-goto-page]').forEach((a) => a.addEventListener('click', () => {
   const btn = document.querySelector(`[data-page="${a.dataset.gotoPage}"]`);
