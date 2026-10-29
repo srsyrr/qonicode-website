@@ -553,6 +553,8 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 /* ==========================================================================
    Latest work carousel
    ========================================================================== */
+/* jumping to #work skips most of the section padding, so heading, card and dots fit one screen */
+#work { scroll-margin-top: calc(20px - var(--section-gap)); }
 .work-track {
   display: grid; grid-auto-flow: column; grid-auto-columns: 100%; gap: 28px;
   overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
@@ -564,11 +566,11 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .work-track.is-dragging *, .tst-track.is-dragging * { pointer-events: none; }
 .work-track:focus-visible { outline-offset: 6px; }
 .work-slide {
-  scroll-snap-align: start; display: grid; grid-template-columns: 1fr 1fr; min-height: 440px;
+  scroll-snap-align: start; display: grid; grid-template-columns: 1fr 1fr; min-height: 500px;
   border: var(--border); border-radius: 28px; overflow: hidden;
   background: #FFF6EA; box-shadow: 0 9px 0 var(--c-ink);
 }
-.work-slide__body { display: flex; flex-direction: column; gap: 18px; padding: clamp(24px, 4vw, 40px); }
+.work-slide__body { display: flex; flex-direction: column; gap: 14px; padding: clamp(22px, 3.2vw, 34px); }
 .work-slide__top { display: flex; align-items: start; justify-content: space-between; margin-bottom: auto; }
 .work-slide__num { font-size: 28px; font-weight: 900; font-stretch: 125%; }
 .arrow-btn {
@@ -578,8 +580,8 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 }
 .arrow-btn:hover { transform: translate(3px, 3px); box-shadow: none; }
 .arrow-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
-.work-slide__title { margin-top: 28px; font-size: clamp(24px, 2.8vw, 34px); font-weight: 600; text-transform: uppercase; line-height: 1.15; }
-.work-slide__text { color: #3A3A3A; font-size: 18px; line-height: 1.7; max-width: 30ch; }
+.work-slide__title { margin-top: 14px; font-size: clamp(22px, 2.4vw, 30px); font-weight: 600; text-transform: uppercase; line-height: 1.15; }
+.work-slide__text { color: #3A3A3A; font-size: 16px; line-height: 1.6; max-width: 38ch; }
 .tags { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; padding: 0; margin-top: 8px; }
 .tags li { padding: 11px 22px; border-radius: 999px; background: var(--c-ink); color: var(--c-paper); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
 
@@ -638,7 +640,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .dv-piece { position: absolute; left: var(--x); top: var(--y); width: var(--w); height: var(--h); border-radius: 10px; background: var(--pc); transform: rotate(var(--r, 0deg)); }
 .dv-piece--round { border-radius: 50%; }
 
-.carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 28px; }
+.carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 22px; }
 .carousel-dots[hidden] { display: none; }
 .carousel-dot { width: 14px; height: 14px; padding: 0; border: var(--border); border-radius: 999px; background: var(--c-paper); cursor: pointer; transition: width .2s ease, background .2s ease; }
 .carousel-dot[aria-current="true"] { width: 36px; background: var(--c-ink); }
@@ -762,9 +764,14 @@ textarea.nb-input { resize: vertical; min-height: 88px; }
 .nb-dialog__footer { display: flex; justify-content: flex-end; gap: 12px; }
 
 /* Case page (work/skinhale/): step-by-step, change-request picker, before / after slider */
-.case { padding: clamp(16px, 3vw, 40px) 0 var(--section-gap); }
+.case { padding: 8px 0 var(--section-gap); }
 .case > .page-width { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4vw, 48px); }
-.case__back { justify-self: start; }
+.case__back { justify-self: start; align-self: start; }
+/* wide screens: the back button shares the row with the floating nav, so the hero and stats fit the first screen */
+@media (min-width: 1340px) {
+  .case { padding-top: 0; }
+  .case__back { margin-top: calc(15px - var(--nav-space)); }
+}
 .case code { padding: 0 4px; border-radius: 4px; background: var(--c-desk); font-size: .9em; }
 
 /* hero: small "Step-by-step" kicker above a big title */
@@ -775,7 +782,7 @@ textarea.nb-input { resize: vertical; min-height: 88px; }
 .case__lead { font-size: clamp(16px, 1.5vw, 19px); line-height: 1.65; color: #3A3A3A; }
 .case__hero .tags { margin-top: 0; }
 /* the same stats strip as the home page, inside the page column */
-.stats--case { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: clamp(28px, 4vw, 48px) 0 clamp(56px, 7vw, 96px); }
+.stats--case { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: clamp(20px, 2.4vw, 32px) 0 clamp(56px, 7vw, 96px); }
 .stats--case .stats__item { min-width: 0; }
 .stats--case .stats__num { font-size: clamp(36px, 5vw, 72px); }
 .stats--case .stats__label { margin-inline: 0; }
