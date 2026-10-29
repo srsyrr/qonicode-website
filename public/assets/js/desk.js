@@ -523,14 +523,14 @@ class Playground {
     return window.htmlToImage;
   }
 
-  /* Only the regular latin Archivo face is used on the page cards. Embedding every Google Fonts
-     subset makes the export ~20x slower, so keep just that one @font-face. */
+  /* Only the upright Archivo face is used on the page cards; embedding the italic too would just
+     make the export slower, so keep that one @font-face. */
   async fontCSS(htmlToImage) {
     if (this._fontCSS != null) return this._fontCSS;
     try {
       const all = await htmlToImage.getFontEmbedCSS(this.desk);
       const faces = (all.match(/@font-face\s*{[^}]*}/g) || [])
-        .filter((f) => /font-family:\s*["']?Archivo/i.test(f) && /font-style:\s*normal/i.test(f) && /U\+0-FF,/i.test(f));
+        .filter((f) => /font-family:\s*["']?Archivo/i.test(f) && /font-style:\s*normal/i.test(f));
       this._fontCSS = [...new Set(faces)].join('\n');
     } catch (e) {
       this._fontCSS = '';
