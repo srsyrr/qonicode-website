@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Halmere plan / build — Qonicode</title>
+  <meta name="description" content="Practice project: a richer product page on Shopify's Dawn theme for a fictional homeware brand, built from three new sections and a phone add-to-cart bar the owner edits in the theme editor.">
+  <meta name="theme-color" content="#F5EFE3">
+  <link rel="canonical" href="https://qonicode.tech/work/halmere/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Qonicode">
+  <meta property="og:url" content="https://qonicode.tech/work/halmere/">
+  <meta property="og:title" content="Halmere: hero product page on Dawn (practice project)">
+  <meta property="og:description" content="Feature highlights, a comparison table, an FAQ and a sticky add-to-cart bar for phones, all editable in the theme editor.">
+  <meta property="og:image" content="https://qonicode.tech/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Qonicode: Design, brainstorm, coding. Beginner Shopify theme developer.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F5EFE3'/%3E%3Cg fill='none' stroke='%23111' stroke-linecap='round'%3E%3Cellipse cx='32' cy='27' rx='12.5' ry='16.5' stroke-width='6'/%3E%3Cpath d='M25 52c5 1.5 10 1.3 14.5-.7' stroke-width='4.5'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preload" href="/assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script type="module" src="/assets/js/main.js"></script>
+  <script type="module" src="/assets/js/case.js"></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="seg seg--nav" aria-label="Main">
+      <a class="seg__item seg__logo" href="/" aria-label="Qonicode — back to top">
+        <svg class="logo-q" viewBox="0 0 40 56" aria-hidden="true"><ellipse cx="20" cy="22" rx="13.5" ry="18"/><path d="M12.5 49.5c5.5 1.6 11 1.4 16-.8"/></svg><span class="seg__text">qonicode</span>
+      </a>
+      <a class="seg__item" href="/#playground" data-spy="playground">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><circle cx="17" cy="7" r="4"/><path d="M7 14l4 7H3Z"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        <span class="seg__text">Playground</span>
+      </a>
+      <a class="seg__item" href="/#work" data-spy="work">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+        <span class="seg__text">Work</span>
+      </a>
+      <a class="seg__item" href="/#process" data-spy="process">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7l2 2 3.5-3.5M4 16l2 2 3.5-3.5M13 8h7M13 17h7"/></svg>
+        <span class="seg__text">How I work</span>
+      </a>
+      <button type="button" class="seg__item seg__talk" data-open-talk>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"/></svg>
+        <span class="seg__text">Let's Talk</span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main" class="case">
+    <div class="page-width">
+      <a class="btn case__back" href="/#work"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>Back to Work so far</a>
+
+      <header class="case__hero">
+        <p class="case__kicker">Step-by-step</p>
+        <h1 class="case__title display display--italic">Halmere</h1>
+        <p class="case__lead">A fictional homeware brand on a new Shopify development store. One best-selling plate set gets a richer product page, built from new sections the owner can edit alone in the theme editor; every other product keeps Dawn's normal page. I wrote the spec and a greyscale wireframe first, then built against it.</p>
+        <ul class="tags"><li>Practice project</li><li>Not client work</li><li>Dawn 16.0.0</li></ul>
+      </header>
+    </div>
+
+    <!-- full-bleed like the home page stats -->
+    <dl class="stats stats--case">
+      <div class="stats__item"><dt class="stats__num display display--italic">4</dt><dd class="stats__label">New sections, no apps</dd></div>
+      <div class="stats__item"><dt class="stats__num display display--italic">43/43</dt><dd class="stats__label">Settings tested one at a time</dd></div>
+      <div class="stats__item"><dt class="stats__num display display--italic">0</dt><dd class="stats__label">Different pixels on other products</dd></div>
+    </dl>
+
+    <div class="page-width">
+      <section class="case__crs" aria-labelledby="crs-title">
+        <h2 class="display display--italic h-section" id="crs-title">Section by section</h2>
+        <div class="cr-tabs" role="group" aria-label="Sections">
+          <button type="button" class="cr-tab" data-cr-pick="cr01" aria-pressed="true" aria-label="S-01: Feature highlights">S-01</button>
+          <button type="button" class="cr-tab" data-cr-pick="cr02" aria-pressed="false" aria-label="S-02: Comparison table">S-02</button>
+          <button type="button" class="cr-tab" data-cr-pick="cr03" aria-pressed="false" aria-label="S-03: FAQ">S-03</button>
+          <button type="button" class="cr-tab" data-cr-pick="cr04" aria-pressed="false" aria-label="S-04: Sticky add to cart (phones)">S-04</button>
+        </div>
+        <article class="cr-frame" data-cr="cr01" aria-labelledby="cr01-title">
+          <header class="cr-frame__head">
+            <h3 class="cr-frame__title" id="cr01-title"><b>S-01</b> Feature highlights</h3>
+            <span class="cr-frame__meta">7 criteria · 15 settings + 4 per feature</span>
+          </header>
+          <div class="cr-frame__grid">
+            <div class="cr-frame__brief">
+              <h4>Brief</h4>
+              <p>An image next to up to six short features (icon, title, text), so a shopper sees what makes the plates different. The owner changes every part without code.</p>
+              <h4>Acceptance criteria</h4>
+              <ul class="ac-list">
+              <li class="ac">Image left or right on desktop, above or below on phones</li>
+              <li class="ac">Features in 1 or 2 columns from 990 px; 1 column on phones</li>
+              <li class="ac">Images download at a size close to how wide they show (smaller file at 390 than at 1440)</li>
+              <li class="ac">With no image, the features use the full width</li>
+              <li class="ac">The button shows only when it has both a label and a link</li>
+              <li class="ac">A 120-character heading or one very long word wraps with no overflow at 360 px</li>
+              <li class="ac ac--todo">Up to 6 features: add, remove, reorder in the editor <em>Passed in preview; editor check to do</em></li>
+              </ul>
+            </div>
+            <div class="cr-frame__shot">
+              <div class="widths" role="group" aria-label="Screen width for S-01">
+                <button type="button" data-width="390" aria-pressed="false">Phone 390</button>
+                <button type="button" data-width="1440" aria-pressed="true">Desktop 1440</button>
+              </div>
+                <figure class="ba" data-w="390">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/halmere/s01-390-after.webp" width="390" height="1270" alt="Built: feature highlights section on the hero product page at 390 px" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/halmere/s01-390-before.webp" width="390" height="1270" alt="Plan: the greyscale wireframe of the same section at 390 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Plan</span><span class="ba__tag ba__tag--after" aria-hidden="true">Built</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Plan and built divider, S-01 at 390 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="1440">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/halmere/s01-1440-after.webp" width="1200" height="749" alt="Built: feature highlights section on the hero product page at 1440 px" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/halmere/s01-1440-before.webp" width="1200" height="749" alt="Plan: the greyscale wireframe of the same section at 1440 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Plan</span><span class="ba__tag ba__tag--after" aria-hidden="true">Built</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Plan and built divider, S-01 at 1440 px">
+                  </div>
+                </figure>
+              <p class="ba__cap">Below the main product area: the plan on the left of the divider, the built section on the right.</p>
+            </div>
+          </div>
+            <details class="cr-more">
+              <summary>Change log, how to edit and what else was tested</summary>
+              <div class="handover">
+                <div class="handover__col"><h4>Change log</h4><ul class="file-list"><li><code>sections/feature-highlights.liquid (new)</code><span>Schema, markup and CSS in one file; styles only apply inside this section</span></li><li><code>templates/product.hero.json (new)</code><span>The hero page: Dawn's product area, then the new sections</span></li></ul></div>
+                <div class="handover__col handover__col--edit"><h4>How to edit</h4><ol class="edit-list"><li>Customize → page picker → Products → hero.</li><li>Click Feature highlights: heading, image, image position, columns, button, colour scheme, padding.</li><li>Add Feature for a new row (up to 6); drag to reorder; an empty feature is not shown.</li></ol></div>
+              </div>
+              <div class="also"><h4>Also tested</h4><ul class="edge-list"><li>Every one of its settings changed one at a time, checked on the page, then restored</li><li>An image instead of an icon, no blocks at all, blocks reordered</li><li>Uses section blocks, not theme blocks, so it also fits older themes agencies maintain</li></ul></div>
+            </details>
+        </article>
+        <article class="cr-frame" data-cr="cr02" aria-labelledby="cr02-title">
+          <header class="cr-frame__head">
+            <h3 class="cr-frame__title" id="cr02-title"><b>S-02</b> Comparison table</h3>
+            <span class="cr-frame__meta">4 criteria · up to 12 rows</span>
+          </header>
+          <div class="cr-frame__grid">
+            <div class="cr-frame__brief">
+              <h4>Brief</h4>
+              <p>A short “Halmere vs a typical plate” table. Each cell is a check, a cross or a few words, and screen readers hear real words instead of icons.</p>
+              <h4>Acceptance criteria</h4>
+              <ul class="ac-list">
+              <li class="ac">A real table: caption from the heading, row and column headers</li>
+              <li class="ac">✓ and ✗ are read out as the “Yes” and “No” labels</li>
+              <li class="ac">At 360 px the page never scrolls sideways; long text wraps inside its cell</li>
+              <li class="ac">A table with no filled rows shows nothing on the storefront, no empty heading or border</li>
+              </ul>
+            </div>
+            <div class="cr-frame__shot">
+              <div class="widths" role="group" aria-label="Screen width for S-02">
+                <button type="button" data-width="390" aria-pressed="false">Phone 390</button>
+                <button type="button" data-width="1440" aria-pressed="true">Desktop 1440</button>
+              </div>
+                <figure class="ba" data-w="390">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/halmere/s02-390-after.webp" width="390" height="540" alt="Built: comparison table on the hero product page at 390 px" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/halmere/s02-390-before.webp" width="390" height="540" alt="Plan: the greyscale wireframe of the table at 390 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Plan</span><span class="ba__tag ba__tag--after" aria-hidden="true">Built</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Plan and built divider, S-02 at 390 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="1440">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/halmere/s02-1440-after.webp" width="1200" height="460" alt="Built: comparison table on the hero product page at 1440 px" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/halmere/s02-1440-before.webp" width="1200" height="460" alt="Plan: the greyscale wireframe of the table at 1440 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Plan</span><span class="ba__tag ba__tag--after" aria-hidden="true">Built</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Plan and built divider, S-02 at 1440 px">
+                  </div>
+                </figure>
+              <p class="ba__cap">The highlighted column can be switched off in the editor.</p>
+            </div>
+          </div>
+            <details class="cr-more">
+              <summary>Change log, how to edit and what else was tested</summary>
+              <div class="handover">
+                <div class="handover__col"><h4>Change log</h4><ul class="file-list"><li><code>sections/comparison-table.liquid (new)</code><span>Schema, table markup and CSS; ✓ / ✗ use Dawn's own icons</span></li><li><code>templates/product.hero.json</code><span>Five sample rows from the spec</span></li></ul></div>
+                <div class="handover__col handover__col--edit"><h4>How to edit</h4><ol class="edit-list"><li>Click Comparison table: heading, intro, the three column headings, highlight on or off.</li><li>Add Row: a feature name, then Check, Cross or Text for each side.</li><li>Screen-reader text for ✓ and ✗ is a setting, so it can follow the store language.</li></ol></div>
+              </div>
+              <div class="also"><h4>Also tested</h4><ul class="edge-list"><li>Highlight off, more rows, very long cell text at 360 px</li><li>Name only your own products: the “Other” column never names a brand</li></ul></div>
+              <figure class="code">
+                <figcaption>Excerpt from <code>sections/comparison-table.liquid</code></figcaption>
+                <pre><code>{%- case value -%}
+  {%- when &#x27;yes&#x27; -%}
+    &lt;span class=&quot;comparison-table__icon comparison-table__icon--yes&quot; aria-hidden=&quot;true&quot;&gt;
+      {{- &#x27;icon-checkmark.svg&#x27; | inline_asset_content -}}
+    &lt;/span&gt;
+    &lt;span class=&quot;visually-hidden&quot;&gt;{{ section.settings.label_yes | escape }}&lt;/span&gt;
+  …
+{%- endcase -%}</code></pre>
+                <p>The icon is hidden from screen readers and the label text is read instead, so a ✓ is heard as “Yes”.</p>
+              </figure>
+            </details>
+        </article>
+        <article class="cr-frame" data-cr="cr03" aria-labelledby="cr03-title">
+          <header class="cr-frame__head">
+            <h3 class="cr-frame__title" id="cr03-title"><b>S-03</b> FAQ</h3>
+            <span class="cr-frame__meta">4 criteria · up to 20 questions</span>
+          </header>
+          <div class="cr-frame__grid">
+            <div class="cr-frame__brief">
+              <h4>Brief</h4>
+              <p>Answers to common questions under the product, with a contact line. Keyboard users can open and close every answer.</p>
+              <h4>Acceptance criteria</h4>
+              <ul class="ac-list">
+              <li class="ac">Answers open and close with mouse, Enter and Space; focus is visible</li>
+              <li class="ac">“Only one answer open at a time” closes the first answer when a second opens</li>
+              <li class="ac">Structured data on: one FAQ block in the page code matching the questions; off: none</li>
+              <li class="ac">No filled questions: nothing on the storefront, a dashed hint in the editor</li>
+              </ul>
+            </div>
+            <div class="cr-frame__shot">
+              <div class="widths" role="group" aria-label="Screen width for S-03">
+                <button type="button" data-width="390" aria-pressed="false">Phone 390</button>
+                <button type="button" data-width="1440" aria-pressed="true">Desktop 1440</button>
+              </div>
+                <figure class="ba" data-w="390">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/halmere/s03-390-after.webp" width="390" height="426" alt="Built: FAQ section on the hero product page at 390 px" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/halmere/s03-390-before.webp" width="390" height="426" alt="Plan: the greyscale wireframe of the FAQ at 390 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Plan</span><span class="ba__tag ba__tag--after" aria-hidden="true">Built</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Plan and built divider, S-03 at 390 px">
+                  </div>
+                </figure>
+                <figure class="ba" data-w="1440">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/halmere/s03-1440-after.webp" width="1200" height="435" alt="Built: FAQ section on the hero product page at 1440 px" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/halmere/s03-1440-before.webp" width="1200" height="435" alt="Plan: the greyscale wireframe of the FAQ at 1440 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Plan</span><span class="ba__tag ba__tag--after" aria-hidden="true">Built</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Plan and built divider, S-03 at 1440 px">
+                  </div>
+                </figure>
+              <p class="ba__cap">Built on the browser's own open / close element, so it needs no JavaScript.</p>
+            </div>
+          </div>
+            <details class="cr-more">
+              <summary>Change log, how to edit and what else was tested</summary>
+              <div class="handover">
+                <div class="handover__col"><h4>Change log</h4><ul class="file-list"><li><code>sections/product-faq.liquid (new)</code><span>Native &lt;details&gt; per question; Dawn's accordion styles</span></li><li><code>templates/product.hero.json</code><span>Five sample questions</span></li></ul></div>
+                <div class="handover__col handover__col--edit"><h4>How to edit</h4><ol class="edit-list"><li>Click FAQ: heading, open the first answer, one answer at a time, text below the questions.</li><li>Add Question: a question and an answer; one without the other is not shown.</li><li>Turn on FAQ structured data for one FAQ per page only.</li></ol></div>
+              </div>
+              <div class="also"><h4>Also tested</h4><ul class="edge-list"><li>Keyboard path with visible focus in Chromium and Edge</li><li>Open first answer on and off; one at a time on and off</li></ul></div>
+              <figure class="code">
+                <figcaption>Excerpt from <code>sections/product-faq.liquid</code></figcaption>
+                <pre><code>&lt;details
+  id=&quot;Faq-{{ block.id }}-{{ section.id }}&quot;
+  {% if section.settings.one_at_a_time %}
+    name=&quot;faq-{{ section.id }}&quot;
+  {% endif %}
+&gt;</code></pre>
+                <p>Answers that share a <code>name</code> close each other in the browser itself: “one at a time” needs no script.</p>
+              </figure>
+            </details>
+        </article>
+        <article class="cr-frame" data-cr="cr04" aria-labelledby="cr04-title">
+          <header class="cr-frame__head">
+            <h3 class="cr-frame__title" id="cr04-title"><b>S-04</b> Sticky add to cart (phones)</h3>
+            <span class="cr-frame__meta">4 criteria · stretch goal</span>
+          </header>
+          <div class="cr-frame__grid">
+            <div class="cr-frame__brief">
+              <h4>Brief</h4>
+              <p>On phones, a bar with the product name, price and Add to cart appears once the main button scrolls away, so a shopper never has to scroll back up.</p>
+              <h4>Acceptance criteria</h4>
+              <ul class="ac-list">
+              <li class="ac">Shows below 750 px only, after the main Add to cart scrolls out of view</li>
+              <li class="ac">Adds the chosen colour, set and quantity, using Dawn's own product form</li>
+              <li class="ac">Updates when the variant changes; no layout shift</li>
+              <li class="ac">Not there on desktop, or when JavaScript is off</li>
+              </ul>
+            </div>
+            <div class="cr-frame__shot">
+                <figure class="ba" data-w="390">
+                  <div class="ba__frame" style="--pos:50%">
+                    <img class="ba__img" src="/assets/work/halmere/s04-390-after.webp" width="390" height="844" alt="After: the hero page scrolled down, with the add-to-cart bar at 390 px" decoding="async" fetchpriority="low">
+                    <img class="ba__img ba__img--before" src="/assets/work/halmere/s04-390-before.webp" width="390" height="844" alt="Before: Dawn's default product page scrolled down, no bar at 390 px" decoding="async" fetchpriority="low">
+                    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span><span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+                    <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before and after divider, S-04 at 390 px">
+                  </div>
+                </figure>
+              <p class="ba__cap">Phone, scrolled past the main button: Dawn's default page (left) and the hero page with the bar (right).</p>
+            </div>
+          </div>
+            <details class="cr-more">
+              <summary>Change log, how to edit and what else was tested</summary>
+              <div class="handover">
+                <div class="handover__col"><h4>Change log</h4><ul class="file-list"><li><code>sections/sticky-add-to-cart.liquid (new)</code><span>The bar, its screen-reader name and colour scheme</span></li><li><code>assets/sticky-add-to-cart.js (new)</code><span>Shows the bar when the main button leaves the screen; its button clicks Dawn's button</span></li><li><code>sections/main-product.liquid</code><span>The only change to a Dawn file: a 3-line guard that hides an empty Material or Care tab</span></li></ul></div>
+                <div class="handover__col handover__col--edit"><h4>How to edit</h4><ol class="edit-list"><li>Click Sticky add to cart: the bar name for screen readers and the colour scheme.</li><li>Material and Care tabs: Products → the product → Metafields. An empty field hides its tab.</li><li>Use the page for another product: in the product admin, Theme template → hero.</li></ol></div>
+              </div>
+              <div class="also"><h4>Also tested</h4><ul class="edge-list"><li>Products on the default template are pixel-identical to untouched Dawn (3 products × 2 widths)</li><li>Theme Check: the same 9 warnings as untouched Dawn, 0 errors</li></ul></div>
+            </details>
+        </article>
+        <p class="case__note">The plan is a greyscale wireframe drawn for this exercise, not a client design. Product photos are stock stand-ins.</p>
+      </section>
+
+      <section class="case__end" aria-labelledby="end-title">
+        <h2 class="case__h2" id="end-title">Not tested yet</h2>
+        <p>Firefox, Safari and a real phone, and adding the sections by hand in the Shopify theme editor (they are on the owner's checklist). Right-to-left languages.</p>
+        <div class="case__cta">
+          <button type="button" class="btn" data-open-talk data-topic="the Halmere practice store">Ask about Halmere</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-width site-footer-wrap">
+    <div class="site-footer">
+      <div class="site-footer__grid">
+        <div class="newsletter">
+          <h2 class="newsletter__title display">Beginner Shopify<br><span>theme developer.</span></h2>
+        </div>
+
+        <ul class="footer-links">
+          <li><a href="/#playground">Playground</a></li>
+          <li><a href="/#work">Work so far</a></li>
+          <li><a href="/#process">How I work</a></li>
+          <li><a href="/#about">About</a></li>
+          <li><a href="https://www.linkedin.com/in/qfsyahirah" rel="noopener">LinkedIn</a></li>
+          <li><a href="/#contact" data-open-talk>Let's Talk</a></li>
+        </ul>
+
+        <div>
+          <ul class="footer-links">
+            <li><a href="/#playground" data-goto-page="home">Home page</a></li>
+            <li><a href="/#playground" data-goto-page="pdp">PDP</a></li>
+            <li><a href="/#playground" data-goto-page="plp">PLP</a></li>
+          </ul>
+          <span class="footer-squiggle" aria-hidden="true"><svg viewBox="0 0 140 70"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+
+        <div class="footer-contact">
+          <p class="muted-light">Surabaya, Indonesia<br>(UTC+7)</p>
+          <a class="footer-contact__mail" href="mailto:qonita@qonicode.tech">qonita@qonicode.tech</a>
+          <div class="footer-social">
+            <a class="social-btn" href="mailto:qonita@qonicode.tech" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+            <button type="button" class="social-btn" data-open-talk aria-label="Let's talk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <p class="footer-mini"><a href="/#playground">Playground</a>. <a href="/#work">Work</a>. <a href="/#about">About</a></p>
+        <span class="chevrons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg></span>
+        <p><b>©<span data-year></span> Qonicode.</b> <span class="muted-light">All rights reserved</span></p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============ Let's Talk / Request dialog ============ -->
+  <dialog class="nb-dialog" data-dialog aria-labelledby="dialog-title" aria-describedby="dialog-desc">
+    <form class="nb-dialog__content" novalidate>
+      <button type="button" class="nb-dialog__close" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <header class="nb-dialog__header">
+        <h2 class="nb-dialog__title" id="dialog-title" data-dialog-title>Let's talk</h2>
+        <p class="nb-dialog__desc" id="dialog-desc" data-dialog-desc></p>
+      </header>
+
+      <div class="nb-dialog__attachment" data-attachment hidden>
+        <img alt="Your layout" data-attachment-img>
+        <span data-attachment-text></span>
+      </div>
+
+      <div class="nb-dialog__fields">
+        <label class="nb-field"><span>Your name</span><input class="nb-input" name="name" autocomplete="name" required></label>
+        <label class="nb-field"><span>Email</span><input class="nb-input" name="email" type="email" autocomplete="email" required></label>
+        <label class="nb-field"><span>Store URL <em>(optional)</em></span><input class="nb-input" name="store" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="yourstore.com"></label>
+        <label class="nb-field"><span><span data-notes-label>Message</span> <em>(optional)</em></span><textarea class="nb-input" name="notes" rows="3" placeholder="Say hi, or ask about Skinhale…"></textarea></label>
+        <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <div class="turnstile-slot" data-turnstile></div>
+      <p class="nb-dialog__status" data-dialog-status role="status"></p>
+      <footer class="nb-dialog__footer">
+        <button type="button" class="btn" data-close>Cancel</button>
+        <button type="submit" class="btn" data-dialog-submit>Send</button>
+      </footer>
+    </form>
+  </dialog>
+</body>
+</html>
