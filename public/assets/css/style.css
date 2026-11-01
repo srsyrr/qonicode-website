@@ -113,8 +113,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
   display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 9px;
   font-weight: 700; font-size: 15px; line-height: 1.25; text-decoration: none;
 }
-.drop a[aria-current] { background: var(--c-desk); }
-.drop a:hover, .drop a:focus-visible { background: var(--c-green); outline: none; }
+.drop a:hover, .drop a:focus-visible { background: var(--c-desk); outline: none; }
 .drop small { display: block; font-weight: 500; font-size: 12px; color: var(--c-muted); }
 .drop__icon { width: 28px; height: 28px; flex: none; display: grid; place-items: center; border: var(--border); border-radius: 50%; background: var(--icon, var(--c-yellow)); font-weight: 900; font-size: 12px; }
 .drop__icon svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
