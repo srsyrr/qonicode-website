@@ -305,7 +305,12 @@ class Playground {
     const num = shuffled ? '??' : String(st.preset + 1).padStart(2, '0');
     const total = String(presets.length).padStart(2, '0');
     const title = shuffled ? 'Shuffled layout' : st.name;
-    this.label.innerHTML = `<b>${num} / ${total}</b><span>${title}${st.edited ? ' · edited' : ''}</span>`;
+    // built as nodes, not HTML: the name can come from a layout saved in this browser
+    const b = document.createElement('b');
+    b.textContent = `${num} / ${total}`;
+    const span = document.createElement('span');
+    span.textContent = `${title}${st.edited ? ' · edited' : ''}`;
+    this.label.replaceChildren(b, span);
   }
 
   markEdited() {
