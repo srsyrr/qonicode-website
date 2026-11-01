@@ -250,24 +250,31 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .preset-label b { font-size: 12px; font-weight: 800; letter-spacing: .06em; }
 .preset-label span { font-size: 13px; font-weight: 600; color: var(--c-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+/* .desk is only the space the desk may use (it scrolls when the desk can't shrink further);
+   the visible desk, border and all, is the stage, so it always hugs the cards (centred, at the top) with no empty bands */
 .desk {
   height: 100%; min-height: 0;
   position: relative;
   isolation: isolate;          /* keeps card z-indexes below the floating nav */
-  border: var(--border); border-radius: calc(var(--radius) * 2);
-  background-color: var(--c-desk);
+  display: grid;
   overflow: auto; overscroll-behavior: contain;
   scrollbar-width: thin; scrollbar-color: var(--c-ink) transparent;
   touch-action: pan-x pan-y;
 }
 .desk__stage {
   --u: 6px;
-  position: relative; margin: 0 auto;
+  position: relative; margin: 0 auto; overflow: hidden;
+  border-radius: calc(var(--radius) * 2);
   background-color: var(--c-desk);
   background-image: radial-gradient(rgba(17,17,17,.16) 1.1px, transparent 1.3px);
   background-size: 22px 22px;
   user-select: none; -webkit-user-select: none;
 }
+/* the border is drawn on top, so it takes no room from the scaled desk */
+.desk__stage::after { content: ""; position: absolute; inset: 0; z-index: 6000; border: var(--border); border-radius: inherit; pointer-events: none; }
+.desk.is-scrolling { border: var(--border); border-radius: calc(var(--radius) * 2); background-color: var(--c-desk); }
+.desk.is-scrolling .desk__stage { border-radius: 0; }
+.desk.is-scrolling .desk__stage::after { display: none; }
 .desk__stage.no-anim * { transition: none !important; }
 
 .desk__caption {
@@ -439,6 +446,21 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .shot--tab { width: 120cqw; --r: 5deg; }
 .offers__note { margin-top: 22px; color: var(--c-muted); font-size: 15px; }
 .offers__note a { color: var(--c-ink); font-weight: 700; }
+/* Starter offers fill one screen, like the Playground: the heading and note keep their size and the cards stretch
+   into the rest, between a floor for small laptops and a cap for tall monitors. Two columns: taller cards instead. */
+@media (min-width: 640px) and (max-width: 1099px) { .svc-grid--offers .svc { min-height: clamp(286px, 48.4svh, 462px); } }
+@media (min-width: 1100px) {
+  .offers { display: flex; min-height: 100svh; padding: calc(var(--nav-space) + 8px) 0 24px; scroll-margin-top: calc(-1 * var(--nav-space)); }
+  .offers > .page-width { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .svc-grid--offers { flex: 1; min-height: 320px; max-height: 640px; }
+  /* that tall a card reads better stacked: the screenshot panel on top, the text under it */
+  .svc-grid--offers .svc { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+  .svc-grid--offers .svc__media { border-right: 0; border-bottom: var(--border); }
+  .svc-grid--offers .svc__body { min-height: 190px; }
+  .svc-grid--offers .shot--phone { width: 38cqw; left: 30cqw; top: 9cqw; }
+  .svc-grid--offers .shot--desk { width: 92cqw; left: 10cqw; top: 12cqw; }
+  .svc-grid--offers .shot--tab { width: 64cqw; left: 18cqw; top: 10cqw; }
+}
 @media (max-width: 1099px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 1099px) { .svc-grid--steps { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 639px) {
@@ -689,15 +711,21 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .talk { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 0 20px; }
 .talk > .page-width { display: flex; flex-direction: column; align-items: center; }
 .talk__title {
-  /* widest line ("SOMETHING") is ~8.8em */
-  font-size: min(116px, calc((100vw - 2 * var(--gutter)) / 9.2), 9svh);
+  /* widest line ("SOMETHING LOUD." + flag) is ~13.7em */
+  font-size: min(116px, calc((100vw - 2 * var(--gutter)) / 14.2), 11svh);
   display: flex; flex-direction: column; align-items: center; line-height: .98;
 }
 .talk__line { display: inline-flex; align-items: center; gap: .16em; white-space: nowrap; position: relative; }
 .talk__word { display: inline-flex; align-items: center; }
+.talk__loud { display: inline-flex; align-items: center; gap: .16em; }
+/* phones: SOMETHING and LOUD. go back on lines of their own, so the widest line is "SOMETHING" (~8.8em) */
+@media (max-width: 639px) {
+  .talk__title { font-size: calc((100vw - 2 * var(--gutter)) / 9.2); }
+  .talk__line--wide { flex-direction: column; gap: 0; }
+}
 .talk__o { display: inline-block; width: .74em; height: .74em; margin: 0 .02em; transform: rotate(-8deg); }
 .talk__o svg { width: 100%; height: 100%; }
-.talk__sub { max-width: 46ch; margin-top: clamp(14px, 2.4svh, 28px); color: var(--c-muted); font-size: clamp(15px, 1.4vw, 18px); }
+.talk__sub { max-width: 82ch; margin-top: clamp(14px, 2.4svh, 28px); color: var(--c-muted); font-size: clamp(15px, 1.4vw, 18px); }
 .talk__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 18px; margin-top: clamp(16px, 3svh, 32px); }
 
 .site-footer-wrap { padding-bottom: 16px; }

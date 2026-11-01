@@ -14,7 +14,7 @@ const DESKS = {
   // Waiting cards on the left (3 columns under the wireframe bar), the page on the right.
   wide: {
     // minU: smallest scale (px per unit) before the desk scrolls instead of shrinking further
-    w: 190, h: 170, ox: 85, oy: 5, miniScale: 0.936, minU: 2.8,
+    w: 190, h: 170, ox: 85, oy: 5, miniScale: 0.936, minU: 2.5,
     bar: { x: 5, y: 4, w: 75 },   // in desk units from the stage's top-left
     slots: [30, 66, 102, 138].flatMap((y) => [-69, -42, -15].map((x) => ({ x, y }))).slice(0, SUPPLY.length),
   },
@@ -72,6 +72,8 @@ class Playground {
     this.desk.style.setProperty('--u', `${this.u}px`);
     this.desk.style.width = `${this.cfg.w * this.u}px`;
     this.desk.style.height = `${this.cfg.h * this.u}px`;
+    // When the desk has to scroll, the scroll area wears the border, so the cut edge still looks framed.
+    this.viewport.classList.toggle('is-scrolling', this.cfg.h * this.u > this.viewport.clientHeight + 1);
     Object.assign(this.frame.style, {
       left: `${this.cfg.ox * this.u}px`, top: `${this.cfg.oy * this.u}px`,
       width: `${FRAME.w * this.u}px`, height: `${FRAME.h * this.u}px`,
