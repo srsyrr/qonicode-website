@@ -385,21 +385,16 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .arrow-btn svg { stroke-linejoin: round; }
 
 /* the sticker illustration on a colored panel */
-.svc__sticker, .tst__avatar {
+.tst__avatar {
   display: grid; place-items: center; background: var(--c-paper); border: var(--border);
 }
-.svc__sticker svg, .tst__avatar svg { width: 76%; height: 76%; fill: none; stroke: var(--c-ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
-.svc__sticker .f0 { fill: var(--c-paper); }
-.svc__sticker .f1 { fill: var(--c-orange); }
-.svc__sticker .f2 { fill: var(--c-yellow); }
-.svc__sticker .f3 { fill: var(--c-green); }
+.tst__avatar svg { width: 76%; height: 76%; fill: none; stroke: var(--c-ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- Our services ---------- */
 .services { padding-bottom: clamp(24px, 4vw, 48px); }
 .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 24px; margin-top: clamp(24px, 3vw, 40px); }
 .svc { grid-template-columns: 38% 1fr; min-height: 230px; }
 .svc__media { display: grid; place-items: center; background: var(--media); border-right: var(--border); padding: 18px; }
-.svc__sticker { width: 86%; max-width: 130px; aspect-ratio: 1; border-radius: 20px; transform: rotate(-6deg); }
 .svc__body { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; min-width: 0; padding: 18px 18px 20px; }
 .svc__top { display: flex; align-items: flex-start; justify-content: space-between; width: 100%; }
 .svc__top .arrow-btn { width: 46px; height: 46px; }
@@ -410,6 +405,13 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .svc--step { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
 .svc--step .svc__media { border-right: 0; border-bottom: var(--border); }
 .svc__text { color: #3A3A3A; font-size: 15px; line-height: 1.6; }
+.svc__media--shot { position: relative; overflow: hidden; padding: 0; container-type: inline-size; }
+.svc__media--shot .shot { left: 14cqw; top: 16cqw; }
+.shot--phone { width: 86cqw; --r: -6deg; }
+.shot--desk { width: 170cqw; --r: -4deg; }
+.shot--tab { width: 120cqw; --r: 5deg; }
+.offers__note { margin-top: 22px; color: var(--c-muted); font-size: 15px; }
+.offers__note a { color: var(--c-ink); font-weight: 700; }
 @media (max-width: 1099px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 1099px) { .svc-grid--steps { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 639px) {
@@ -431,7 +433,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 @media (max-width: 639px) { .proc { --en: 0px, -80cqw; --ex: 0px, 80cqw; } }   /* one column: from above, out below */
 .proc .svc__media { position: relative; overflow: hidden; padding: 0; aspect-ratio: 4 / 3; container-type: inline-size; }
 @media (max-width: 639px) { .proc .svc__media { aspect-ratio: 3 / 2; } }
-/* the scene fills the panel; each screenshot is one whole screen, scaled down, inside 64cqw so the 3:2 phone crop keeps it */
+/* the scene fills the panel; each screenshot is one whole screen, bigger than the panel, so its edges crop it */
 .scene { position: absolute; inset: 0; }
 /* screenshot stickers: white edge, ink outline and a hard shadow; --r is each one's resting tilt */
 .shot, .note, .toggle { position: absolute; transform: rotate(var(--r, 0deg)); }
@@ -457,14 +459,14 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .toggle i { position: absolute; right: .8cqw; top: 50%; width: 4.2cqw; aspect-ratio: 1; margin-top: -2.1cqw; border-radius: 50%; background: var(--c-ink); }
 .sc4-cursor { position: absolute; left: 24cqw; top: 52cqw; width: 7cqw; fill: var(--c-ink); stroke: #fff; stroke-width: 1.5; stroke-linejoin: round; }
 /* where each sticker rests */
-.sc1-live { left: 14cqw; top: 4cqw; width: 27cqw; --r: -6deg; }
-.sc1-copy { left: 56cqw; top: 4cqw; width: 27cqw; --r: 5deg; }
-.sc2-page { left: 10cqw; top: 4cqw; width: 27cqw; --r: -5deg; }
-.sc2-list { left: 46cqw; top: 20cqw; --r: 3deg; }
-.sc3-desk { left: 4cqw; top: 8cqw; width: 50cqw; --r: -3deg; }
-.sc3-tab { left: 44cqw; top: 22cqw; width: 25cqw; --r: 4deg; }
-.sc3-phone { left: 73cqw; top: 12cqw; width: 22cqw; --r: -4deg; }
-.sc4-page { left: 58cqw; top: 4cqw; width: 27cqw; --r: 5deg; }
+.sc1-live { left: 0; top: 22cqw; width: 44cqw; --r: -6deg; }
+.sc1-copy { left: 48cqw; top: 6cqw; width: 44cqw; --r: 5deg; }
+.sc2-page { left: 2cqw; top: 6cqw; width: 46cqw; --r: -5deg; }
+.sc2-list { left: 48cqw; top: 24cqw; --r: 3deg; }
+.sc3-desk { left: -12cqw; top: 4cqw; width: 84cqw; --r: -3deg; }
+.sc3-tab { left: 40cqw; top: 22cqw; width: 42cqw; --r: 4deg; }
+.sc3-phone { left: 72cqw; top: 12cqw; width: 34cqw; --r: -4deg; }
+.sc4-page { left: 54cqw; top: 6cqw; width: 46cqw; --r: 5deg; }
 /* the toggle switches the store from its before look to the after look; final frame: after */
 .sc4-page img.sc4-before { position: absolute; left: 0; top: 0; }
 .sc4-before { opacity: 0; }
@@ -491,7 +493,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .proc.is-done .proc-settle { animation: proc-settle .6s ease-out .3s both; }
 
 /* 01: the copy lifts off the live store, then moves on */
-@keyframes proc-c1-copy { 0%, 14% { transform: translate(-42cqw, 0) rotate(-6deg); } 40%, 80% { transform: rotate(var(--r)); } 100% { transform: translate(var(--ex)) rotate(var(--r)); } }
+@keyframes proc-c1-copy { 0%, 14% { transform: translate(-48cqw, 16cqw) rotate(-6deg); } 40%, 80% { transform: rotate(var(--r)); } 100% { transform: translate(var(--ex)) rotate(var(--r)); } }
 @keyframes proc-label { 0%, 40% { opacity: 0; } 52%, 100% { opacity: 1; } }
 @keyframes proc-enter { 0% { transform: translate(var(--en)) rotate(var(--r)); } 16%, 100% { transform: rotate(var(--r)); } }
 @keyframes proc-enter-exit { 0% { transform: translate(var(--en)) rotate(var(--r)); } 16%, 80% { transform: rotate(var(--r)); } 100% { transform: translate(var(--ex)) rotate(var(--r)); } }
@@ -625,6 +627,8 @@ h1, h2, h3, p, figure, ul { margin: 0; }
   box-shadow: 0 0 0 1.5px var(--c-ink), 8px 8px 0 var(--c-ink);
   transform: translateX(-50%) rotate(-6deg);
 }
+.sticker--desk { top: 16%; width: min(84%, 440px); aspect-ratio: 16 / 10; }
+.sticker--tab { top: 9%; width: min(56%, 300px); aspect-ratio: 3 / 4; }
 .sticker-pill, .sticker-stat { position: absolute; border: var(--border); background: #fff; font-weight: 700; }
 .sticker-pill { left: 8%; top: 9%; padding: 6px 16px; border-radius: 999px; font-size: 14px; transform: rotate(-4deg); }
 .sticker-stat { right: 7%; bottom: 10%; display: grid; padding: 10px 18px; border-radius: 18px; box-shadow: 5px 5px 0 var(--c-ink); transform: rotate(5deg); }
@@ -663,7 +667,8 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 .talk__word { display: inline-flex; align-items: center; }
 .talk__o { display: inline-block; width: .74em; height: .74em; margin: 0 .02em; transform: rotate(-8deg); }
 .talk__o svg { width: 100%; height: 100%; }
-.talk .btn--lg { margin-top: clamp(16px, 3svh, 36px); }
+.talk__sub { max-width: 46ch; margin-top: clamp(14px, 2.4svh, 28px); color: var(--c-muted); font-size: clamp(15px, 1.4vw, 18px); }
+.talk__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 18px; margin-top: clamp(16px, 3svh, 32px); }
 
 .site-footer-wrap { padding-bottom: 16px; }
 .site-footer { background: #000; color: #fff; border-radius: 32px; padding: clamp(24px, 4svh, 44px) clamp(22px, 3vw, 40px) 20px; }
@@ -752,6 +757,7 @@ h1, h2, h3, p, figure, ul { margin: 0; }
 }
 .nb-input:focus { outline: none; box-shadow: 3px 3px 0 var(--c-ink); transform: translate(-1px, -1px); }
 textarea.nb-input { resize: vertical; min-height: 88px; }
+.nb-dialog__privacy { font-size: 13px; color: var(--c-muted); }
 .nb-dialog__status { min-height: 1.3em; margin-top: -6px; font-size: 14px; font-weight: 600; }
 .nb-dialog__status:empty { display: none; }
 .nb-dialog__status[data-state="error"] { color: var(--c-error); }
