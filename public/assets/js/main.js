@@ -13,6 +13,23 @@ document.addEventListener('click', (e) => {
 });
 
 
+/* Work so far: 2 or 3 hero shapes per sticker card, about 15 % of the panel wide, at a random spot in a different corner
+   each, so the screenshot in the middle never hides them (the panel edge may cut them) */
+const rand = (min, max) => min + Math.random() * (max - min);
+const shuffle = (list) => list.sort(() => Math.random() - 0.5);
+const corners = [[-8, 20, -8, 25], [68, 90, -8, 25], [-8, 20, 55, 85], [68, 90, 55, 85]];
+document.querySelectorAll('.work-slide__media--sticker').forEach((media) => {
+  const spots = shuffle([...corners]);
+  shuffle([...media.querySelectorAll('.deco')]).slice(0, 2 + Math.round(Math.random())).forEach((d, i) => {
+    const [x0, x1, y0, y1] = spots[i];
+    d.style.width = `${rand(12, 18).toFixed(0)}%`;
+    d.style.left = `${rand(x0, x1).toFixed(0)}%`;
+    d.style.top = `${rand(y0, y1).toFixed(0)}%`;
+    d.style.transform = `rotate(${rand(-25, 25).toFixed(0)}deg)`;
+    d.classList.add('is-placed');
+  });
+});
+
 /* Footer links that open the playground on a given page type */
 document.querySelectorAll('[data-goto-page]').forEach((a) => a.addEventListener('click', () => {
   const btn = document.querySelector(`[data-page="${a.dataset.gotoPage}"]`);

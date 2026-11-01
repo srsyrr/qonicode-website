@@ -101,10 +101,10 @@
           </div>
         </div>
         <div class="about__media">
-          <div class="about__img" aria-hidden="true">
-            <div class="mock mock--a"><b>Wireframe</b><span class="mock__img" style="--mi:var(--c-pink)"></span><span class="mock__star">✦</span></div>
-            <div class="mock mock--b"><b class="mock__big">Liquid</b><i></i><i></i><span class="mock__btn">Test on mobile</span></div>
-            <div class="mock mock--c"><small>Change log</small><b>v1.0</b><span class="mock__band" style="--mb:var(--c-teal)">Before / after <em>✓</em></span></div>
+          <div class="about__img grid-bg" aria-hidden="true">
+            <span class="shot ab-desk"><img src="assets/work/halmere/s01-1440-after.webp" width="1200" height="749" alt="" loading="lazy" decoding="async"><b class="shot__pill shot__pill--end">Desktop</b></span>
+            <span class="shot ab-phone"><img src="assets/work/mobile-fix/m04-360-after.webp" width="360" height="800" alt="" loading="lazy" decoding="async"><b class="shot__pill shot__pill--copy">Phone</b></span>
+            <span class="note ab-log"><b>Change log v1.0</b><span class="note__row"><i class="dot"></i>Before / after</span><span class="note__row"><i class="dot"></i>How to edit</span></span>
           </div>
           <div class="starburst about__badge">
             <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50.0,1.0 58.9,11.0 71.3,5.9 74.9,18.7 88.3,19.4 86.0,32.6 97.8,39.1 90.0,50.0 97.8,60.9 86.0,67.4 88.3,80.6 74.9,81.3 71.3,94.1 58.9,89.0 50.0,99.0 41.1,89.0 28.7,94.1 25.1,81.3 11.7,80.6 14.0,67.4 2.2,60.9 10.0,50.0 2.2,39.1 14.0,32.6 11.7,19.4 25.1,18.7 28.7,5.9 41.1,11.0"/></svg>
@@ -193,13 +193,15 @@
               <p class="work-slide__text">“My store looks broken on phones”, simulated on a copy of the Skinhale theme: a page that slides sideways, a promo box off the screen, tiny header icons, a thin Add to cart, a long name over the price and a cart icon hidden on tablets. Fixed with phone and tablet rules only; desktop stays pixel-identical. Not yet: a real phone.</p>
               <ul class="tags"><li>Practice</li><li>Horizon</li><li>CSS</li></ul>
             </div>
-            <div class="work-slide__media" style="--media:var(--c-purple-soft)">
-              <div class="device device--phone" aria-hidden="true">
-                <div class="dv-img" style="--dv:#A4532F"><svg viewBox="0 0 40 80" aria-hidden="true"><rect x="14" y="2" width="12" height="15" rx="3" fill="#111111"/><rect x="6" y="15" width="28" height="62" rx="9" fill="#FAF7F2"/><rect x="11" y="36" width="18" height="18" rx="4" fill="#A4532F" opacity=".3"/></svg><span class="dv-pills"><span class="dv-pill" style="--pc:var(--c-green)">0 px sideways</span></span></div>
-                <b class="dv-title">Gentle Gel Cleanser</b>
-                <span class="dv-row">Tap size 44 × 44 <em>✓</em></span>
-                <span class="dv-btn">Add to cart</span>
-              </div>
+            <div class="work-slide__media work-slide__media--sticker" style="--media:#B9E3FA">
+              <span class="deco deco--pill" aria-hidden="true"></span>
+              <svg class="deco deco--infinity" viewBox="0 0 120 60" aria-hidden="true"><path d="M60 30C46 8 12 8 12 30s34 22 48 0 48-22 48 0-34 22-48 0Z" fill="none" stroke="var(--c-purple)" stroke-width="11" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--squiggle" viewBox="0 0 140 70" aria-hidden="true"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="var(--c-pink)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--flag" viewBox="0 0 110 70" aria-hidden="true"><path d="M8 14c30-14 52 14 86 0l10 46c-34 14-56-14-86 0Z" fill="var(--c-green)"/></svg>
+              <svg class="deco deco--smiley" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="var(--c-yellow)" stroke="var(--c-ink)" stroke-width="5"/><ellipse cx="36" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><ellipse cx="64" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><path d="M30 60q20 20 40 0" fill="none" stroke="var(--c-ink)" stroke-width="6" stroke-linecap="round"/></svg>
+              <img class="sticker" style="--crop:50% 62%" src="assets/work/mobile-fix/m04-360-after.webp" width="360" height="800" alt="Product page of the Skinhale store on a 360 px phone after the fix, Add to cart on the first screen" loading="lazy" decoding="async">
+              <span class="sticker-pill">360 px phone</span>
+              <span class="sticker-stat"><small>Sideways scroll</small><b>0 px</b></span>
             </div>
           </article>
 
@@ -210,13 +212,15 @@
               <p class="work-slide__text">Fictional skincare brand on a Shopify development store, Horizon theme. Four change requests from a written brief, on a copy of the theme: brand settings, product-card labels from tags, a product-details block from metafields and a "Show more" collection description. Checked at 360 to 1440 px in Chromium, Edge and Firefox. Not yet: Safari and a real phone.</p>
               <ul class="tags"><li>Practice</li><li>Horizon</li><li>Liquid</li></ul>
             </div>
-            <div class="work-slide__media" style="--media:var(--c-green-soft)">
-              <div class="device device--phone" aria-hidden="true">
-                <div class="dv-img" style="--dv:#A4532F"><svg viewBox="0 0 40 80" aria-hidden="true"><rect x="14" y="2" width="12" height="15" rx="3" fill="#111111"/><rect x="6" y="15" width="28" height="62" rx="9" fill="#FAF7F2"/><rect x="11" y="36" width="18" height="18" rx="4" fill="#A4532F" opacity=".3"/></svg><span class="dv-pills"><span class="dv-pill" style="--pc:var(--c-green)">Limited edition run</span><span class="dv-pill" style="--pc:var(--c-yellow)">New</span></span></div>
-                <b class="dv-title">Body Wash</b>
-                <span class="dv-row">Key ingredients <em>+</em></span>
-                <span class="dv-btn">Add to cart</span>
-              </div>
+            <div class="work-slide__media work-slide__media--sticker" style="--media:#F9C9E6">
+              <span class="deco deco--pill" aria-hidden="true"></span>
+              <svg class="deco deco--infinity" viewBox="0 0 120 60" aria-hidden="true"><path d="M60 30C46 8 12 8 12 30s34 22 48 0 48-22 48 0-34 22-48 0Z" fill="none" stroke="var(--c-purple)" stroke-width="11" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--squiggle" viewBox="0 0 140 70" aria-hidden="true"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="var(--c-pink)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--flag" viewBox="0 0 110 70" aria-hidden="true"><path d="M8 14c30-14 52 14 86 0l10 46c-34 14-56-14-86 0Z" fill="var(--c-green)"/></svg>
+              <svg class="deco deco--smiley" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="var(--c-yellow)" stroke="var(--c-ink)" stroke-width="5"/><ellipse cx="36" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><ellipse cx="64" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><path d="M30 60q20 20 40 0" fill="none" stroke="var(--c-ink)" stroke-width="6" stroke-linecap="round"/></svg>
+              <img class="sticker" src="assets/work/skinhale/cr02-390-after.webp" width="390" height="640" alt="Skinhale collection on a 390 px phone, product cards with Limited edition run and New labels" loading="lazy" decoding="async">
+              <span class="sticker-pill">390 px phone</span>
+              <span class="sticker-stat"><small>Change requests</small><b>4</b></span>
             </div>
           </article>
 
@@ -227,14 +231,15 @@
               <p class="work-slide__text">Fictional homeware brand on a new development store, Dawn theme. One product gets a richer page from new sections the owner edits alone: feature highlights, a comparison table, an FAQ and an add-to-cart bar for phones. All 43 settings tested one at a time; other products stay pixel-identical to Dawn. Not yet: Safari and a real phone.</p>
               <ul class="tags"><li>Practice</li><li>Dawn</li><li>Sections</li></ul>
             </div>
-            <div class="work-slide__media" style="--media:var(--c-yellow-soft)">
-              <div class="device device--phone" aria-hidden="true">
-                <div class="dv-img" style="--dv:#D9D2C5"><svg viewBox="0 0 40 80" aria-hidden="true"><ellipse cx="20" cy="58" rx="18" ry="6" fill="#FFFFFF"/><ellipse cx="20" cy="50" rx="16" ry="5" fill="#F4EFE7"/><rect x="10" y="22" width="16" height="22" rx="4" fill="#FFFFFF"/><rect x="10" y="34" width="16" height="10" rx="3" fill="#C9B79C"/></svg><span class="dv-pills"><span class="dv-pill" style="--pc:var(--c-teal)">Hero page</span></span></div>
-                <b class="dv-title">Dinner Plate Set</b>
-                <span class="dv-row">Glazed by hand <em>✓</em></span>
-                <span class="dv-row">Can I return a set? <em>+</em></span>
-                <span class="dv-btn">Add to cart</span>
-              </div>
+            <div class="work-slide__media work-slide__media--sticker" style="--media:#FFCB9E">
+              <span class="deco deco--pill" aria-hidden="true"></span>
+              <svg class="deco deco--infinity" viewBox="0 0 120 60" aria-hidden="true"><path d="M60 30C46 8 12 8 12 30s34 22 48 0 48-22 48 0-34 22-48 0Z" fill="none" stroke="var(--c-purple)" stroke-width="11" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--squiggle" viewBox="0 0 140 70" aria-hidden="true"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="var(--c-pink)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--flag" viewBox="0 0 110 70" aria-hidden="true"><path d="M8 14c30-14 52 14 86 0l10 46c-34 14-56-14-86 0Z" fill="var(--c-green)"/></svg>
+              <svg class="deco deco--smiley" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="var(--c-yellow)" stroke="var(--c-ink)" stroke-width="5"/><ellipse cx="36" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><ellipse cx="64" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><path d="M30 60q20 20 40 0" fill="none" stroke="var(--c-ink)" stroke-width="6" stroke-linecap="round"/></svg>
+              <img class="sticker" src="assets/work/halmere/s01-390-after.webp" width="390" height="1270" alt="Halmere product page on a 390 px phone: the photo and the feature highlights" loading="lazy" decoding="async">
+              <span class="sticker-pill">390 px phone</span>
+              <span class="sticker-stat"><small>Settings tested</small><b>43</b></span>
             </div>
           </article>
 
@@ -245,14 +250,15 @@
               <p class="work-slide__text">A written 36-check list run on both practice stores before handover: layout at 5 widths, navigation, search, variants, cart, forms, keyboard path and a comparison with the untouched theme. 31 pass; one defect (cart button off-screen on tablets) found, fixed and re-tested. Self-inspection, not independent QA.</p>
               <ul class="tags"><li>Practice</li><li>QA</li><li>Checklist</li></ul>
             </div>
-            <div class="work-slide__media" style="--media:var(--c-pink-soft)">
-              <div class="device device--phone" aria-hidden="true">
-                <div class="dv-img" style="--dv:#F4EADF"><svg viewBox="0 0 40 80" aria-hidden="true"><rect x="6" y="10" width="28" height="60" rx="5" fill="#FFFFFF"/><path d="M11 24l3 3 5-6M11 40l3 3 5-6M11 56l3 3 5-6" fill="none" stroke="#111111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="22" y="22" width="8" height="3" rx="1.5" fill="#111111" opacity=".3"/><rect x="22" y="38" width="8" height="3" rx="1.5" fill="#111111" opacity=".3"/><rect x="22" y="54" width="8" height="3" rx="1.5" fill="#111111" opacity=".3"/></svg><span class="dv-pills"><span class="dv-pill" style="--pc:var(--c-green)">1 fixed</span></span></div>
-                <b class="dv-title">36 checks</b>
-                <span class="dv-row">C05 Header 768 <em>Fixed</em></span>
-                <span class="dv-row">C22 Cart <em>Pass</em></span>
-                <span class="dv-btn">31 / 36 pass</span>
-              </div>
+            <div class="work-slide__media work-slide__media--sticker" style="--media:#D9C8FF">
+              <span class="deco deco--pill" aria-hidden="true"></span>
+              <svg class="deco deco--infinity" viewBox="0 0 120 60" aria-hidden="true"><path d="M60 30C46 8 12 8 12 30s34 22 48 0 48-22 48 0-34 22-48 0Z" fill="none" stroke="var(--c-purple)" stroke-width="11" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--squiggle" viewBox="0 0 140 70" aria-hidden="true"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="var(--c-pink)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--flag" viewBox="0 0 110 70" aria-hidden="true"><path d="M8 14c30-14 52 14 86 0l10 46c-34 14-56-14-86 0Z" fill="var(--c-green)"/></svg>
+              <svg class="deco deco--smiley" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="var(--c-yellow)" stroke="var(--c-ink)" stroke-width="5"/><ellipse cx="36" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><ellipse cx="64" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><path d="M30 60q20 20 40 0" fill="none" stroke="var(--c-ink)" stroke-width="6" stroke-linecap="round"/></svg>
+              <img class="sticker" src="assets/work/qa-report/c12-390-after.webp" width="390" height="900" alt="Skinhale Shop all page on a 390 px phone with the collection description expanded" loading="lazy" decoding="async">
+              <span class="sticker-pill">390 px phone</span>
+              <span class="sticker-stat"><small>Checks passed</small><b>31 / 36</b></span>
             </div>
           </article>
 
@@ -263,18 +269,15 @@
               <p class="work-slide__text">The wireframe desk on this page: drag, resize, shuffle and save a layout as a PNG. Plain HTML, CSS and JavaScript.</p>
               <ul class="tags"><li>Side project</li><li>JavaScript</li><li>Wireframes</li></ul>
             </div>
-            <div class="work-slide__media" style="--media:var(--c-teal-soft)">
-              <div class="device device--desk" aria-hidden="true">
-                <div class="dv-bar"><i></i><b>01 / 05</b><span>Classic store</span><em>Shuffle</em></div>
-                <div class="dv-desk">
-                  <span class="dv-piece" style="--x:6%;--y:7%;--w:88%;--h:9%;--pc:var(--c-ink)"></span>
-                  <span class="dv-piece" style="--x:6%;--y:22%;--w:88%;--h:30%;--pc:var(--c-yellow)"></span>
-                  <span class="dv-piece" style="--x:8%;--y:58%;--w:38%;--h:34%;--pc:var(--c-pink);--r:-4deg"></span>
-                  <span class="dv-piece dv-piece--round" style="--x:54%;--y:58%;--w:16%;--h:22%;--pc:var(--c-purple)"></span>
-                  <span class="dv-piece" style="--x:74%;--y:60%;--w:20%;--h:6%;--pc:var(--c-green)"></span>
-                  <span class="dv-piece" style="--x:74%;--y:70%;--w:14%;--h:6%;--pc:var(--c-green)"></span>
-                </div>
-              </div>
+            <div class="work-slide__media work-slide__media--sticker" style="--media:#DDF7A8">
+              <span class="deco deco--pill" aria-hidden="true"></span>
+              <svg class="deco deco--infinity" viewBox="0 0 120 60" aria-hidden="true"><path d="M60 30C46 8 12 8 12 30s34 22 48 0 48-22 48 0-34 22-48 0Z" fill="none" stroke="var(--c-purple)" stroke-width="11" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--squiggle" viewBox="0 0 140 70" aria-hidden="true"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="var(--c-pink)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="deco deco--flag" viewBox="0 0 110 70" aria-hidden="true"><path d="M8 14c30-14 52 14 86 0l10 46c-34 14-56-14-86 0Z" fill="var(--c-green)"/></svg>
+              <svg class="deco deco--smiley" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="var(--c-yellow)" stroke="var(--c-ink)" stroke-width="5"/><ellipse cx="36" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><ellipse cx="64" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><path d="M30 60q20 20 40 0" fill="none" stroke="var(--c-ink)" stroke-width="6" stroke-linecap="round"/></svg>
+              <img class="sticker" src="assets/work/playground/desk.webp" width="446" height="712" alt="A store page sketched on the playground desk" loading="lazy" decoding="async">
+              <span class="sticker-pill">Wireframe desk</span>
+              <span class="sticker-stat"><small>Page types</small><b>3</b></span>
             </div>
           </article>
         </div>
@@ -289,15 +292,15 @@
           <h2 class="display display--italic h-section">How I work</h2>
           <button type="button" class="btn proc-replay" data-proc-replay aria-label="Replay the How I work animation" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 3v5h5"/></svg>Replay</button>
         </div>
-        <!-- One yellow layout travels through the four cards (process.js plays them in turn).
+        <!-- One store screenshot travels through the four cards (process.js plays them in turn).
              Without JS or with reduced motion, each panel shows its final frame. -->
         <div class="svc-grid svc-grid--steps" data-proc>
           <article class="svc svc--step proc proc--1">
-            <div class="svc__media" style="--media:var(--c-pink-soft)">
-              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
-                <g class="proc-c1-copy proc-settle proc-last"><g transform="translate(78 22) rotate(-12) scale(1.15)"><rect x="3.4" y="3.4" width="70" height="96" rx="6" class="f2"/><rect x="0" y="0" width="70" height="96" rx="6" class="ln"/><path class="ln" d="M10 12h28"/><rect x="10" y="22" width="50" height="32" rx="4" class="f0"/><path class="ln" d="M10 64h28M10 72h18"/><g class="proc-label"><rect x="1" y="-13.5" width="26" height="11" rx="5.5" class="fi"/><text class="t t--light" x="14" y="-5.6">COPY</text></g></g></g>
-                <g transform="translate(22 42) rotate(-12) scale(1.15)"><rect x="3.4" y="3.4" width="70" height="96" rx="6" class="f6"/><rect x="0" y="0" width="70" height="96" rx="6" class="ln"/><path class="ln" d="M10 12h28"/><rect x="10" y="22" width="50" height="32" rx="4" class="f0"/><path class="ln" d="M10 64h28M10 72h18"/><g class="proc-label"><rect x="1" y="-13.5" width="24" height="11" rx="5.5" class="fi"/><text class="t t--light" x="13" y="-5.6">LIVE</text></g></g>
-              </svg></div>
+            <div class="svc__media grid-bg" style="--media:#F9C9E6">
+              <div class="scene" aria-hidden="true">
+                <span class="shot sc1-live"><img src="assets/work/screens/home-390.webp" width="260" height="563" alt="" loading="lazy" decoding="async"><b class="shot__pill">Live</b></span>
+                <span class="shot sc1-copy proc-settle proc-last"><img src="assets/work/screens/home-390.webp" width="260" height="563" alt="" loading="lazy" decoding="async"><b class="shot__pill shot__pill--copy proc-label">Copy</b></span>
+              </div>
             </div>
             <div class="svc__body">
               <span class="card-num">01.</span>
@@ -306,13 +309,11 @@
             </div>
           </article>
           <article class="svc svc--step proc proc--2">
-            <div class="svc__media" style="--media:var(--c-teal-soft)">
-              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
-                <g class="proc-c2-page proc-settle proc-last"><g transform="translate(28 -6) rotate(-10) scale(1.2)"><rect x="3.4" y="3.4" width="70" height="96" rx="6" class="f2"/><rect x="0" y="0" width="70" height="96" rx="6" class="ln"/><path class="ln" d="M10 12h28"/><rect x="10" y="22" width="50" height="32" rx="4" class="proc-c2-hero"/><path class="ln" d="M10 64h28M10 72h18"/><rect x="42" y="60" width="18" height="10" rx="5" class="fi proc-c2-btn"/></g></g>
-                <g class="proc-c2-box" style="--i:0"><path class="ln" d="M107 26H138"/><rect x="141" y="22" width="14" height="14" rx="4" class="f0"/><rect x="138" y="19" width="14" height="14" rx="4" class="ln"/><path class="proc-c2-tick" pathLength="1" d="M141.5 26l3 3 6-6"/></g>
-                <g class="proc-c2-box" style="--i:1"><path class="ln" d="M113 61H138"/><rect x="141" y="57" width="14" height="14" rx="4" class="f0"/><rect x="138" y="54" width="14" height="14" rx="4" class="ln"/><path class="proc-c2-tick" pathLength="1" d="M141.5 61l3 3 6-6"/></g>
-                <g class="proc-c2-box" style="--i:2"><path class="ln" d="M55 77L24 97"/><rect x="15" y="99" width="14" height="14" rx="4" class="f0"/><rect x="12" y="96" width="14" height="14" rx="4" class="ln"/><path class="proc-c2-tick" pathLength="1" d="M15.5 103l3 3 6-6"/></g>
-              </svg></div>
+            <div class="svc__media grid-bg" style="--media:#B9E3FA">
+              <div class="scene" aria-hidden="true">
+                <span class="shot sc2-page proc-settle proc-last"><img src="assets/work/screens/home-390.webp" width="260" height="563" alt="" loading="lazy" decoding="async"><b class="shot__pill shot__pill--copy">Copy</b></span>
+                <span class="note sc2-list"><b>Done when</b><span class="note__row" style="--i:0"><i class="tick"><svg viewBox="0 0 12 12"><path pathLength="1" d="M2.5 6.5l2.5 2.5 4.5-5"/></svg></i>Tag labels</span><span class="note__row" style="--i:1"><i class="tick"><svg viewBox="0 0 12 12"><path pathLength="1" d="M2.5 6.5l2.5 2.5 4.5-5"/></svg></i>Max 2 a card</span><span class="note__row" style="--i:2"><i class="tick"><svg viewBox="0 0 12 12"><path pathLength="1" d="M2.5 6.5l2.5 2.5 4.5-5"/></svg></i>390–1440 px</span></span>
+              </div>
             </div>
             <div class="svc__body">
               <span class="card-num">02.</span>
@@ -321,12 +322,12 @@
             </div>
           </article>
           <article class="svc svc--step proc proc--3">
-            <div class="svc__media" style="--media:var(--c-yellow-soft)">
-              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
-                <g class="proc-c3-desk"><rect x="39.4" y="13.4" width="150" height="54" rx="5" class="f5"/><rect x="36" y="10" width="150" height="54" rx="5" class="ln"/><path class="ln" d="M36 19h150"/><rect x="46" y="26" width="30" height="30" rx="3" class="f2"/><rect x="82" y="26" width="30" height="30" rx="3" class="f0"/><rect x="118" y="26" width="30" height="30" rx="3" class="f3"/><g class=""><rect x="7" y="32.5" width="26" height="11" rx="5.5" class="fi"/><text class="t t--light" x="20" y="40.4">1440</text></g></g>
-                <g class="proc-c3-tab"><rect x="-6.6" y="77.4" width="74" height="70" rx="5" class="f3"/><rect x="-10" y="74" width="74" height="70" rx="5" class="ln"/><rect x="0" y="84" width="24" height="22" rx="3" class="f2"/><rect x="30" y="84" width="24" height="22" rx="3" class="f4"/><rect x="0" y="112" width="54" height="20" rx="3" class="f0"/><g class=""><rect x="41" y="60.5" width="22" height="11" rx="5.5" class="fi"/><text class="t t--light" x="52" y="68.4">768</text></g></g>
-                <g class="proc-c3-phone proc-settle proc-last"><rect x="99.4" y="79.4" width="40" height="66" rx="7" class="f4"/><rect x="96" y="76" width="40" height="66" rx="7" class="ln"/><path class="ln" d="M111 82h10"/><rect x="103" y="88" width="26" height="16" rx="3" class="f2"/><rect x="103" y="108" width="26" height="16" rx="3" class="f0"/><g class=""><rect x="138" y="78.5" width="20" height="11" rx="5.5" class="fi"/><text class="t t--light" x="148" y="86.4">390</text></g></g>
-              </svg></div>
+            <div class="svc__media grid-bg" style="--media:#FFCB9E">
+              <div class="scene" aria-hidden="true">
+                <span class="shot sc3-desk"><img src="assets/work/screens/collection-1440.webp" width="480" height="300" alt="" loading="lazy" decoding="async"><b class="shot__pill">1440</b></span>
+                <span class="shot sc3-tab"><img src="assets/work/screens/collection-768.webp" width="300" height="400" alt="" loading="lazy" decoding="async"><b class="shot__pill">768</b></span>
+                <span class="shot sc3-phone proc-settle proc-last"><img src="assets/work/screens/collection-390.webp" width="260" height="563" alt="" loading="lazy" decoding="async"><b class="shot__pill">390</b></span>
+              </div>
             </div>
             <div class="svc__body">
               <span class="card-num">03.</span>
@@ -335,15 +336,13 @@
             </div>
           </article>
           <article class="svc svc--step proc proc--4">
-            <div class="svc__media" style="--media:var(--c-purple-soft)">
-              <div class="svc__sticker svc__sticker--anim" aria-hidden="true"><svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">
-                <g class="proc-c4-page"><g transform="translate(80 -40) rotate(-14) scale(1.1)"><rect x="3.4" y="3.4" width="70" height="96" rx="6" class="f2"/><rect x="0" y="0" width="70" height="96" rx="6" class="ln"/><path class="ln" d="M10 28h40M10 36h30"/><rect x="10" y="48" width="50" height="28" rx="4" class="proc-c4-hero"/><rect x="40" y="82" width="20" height="9" rx="4.5" class="fi"/></g></g>
-                <g class="proc-c4-row" style="--i:0"><circle cx="17.5" cy="55.5" r="4.5" class="proc-c4-dot"/><circle cx="16" cy="54" r="4.5" class="ln"/><text class="t t--row" x="26" y="56.8">Files changed</text></g>
-                <g class="proc-c4-row" style="--i:1"><circle cx="17.5" cy="71.5" r="4.5" class="proc-c4-dot"/><circle cx="16" cy="70" r="4.5" class="ln"/><text class="t t--row" x="26" y="72.8">Why</text></g>
-                <g class="proc-c4-row" style="--i:2"><circle cx="17.5" cy="87.5" r="4.5" class="proc-c4-dot"/><circle cx="16" cy="86" r="4.5" class="ln"/><text class="t t--row" x="26" y="88.8">How to edit</text></g>
-                <g class="proc-c4-toggle"><rect x="104" y="72" width="34" height="18" rx="9" class="proc-c4-track"/><rect x="102" y="70" width="34" height="18" rx="9" class="ln"/><circle cx="127" cy="79" r="6" class="fi proc-c4-knob"/></g>
-                <path class="fi proc-c4-cursor proc-last" d="M124 83v21l6-5 5 9 5-3-5-9h8Z"/>
-              </svg></div>
+            <div class="svc__media grid-bg" style="--media:#D9C8FF">
+              <div class="scene" aria-hidden="true">
+                <span class="shot sc4-page"><img src="assets/work/screens/pdp-390-after.webp" width="260" height="563" alt="" loading="lazy" decoding="async"><img class="sc4-before" src="assets/work/screens/pdp-390-before.webp" width="260" height="563" alt="" loading="lazy" decoding="async"><b class="shot__pill shot__pill--copy">After</b><b class="shot__pill sc4-before">Before</b></span>
+                <span class="note sc4-log"><b>Change log</b><span class="note__row" style="--i:0"><i class="dot"></i>Files changed</span><span class="note__row" style="--i:1"><i class="dot"></i>Why</span><span class="note__row" style="--i:2"><i class="dot"></i>How to edit</span></span>
+                <span class="toggle sc4-toggle"><i></i></span>
+                <svg class="sc4-cursor proc-last" viewBox="0 0 24 24"><path d="M5 2v18l5-4.5 3.6 7.5 3.4-1.6-3.6-7.4H20Z"/></svg>
+              </div>
             </div>
             <div class="svc__body">
               <span class="card-num">04.</span>
