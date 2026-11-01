@@ -12,6 +12,29 @@ document.addEventListener('click', (e) => {
   openDialog('talk', { topic: btn.dataset.topic });
 });
 
+/* Nav dropdowns: hovering (or tabbing to) Work / Let's Talk opens its menu; a click still scrolls or opens the form.
+   Touch screens have no hover, so there the click is all they get. */
+document.querySelectorAll('[data-hover-menu]').forEach((item) => {
+  const menu = document.getElementById(item.dataset.hoverMenu);
+  let timer;
+  const isOpen = () => menu.matches(':popover-open');
+  const hide = () => { clearTimeout(timer); if (isOpen()) menu.hidePopover(); };
+  const open = () => { clearTimeout(timer); if (!isOpen()) menu.showPopover(); };
+  const close = () => { clearTimeout(timer); timer = setTimeout(hide, 160); };
+  for (const el of [item, menu]) {
+    el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') open(); });
+    el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') close(); });
+    el.addEventListener('focusout', (e) => { if (!item.contains(e.relatedTarget) && !menu.contains(e.relatedTarget)) close(); });
+  }
+  item.addEventListener('focusin', () => { if (item.matches(':focus-visible')) open(); });
+  item.addEventListener('click', hide);
+});
+
+/* any dropdown closes after a pick (in-page links would leave it open) */
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.drop a')) e.target.closest('.drop').hidePopover();
+});
+
 
 /* Work so far: 2 or 3 hero shapes per sticker card, about 15 % of the panel wide, at a random spot in a different corner
    each, so the screenshot in the middle never hides them (the panel edge may cut them) */
