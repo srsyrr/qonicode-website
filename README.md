@@ -1,44 +1,61 @@
-# Qonicode — agency site with a layout playground
+# Qonicode — Shopify theme fixes, with a fix picker
 
 Static site (plain HTML/CSS/JS, no build step) on **Cloudflare Workers** (static assets + a tiny Worker for the form API),
 deployed from GitHub.
-The centerpiece is the **Playground**: visitors drag paper wireframe cards onto a page, then save it as a PNG
-or send it to `qonita@qonicode.tech`.
+Visitors list what's wrong with their store on the **fix picker** and see a price before they ask,
+then send the list to `qonita@qonicode.tech`.
 
 ```
 public/                     ← static files Cloudflare serves
   index.html
   assets/css/style.css
   assets/js/main.js         ← floating nav, Let's Talk buttons, work carousel, newsletter
-  assets/js/pieces.js       ← card types, standard wireframes per page type, shuffle rules
-  assets/js/desk.js         ← playground: drag / resize / presets / PNG export
-  assets/js/dialog.js       ← Let's Talk + Request dialog
+  assets/js/fix.js          ← fix picker: example store, wheels, prices, fix list, sending
+  assets/js/dialog.js       ← Let's Talk dialog
   assets/js/turnstile.js    ← Cloudflare Turnstile spam check for the forms
   _headers                  ← security headers (CSP, etc.) applied by Cloudflare
-  assets/vendor/html-to-image.js (MIT) ← renders the playground to PNG
 src/worker.js               ← Worker entry: routes /api/* to the handlers below, everything else → public/
-functions/api/request.js    ← POST /api/request → email (request / talk / newsletter)
+functions/api/request.js    ← POST /api/request → email (fixlist / talk / newsletter)
 functions/api/config.js     ← GET /api/config → public settings (Turnstile site key)
 wrangler.toml               ← Worker name, entry point and assets folder
 ```
 
-## Playground
+## Fix picker
 
-| Control | What it does |
+An example store built from named Shopify sections (Announcement bar, Header, Product information, Footer…), on five
+page tabs: Home, Product, Collection, Cart, Other pages.
+
+| Step | What happens |
 | --- | --- |
-| Home page / PDP / PLP | Switches page type. Each type keeps its own layout. |
-| ⬇ (save) | Downloads the page as a PNG. |
-| Shuffle | Builds a random but sensible layout for the current page type. |
-| Request | Opens the dialog and emails the PNG + layout JSON with the visitor's details. |
-| ← → | Steps through the standard wireframes of the current page type. |
+| Tap a section (or a part inside it) | A picker docks at the bottom of the screen with two wheels: **which part** and **what's wrong**. |
+| Roll the wheels | The part lights up yellow on the store and the price under the wheels follows live. |
+| Note | One optional field, "what you see, and how it should be". Needed only for *Something else*. |
+| Add to list | The item gets a number on the store, coloured by its problem, and goes into the fix list. |
+| Fix list button | Opens the list like a store's cart: items, editable notes, estimate, time, the price promise and the send form. |
 
-Cards wait on the desk with their name written under them: img box, circle img, description, table, CTA, 5 stars,
-menu, banner, section / sidebar, slider and label. Drag one onto the page and a fresh copy appears in its spot.
-Cards can overlap; the yellow corner resizes, the pink × (or dragging the card off the page) removes it.
-**Label** cards are typed by the visitor (click to edit, max 20 characters). Keyboard: arrows move, Enter puts a desk card
-on the page or edits a label, Delete removes. Layouts are kept in the visitor's browser (localStorage).
+Problems and their colours (the same in the wheel, on the store and in the list): Looks wrong on phone (orange),
+Looks wrong on desktop (teal), Doesn't work (pink), Change it (purple), Add something here (green), Something else (yellow).
 
-To add or change standard wireframes, edit `PAGES` (lists of rows) and `ROWS` in `public/assets/js/pieces.js`.
+Prices are set in `priceAll()` in `public/assets/js/fix.js`. The bands come from Upwork job budgets in the acquisition research
+(2026-11); every item is still confirmed with the client before any contract:
+
+| Problem | Price |
+| --- | --- |
+| Looks wrong on phone | $40 for the first template, +$20 per extra template; more parts on a listed template are included |
+| Looks wrong on desktop | $40–$100 |
+| Change it | $25, +$10 per extra change |
+| Doesn't work | $40–$100 |
+| Variant picker (looks wrong on phone / doesn't work) | $50–$100 |
+| Reviews, Cart upsell (app sections) | $35–$70 |
+| Add something here | $60–$150 |
+| Something else, Checkout | after a look |
+
+Sending posts `kind: "fixlist"` to `/api/request`: store address and email are required, screenshots are optional
+(up to 6, made smaller in the browser to JPEG). Links elsewhere on the page can preselect a problem
+(`data-fix-prob="phone"`, used by the Starter offers) or open a page tab (`data-fix-page="product"`, used by the footer).
+To add or rename sections, edit `GLOBAL_TOP`, `GLOBAL_BOTTOM` and `PAGES` in `fix.js`.
+
+The earlier prototypes of this tool are kept on the `claude/prototypes` branch, outside the site.
 
 ## Deploy (GitHub → Cloudflare Workers)
 

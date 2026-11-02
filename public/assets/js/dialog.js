@@ -1,36 +1,9 @@
-/* "Let's Talk" and "Request" share one neobrutalist dialog.
-   request: also renders the playground to a PNG and attaches it. */
+/* The "Let's Talk" dialog (neobrutalist), sent to /api/request as kind "talk". */
 
 import { mountTurnstile } from './turnstile.js';
 
 const MAIL_TO = 'qonita@qonicode.tech';
 const ENDPOINT = '/api/request';
-
-const COPY = {
-  talk: {
-    title: "Let's talk",
-    desc: 'Questions about my work, or a small theme task? I usually reply within a day.',
-    notes: 'Message',
-    submit: 'Send message',
-  },
-  request: {
-    title: 'Send me this layout',
-    desc: 'I’ll get your layout as an image, plus anything you add below.',
-    notes: 'Notes',
-    submit: 'Send request',
-  },
-};
-
-export function triggerDownload(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
-}
 
 const ui = {};
 
@@ -38,12 +11,6 @@ function init() {
   ui.dialog = document.querySelector('[data-dialog]');
   if (!ui.dialog) return false;
   ui.form = ui.dialog.querySelector('form');
-  ui.title = ui.dialog.querySelector('[data-dialog-title]');
-  ui.desc = ui.dialog.querySelector('[data-dialog-desc]');
-  ui.notesLabel = ui.dialog.querySelector('[data-notes-label]');
-  ui.attach = ui.dialog.querySelector('[data-attachment]');
-  ui.preview = ui.dialog.querySelector('[data-attachment-img]');
-  ui.attachText = ui.dialog.querySelector('[data-attachment-text]');
   ui.status = ui.dialog.querySelector('[data-dialog-status]');
   ui.submit = ui.dialog.querySelector('[data-dialog-submit]');
   ui.dialog.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => ui.dialog.close()));
@@ -52,21 +19,14 @@ function init() {
   return true;
 }
 
-let state = {};
-
 function setStatus(text, kind = '') {
   ui.status.textContent = text;
   ui.status.dataset.state = kind;
 }
 
-export async function openDialog(mode, opts = {}) {
+export function openDialog(opts = {}) {
   if (!ui.dialog && !init()) return;
-  const copy = COPY[mode];
-  state = { mode, ...opts, dataUrl: null, canvas: null };
-  ui.title.textContent = copy.title;
-  ui.desc.textContent = copy.desc;
-  ui.notesLabel.textContent = copy.notes;
-  ui.submit.textContent = copy.submit;
+  ui.submit.disabled = false;
   ui.form.querySelectorAll('input, textarea').forEach((el) => { el.disabled = false; });
   // Service cards pass their name, so the message starts with what the visitor asked about.
   const notes = ui.form.elements.notes;
@@ -76,26 +36,9 @@ export async function openDialog(mode, opts = {}) {
     notes.dataset.auto = notes.value;
   }
   setStatus('');
-  ui.attach.hidden = mode !== 'request';
-  ui.submit.disabled = mode === 'request';
-  ui.preview.removeAttribute('src');
   ui.dialog.showModal();
   // Spam check loads the first time the dialog is open (it needs to be visible to run).
   if (!ui.captcha) ui.captcha = mountTurnstile(ui.dialog.querySelector('[data-turnstile]'));
-
-  if (mode === 'request') {
-    ui.attachText.textContent = 'Rendering your layout…';
-    try {
-      state.canvas = await opts.render();
-      state.dataUrl = state.canvas.toDataURL('image/png');
-      ui.preview.src = state.dataUrl;
-      ui.attachText.textContent = `${opts.filename} will be attached`;
-      ui.submit.disabled = false;
-    } catch (err) {
-      console.error(err);
-      ui.attachText.textContent = 'The layout image could not be created.';
-    }
-  }
 }
 
 // Optional field: empty stays empty, a bare domain like "shop.com" becomes https://shop.com.
@@ -107,10 +50,9 @@ function storeUrl(value) {
 
 async function send() {
   if (!ui.form.reportValidity()) return;
-  if (state.mode === 'request' && !state.dataUrl) return;
   const fd = new FormData(ui.form);
   const payload = {
-    kind: state.mode,
+    kind: 'talk',
     name: String(fd.get('name')).trim(),
     email: String(fd.get('email')).trim(),
     store: storeUrl(fd.get('store')),
@@ -126,10 +68,6 @@ async function send() {
     }
   }
   payload.turnstile = captcha.token();
-  if (state.mode === 'request') {
-    payload.image = state.dataUrl;
-    payload.layout = state.layout();
-  }
   ui.submit.disabled = true;
   setStatus('Sending…');
   try {
@@ -142,16 +80,8 @@ async function send() {
     console.error(err);
     ui.submit.disabled = false;
     ui.status.dataset.state = 'error';
-    const mailto = `mailto:${MAIL_TO}?subject=${encodeURIComponent(state.mode === 'request' ? 'Layout request' : 'Hello qonicode')}`;
-    if (state.mode === 'request') {
-      ui.status.innerHTML = `Couldn’t send automatically. <a href="#" data-dl>Download the PNG</a> and email it to <a href="${mailto}">${MAIL_TO}</a>.`;
-      ui.status.querySelector('[data-dl]').addEventListener('click', (e) => {
-        e.preventDefault();
-        state.canvas.toBlob((blob) => triggerDownload(blob, state.filename), 'image/png');
-      });
-    } else {
-      ui.status.innerHTML = `Couldn’t send automatically. Please email <a href="${mailto}">${MAIL_TO}</a>.`;
-    }
+    const mailto = `mailto:${MAIL_TO}?subject=${encodeURIComponent('Hello qonicode')}`;
+    ui.status.innerHTML = `Couldn’t send automatically. Please email <a href="${mailto}">${MAIL_TO}</a>.`;
   } finally {
     captcha.reset(); // tokens are single-use
   }

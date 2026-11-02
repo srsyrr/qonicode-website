@@ -1,7 +1,6 @@
 /* Site chrome: floating nav, Let's Talk buttons, carousels, newsletter. */
 import { openDialog } from './dialog.js';
 import { mountTurnstile } from './turnstile.js';
-import './desk.js';
 import './process.js';
 
 /* Let's Talk buttons anywhere on the page */
@@ -9,7 +8,7 @@ document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-open-talk]');
   if (!btn) return;
   e.preventDefault();
-  openDialog('talk', { topic: btn.dataset.topic });
+  openDialog({ topic: btn.dataset.topic });
 });
 
 /* Nav dropdowns: hovering (or tabbing to) Work / Let's Talk opens its menu; a click still scrolls or opens the form.
@@ -52,12 +51,6 @@ document.querySelectorAll('.work-slide__media--sticker').forEach((media) => {
     d.classList.add('is-placed');
   });
 });
-
-/* Footer links that open the playground on a given page type */
-document.querySelectorAll('[data-goto-page]').forEach((a) => a.addEventListener('click', () => {
-  const btn = document.querySelector(`[data-page="${a.dataset.gotoPage}"]`);
-  if (btn) btn.click();
-}));
 
 /* Nav shrinks to icons once the page is scrolled */
 const header = document.querySelector('.site-header');

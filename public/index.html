@@ -21,6 +21,7 @@
   <link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
   <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/fix.js"></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -45,9 +46,9 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7l2 2 3.5-3.5M4 16l2 2 3.5-3.5M13 8h7M13 17h7"/></svg>
         <span class="seg__text">How I work</span>
       </a>
-      <a class="seg__item" href="#playground" data-spy="playground">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><circle cx="17" cy="7" r="4"/><path d="M7 14l4 7H3Z"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-        <span class="seg__text">Playground</span>
+      <a class="seg__item" href="#fix" data-spy="fix">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h11M4 12h11M4 18h6"/><path d="m14.5 17 2.5 2.5 4.5-5"/></svg>
+        <span class="seg__text">Price a fix</span>
       </a>
       <button type="button" class="seg__item seg__talk" data-open-talk data-hover-menu="nav-talk" style="anchor-name:--nav-talk">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"/></svg>
@@ -56,7 +57,7 @@
       <div class="drop drop--end" id="nav-talk" popover style="--anchor:--nav-talk">
         <a href="https://www.upwork.com/freelancers/~01d6e5b7b37775cfbe" rel="noopener"><span class="drop__icon" style="--icon:var(--c-teal)">U</span><span>Hire me on Upwork<small>More secure payment</small></span></a>
         <a href="mailto:qonita@qonicode.tech"><span class="drop__icon" style="--icon:var(--c-purple)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span>Email me<small>qonita@qonicode.tech</small></span></a>
-        <a href="#playground"><span class="drop__icon" style="--icon:var(--c-pink)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><circle cx="17" cy="7" r="4"/><path d="M7 14l4 7H3Z"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>Sketch it in the playground<small>Then send it over</small></span></a>
+        <a href="#fix"><span class="drop__icon" style="--icon:var(--c-pink)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h11M4 12h11M4 18h6"/><path d="m14.5 17 2.5 2.5 4.5-5"/></svg></span><span>List what's wrong<small>See the price first</small></span></a>
       </div>
     </nav>
   </header>
@@ -91,16 +92,12 @@
             <div><strong>Before / after</strong><small>4 projects, see the work ↓</small></div>
           </a>
           <span class="hero__arrow" aria-hidden="true"><svg viewBox="0 0 220 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 40c20-30 52-30 44 0s-30 12-12-6 50-24 54 8-26 22-14 0 46-30 58-6-14 26-6 8 40-30 80-12"/><path d="M196 18l16 14-20 8"/></svg></span>
-          <button type="button" class="btn hero__cta" data-open-talk>Say hi</button>
+          <div class="hero__cta">
+            <a class="btn btn--go" href="#fix">Price my fixes</a>
+            <button type="button" class="btn" data-open-talk>Say hi</button>
+          </div>
         </div>
       </div>
-    </section>
-
-    <!-- ============ Stats ============ -->
-    <section class="stats">
-      <div class="stats__item"><div class="stats__num display display--italic">4</div><div class="stats__label">Projects with before / after</div></div>
-      <div class="stats__item"><div class="stats__num display display--italic">36</div><div class="stats__label">Checks on my handoff list</div></div>
-      <div class="stats__item"><div class="stats__num display display--italic">5</div><div class="stats__label">Screen widths in every QA pass</div></div>
     </section>
 
     <!-- ============ Work ============ -->
@@ -187,28 +184,56 @@
             </div>
           </article>
 
-          <article class="work-slide">
-            <div class="work-slide__body">
-              <div class="work-slide__top"><span class="work-slide__num">05.</span><a class="arrow-btn" href="#playground" aria-label="Open the playground"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div>
-              <h3 class="work-slide__title">This playground</h3>
-              <p class="work-slide__text">The wireframe desk on this page: drag, resize, shuffle and save a layout as a PNG. Plain HTML, CSS and JavaScript.</p>
-              <ul class="tags"><li>Side project</li><li>JavaScript</li><li>Wireframes</li></ul>
-            </div>
-            <div class="work-slide__media work-slide__media--sticker" style="--media:#DDF7A8">
-              <span class="deco deco--pill" aria-hidden="true"></span>
-              <svg class="deco deco--infinity" viewBox="0 0 120 60" aria-hidden="true"><path d="M60 30C46 8 12 8 12 30s34 22 48 0 48-22 48 0-34 22-48 0Z" fill="none" stroke="var(--c-purple)" stroke-width="11" stroke-linejoin="round"/></svg>
-              <svg class="deco deco--squiggle" viewBox="0 0 140 70" aria-hidden="true"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="var(--c-pink)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <svg class="deco deco--flag" viewBox="0 0 110 70" aria-hidden="true"><path d="M8 14c30-14 52 14 86 0l10 46c-34 14-56-14-86 0Z" fill="var(--c-green)"/></svg>
-              <svg class="deco deco--smiley" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="var(--c-yellow)" stroke="var(--c-ink)" stroke-width="5"/><ellipse cx="36" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><ellipse cx="64" cy="40" rx="5" ry="8" fill="var(--c-ink)"/><path d="M30 60q20 20 40 0" fill="none" stroke="var(--c-ink)" stroke-width="6" stroke-linecap="round"/></svg>
-              <img class="sticker" src="assets/work/playground/desk.webp" width="446" height="712" alt="A store page sketched on the playground desk" loading="lazy" decoding="async">
-              <span class="sticker-pill">Wireframe desk</span>
-              <span class="sticker-stat"><small>Page types</small><b>3</b></span>
-            </div>
-          </article>
         </div>
         <div class="carousel-dots" data-dots></div>
       </div>
     </section>
+
+    <!-- ============ Fix picker (fix.js): tap a section, roll the part and the problem, see the price ============ -->
+    <section class="section fix" id="fix" data-fix>
+      <div class="page-width">
+        <div class="section-head fix__head">
+          <h2 class="display display--italic h-section">What should I fix?</h2>
+          <p class="fix__lede">Tap the section of this example store that's wrong in yours. Roll to the part and the problem, and the price shows straight away.</p>
+        </div>
+        <div class="seg seg--sm fix__tabs" role="group" aria-label="Page of the example store" data-fix-tabs></div>
+        <div class="fx-frame" data-fix-frame>
+          <noscript><p class="fx-empty">The fix list needs JavaScript. You can <a href="mailto:qonita@qonicode.tech?subject=Fix%20list">email me what's wrong</a> instead.</p></noscript>
+        </div>
+        <ul class="fx-legend" aria-label="What the colours mean" data-fix-legend></ul>
+        <p class="fix__else">Your store looks different? Pick the section that does the same job. Can't find it? <button type="button" class="fx-link" data-fx-act="elsewhere">Describe it in a few words</button></p>
+      </div>
+    </section>
+
+    <div class="fx-dock" role="dialog" data-fix-dock hidden></div>
+    <div class="fx-toast" role="status" aria-live="polite" data-fix-toast></div>
+    <button type="button" class="fx-pill" data-fx-act="openlist" data-fix-pill hidden></button>
+    <div class="fx-scrim" data-fx-act="closelist" data-fix-scrim hidden></div>
+    <aside class="fx-list" aria-labelledby="fx-list-title" data-fix-list hidden>
+      <div class="fx-list__head">
+        <h2 class="fx-list__title" id="fx-list-title" tabindex="-1" data-fix-title>Your fix list</h2>
+        <button type="button" class="fx-x" data-fx-act="closelist" aria-label="Close fix list">×</button>
+      </div>
+      <div data-fix-items></div>
+      <div class="fx-list__sum" data-fix-sum></div>
+      <form class="fx-send" data-fix-form novalidate>
+        <p class="fx-done" data-fix-done role="status"></p>
+        <label class="fx-field"><span>Store address</span><input class="fx-in" name="store" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="yourstore.com" required><em class="fx-err" data-fix-err="store"></em></label>
+        <label class="fx-field"><span>Email</span><input class="fx-in" name="email" type="email" autocomplete="email" placeholder="you@yourstore.com" required><em class="fx-err" data-fix-err="email"></em></label>
+        <label class="fx-field"><span>Anything else? <small>(optional)</small></span><textarea class="fx-in" name="notes" rows="2" maxlength="1000" placeholder="The theme is Dawn. The menu only breaks on iPhone."></textarea></label>
+        <label class="fx-attach"><span data-fix-shots-text>Attach screenshots (optional)</span><input type="file" accept="image/png, image/jpeg, image/webp" multiple data-fix-shots></label>
+        <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
+        <em class="fx-err" data-fix-err="notes"></em>
+        <div class="turnstile-slot" data-turnstile></div>
+        <button type="button" class="btn fx-go" data-fx-act="send" data-fix-send>Send for a fixed price</button>
+        <p class="fx-status" role="status" data-fix-status></p>
+        <p class="fx-small">One reply with your price. I only use your details to reply to you.</p>
+      </form>
+      <div class="fx-upwork">
+        <button type="button" class="fx-link" data-fx-act="copy" data-fix-copy>Prefer Upwork? Copy this list for a message</button>
+        <textarea class="fx-in fx-copybox" readonly hidden aria-label="Your fix list as text" data-fix-copybox></textarea>
+      </div>
+    </aside>
 
     <!-- ============ How I work ============ -->
     <section class="section services" id="process">
@@ -326,6 +351,7 @@
                 <div class="drop drop--end" id="offer-1" popover style="--anchor:--offer-1">
                   <a href="https://www.upwork.com/freelancers/~01d6e5b7b37775cfbe" rel="noopener"><span class="drop__icon" style="--icon:var(--c-teal)">U</span><span>Hire me on Upwork<small>More secure payment</small></span></a>
                   <a href="mailto:qonita@qonicode.tech?subject=Mobile%20layout%20fix"><span class="drop__icon" style="--icon:var(--c-purple)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span>Email me<small>qonita@qonicode.tech</small></span></a>
+                  <a href="#fix" data-fix-prob="phone"><span class="drop__icon" style="--icon:var(--c-yellow)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h11M4 12h11M4 18h6"/><path d="m14.5 17 2.5 2.5 4.5-5"/></svg></span><span>Price it in the fix list<small>See the price before you ask</small></span></a>
                 </div>
               </div>
               <p class="svc__text">Pages that slide sideways, buttons off the screen or too small to tap, fixed with phone and tablet rules only.</p>
@@ -343,6 +369,7 @@
                 <div class="drop drop--end" id="offer-2" popover style="--anchor:--offer-2">
                   <a href="https://www.upwork.com/freelancers/~01d6e5b7b37775cfbe" rel="noopener"><span class="drop__icon" style="--icon:var(--c-teal)">U</span><span>Hire me on Upwork<small>More secure payment</small></span></a>
                   <a href="mailto:qonita@qonicode.tech?subject=Small%20theme%20change"><span class="drop__icon" style="--icon:var(--c-purple)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span>Email me<small>qonita@qonicode.tech</small></span></a>
+                  <a href="#fix" data-fix-prob="change"><span class="drop__icon" style="--icon:var(--c-yellow)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h11M4 12h11M4 18h6"/><path d="m14.5 17 2.5 2.5 4.5-5"/></svg></span><span>Price it in the fix list<small>See the price before you ask</small></span></a>
                 </div>
               </div>
               <p class="svc__text">A new setting, label, block or text change on your current theme, done on a duplicate you approve.</p>
@@ -368,63 +395,6 @@
           </article>
         </div>
         <p class="offers__note">The final price is fixed after I see your store, before any work starts. Paid through <a href="https://www.upwork.com/freelancers/~01d6e5b7b37775cfbe" rel="noopener">Upwork</a> and released only after you approve the work.</p>
-      </div>
-    </section>
-
-    <!-- ============ Playground ============ -->
-    <section class="playground" id="playground">
-      <div class="page-width playground__grid">
-        <div class="playground__side">
-          <h2 class="playground__title display display--italic h-section">Playground</h2>
-          <p class="desk-hint">I sketch layouts like this before I build. Try it: drag cards onto the page — they can overlap. Grab the yellow corner to resize, drag a card off the page to remove it.</p>
-
-          <div class="seg seg--sm playground__pages" role="radiogroup" aria-label="Page type">
-            <button type="button" class="seg__item" role="radio" data-page="home">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>
-              <span>Home page</span>
-            </button>
-            <button type="button" class="seg__item" role="radio" data-page="pdp">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8Z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>
-              <span>PDP</span>
-            </button>
-            <button type="button" class="seg__item" role="radio" data-page="plp">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-              <span>PLP</span>
-            </button>
-          </div>
-
-          <div class="playground__tools" role="toolbar" aria-label="Playground tools">
-            <button type="button" class="btn btn--icon" data-action="save" title="Download as PNG" aria-label="Download as PNG">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
-            </button>
-            <button type="button" class="btn btn--icon" data-action="shuffle" title="Shuffle" aria-label="Shuffle layout">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3.5c2 0 3.2 1 4.5 3l1 1.6c1.3 2 2.5 3.4 4.5 3.4H20m0 0-3-3m3 3-3 3M4 17h3.5c1.4 0 2.4-.6 3.3-1.6M20 7h-2.5c-1.4 0-2.4.6-3.3 1.6M20 7l-3-3m3 3-3 3"/></svg>
-            </button>
-            <button type="button" class="btn playground__request" data-action="request">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5 16-3.5-6.5L4 12Zm7.5 1.5L20 4"/></svg>
-              Request
-            </button>
-          </div>
-        </div>
-
-        <div class="desk" data-desk>
-          <div class="desk__stage" data-stage>
-            <!-- standard wireframes: ← 01/03 name → (positioned above the waiting cards) -->
-            <div class="desk__bar" data-preset-bar>
-              <button type="button" class="desk__dot" data-action="prev" aria-label="Previous standard wireframe">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-              </button>
-              <span class="preset-label" data-preset-label aria-live="polite"></span>
-              <button type="button" class="desk__dot" data-action="next" aria-label="Next standard wireframe">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-              </button>
-            </div>
-            <div class="desk__frame" data-frame aria-hidden="true">
-              <div class="desk__frame-bar"><i></i><i></i><i></i><span></span></div>
-            </div>
-          </div>
-        </div>
-        <p class="visually-hidden" aria-live="polite" data-live></p>
       </div>
     </section>
 
@@ -460,7 +430,7 @@
           <li><a href="#process">How I work</a></li>
           <li><a href="#offers">Starter offers</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#playground">Playground</a></li>
+          <li><a href="#fix">Price a fix</a></li>
           <li><a href="https://www.upwork.com/freelancers/~01d6e5b7b37775cfbe" rel="noopener">Upwork</a></li>
           <li><a href="https://www.linkedin.com/in/qfsyahirah" rel="noopener">LinkedIn</a></li>
           <li><a href="#contact" data-open-talk>Let's Talk</a></li>
@@ -468,9 +438,9 @@
 
         <div>
           <ul class="footer-links">
-            <li><a href="#playground" data-goto-page="home">Home page</a></li>
-            <li><a href="#playground" data-goto-page="pdp">PDP</a></li>
-            <li><a href="#playground" data-goto-page="plp">PLP</a></li>
+            <li><a href="#fix" data-fix-page="home">Home page</a></li>
+            <li><a href="#fix" data-fix-page="product">Product page</a></li>
+            <li><a href="#fix" data-fix-page="collection">Collection page</a></li>
           </ul>
           <span class="footer-squiggle" aria-hidden="true"><svg viewBox="0 0 140 70"><path d="M10 58V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 26 0v14a13 13 0 0 0 26 0V28a13 13 0 0 1 16-12" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </div>
@@ -486,7 +456,7 @@
       </div>
 
       <div class="site-footer__bottom">
-        <p class="footer-mini"><a href="#work">Work</a>. <a href="#about">About</a>. <a href="#playground">Playground</a></p>
+        <p class="footer-mini"><a href="#work">Work</a>. <a href="#about">About</a>. <a href="#fix">Price a fix</a></p>
         <span class="chevrons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></svg></span>
         <p><b>©<span data-year></span> Qonicode.</b> <span class="muted-light">All rights reserved</span></p>
       </div>
@@ -501,20 +471,16 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
       <header class="nb-dialog__header">
-        <h2 class="nb-dialog__title" id="dialog-title" data-dialog-title>Let's talk</h2>
-        <p class="nb-dialog__desc" id="dialog-desc" data-dialog-desc></p>
+        <h2 class="nb-dialog__title" id="dialog-title">Let's talk</h2>
+        <p class="nb-dialog__desc" id="dialog-desc">Questions about my work, or a small theme task? I usually reply within a day.</p>
       </header>
 
-      <div class="nb-dialog__attachment" data-attachment hidden>
-        <img alt="Your layout" data-attachment-img>
-        <span data-attachment-text></span>
-      </div>
 
       <div class="nb-dialog__fields">
         <label class="nb-field"><span>Your name</span><input class="nb-input" name="name" autocomplete="name" required></label>
         <label class="nb-field"><span>Email</span><input class="nb-input" name="email" type="email" autocomplete="email" required></label>
         <label class="nb-field"><span>Store URL <em>(optional)</em></span><input class="nb-input" name="store" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="yourstore.com"></label>
-        <label class="nb-field"><span><span data-notes-label>Message</span> <em>(optional)</em></span><textarea class="nb-input" name="notes" rows="3" placeholder="Say hi, or ask about Skinhale…"></textarea></label>
+        <label class="nb-field"><span>Message <em>(optional)</em></span><textarea class="nb-input" name="notes" rows="3" placeholder="Say hi, or ask about Skinhale…"></textarea></label>
         <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
       </div>
 
