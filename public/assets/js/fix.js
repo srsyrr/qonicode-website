@@ -110,25 +110,27 @@ const probsOf = (s) => (s.limited ? [PROB.other] : PROBS);
 const crumbOf = (tmpl, name, part) => `${tmpl} › ${name}${part !== 'Whole section' ? ' › ' + part : ''}`;
 
 /* ---------- prices ---------- */
-/* Price every item in list order. Phone layout: first template $40, each further template $15,
+/* Price every item in list order (bands from the Upwork job data in Demo/40_acquisition, 2026-11).
+   Phone layout: first template $40, each further template $20,
    more parts on an already-listed template are included. Change: $25, then $10 each. */
 function priceAll(items) {
   const layout = new Set();
   let changes = 0;
   return items.map((it) => {
     if (it.why === 'other' || it.limited) return { after: true, rule: 'I look at your store first' };
-    if (it.why === 'looks' && it.device === 'desktop') return { after: true, rule: 'Desktop layout: I look at your store first' };
-    if ((it.why === 'looks' || it.why === 'broken') && it.kind === 'data') return { low: 45, high: 90, rule: 'Product options and data', days: 2 };
+    if (it.why === 'looks' && it.device === 'desktop') return { low: 40, high: 100, rule: 'Desktop layout fix', days: 2 };
+    if ((it.why === 'looks' || it.why === 'broken') && it.kind === 'data') return { low: 50, high: 100, rule: 'Product options and data', days: 2 };
     if ((it.why === 'looks' || it.why === 'broken') && it.kind === 'app') return { low: 35, high: 70, rule: 'Make the app fit your theme', days: 1 };
     if (it.why === 'looks') {
       if (layout.has(it.tmpl)) return { low: 0, high: 0, rule: `Part of the ${it.tmpl.toLowerCase()} phone fix`, days: 0 };
-      const price = layout.size ? 15 : 40;
+      const extra = layout.size > 0;
+      const price = extra ? 20 : 40;
       layout.add(it.tmpl);
-      return { low: price, high: price, rule: `Phone layout · ${it.tmpl}${price === 15 ? ', extra page' : ''}`, days: layout.size === 1 ? 2 : 1 };
+      return { low: price, high: price, rule: `Phone layout · ${it.tmpl}${extra ? ', extra page' : ''}`, days: extra ? 1 : 2 };
     }
     if (it.why === 'broken') return { low: 40, high: 100, rule: 'Repair', days: 2 };
     if (it.why === 'change') { const price = changes++ ? 10 : 25; return { low: price, high: price, rule: price === 25 ? 'Text, label or setting change' : 'Extra change', days: 0.5 }; }
-    if (it.why === 'add') return { low: 60, high: 120, rule: 'New section, simple to advanced', days: 3 };
+    if (it.why === 'add') return { low: 60, high: 150, rule: 'New section, simple to advanced', days: 3 };
     return { after: true, rule: 'I look at your store first' };
   });
 }

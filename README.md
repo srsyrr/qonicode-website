@@ -36,17 +36,19 @@ page tabs: Home, Product, Collection, Cart, Other pages.
 Problems and their colours (the same in the wheel, on the store and in the list): Looks wrong on phone (orange),
 Looks wrong on desktop (teal), Doesn't work (pink), Change it (purple), Add something here (green), Something else (yellow).
 
-Prices are set in `priceAll()` in `public/assets/js/fix.js` (example numbers, confirmed with the client before any contract):
+Prices are set in `priceAll()` in `public/assets/js/fix.js`. The bands come from Upwork job budgets in the acquisition research
+(2026-11); every item is still confirmed with the client before any contract:
 
 | Problem | Price |
 | --- | --- |
-| Looks wrong on phone | $40 for the first template, +$15 per extra template; more parts on a listed template are included |
+| Looks wrong on phone | $40 for the first template, +$20 per extra template; more parts on a listed template are included |
+| Looks wrong on desktop | $40–$100 |
 | Change it | $25, +$10 per extra change |
 | Doesn't work | $40–$100 |
-| Variant picker (looks wrong on phone / doesn't work) | $45–$90 |
+| Variant picker (looks wrong on phone / doesn't work) | $50–$100 |
 | Reviews, Cart upsell (app sections) | $35–$70 |
-| Add something here | $60–$120 |
-| Looks wrong on desktop, Something else, Checkout | after a look |
+| Add something here | $60–$150 |
+| Something else, Checkout | after a look |
 
 Sending posts `kind: "fixlist"` to `/api/request`: store address and email are required, screenshots are optional
 (up to 6, made smaller in the browser to JPEG). Links elsewhere on the page can preselect a problem
