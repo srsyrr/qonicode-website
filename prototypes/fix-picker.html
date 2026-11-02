@@ -1,0 +1,722 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Qonicode Fix Picker</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+<style>
+/* One example store, full width. Tap a section, roll two wheels (which part, what's wrong), see the price, add it. The fix list is a cart drawer. Single light theme, same as qonicode.tech. */
+:root {
+  --bg: #F5EFE3; --paper: #FFFFFF; --surface: #FFFDF8; --desk: #EFE7D8;
+  --ink: #111111; --muted: #5B564D; --line: #D9D1C2; --hl: #FFF6D6;
+  --teal: #A7DBD8; --green: #BAFCA2; --yellow: #FFDB58; --orange: #FFA07A; --pink: #FFC0CB; --purple: #C4A1FF;
+  --error: #B4231B;
+  --font: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --border: 2px solid var(--ink);
+  --shadow: 4px 4px 0 var(--ink);
+  --row: 40px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; transition: padding-bottom .2s; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 24px 120px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.brand { font-weight: 900; font-stretch: 125%; font-size: 14px; text-transform: uppercase; letter-spacing: .02em; }
+.title { margin-top: 4px; font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(28px, 4.6vw, 46px); line-height: .95; letter-spacing: -.02em; }
+.lede { margin-top: 10px; font-size: 15px; color: var(--muted); max-width: 52ch; }
+
+.tabs { position: sticky; top: 0; z-index: 4; margin: 18px -16px 0; padding: 10px 16px; background: var(--bg); display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { flex: none; padding: 7px 14px; border: var(--border); border-radius: 999px; background: var(--paper); font-weight: 800; font-size: 14px; cursor: pointer; }
+.tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+/* the example store */
+.frame { margin-top: 6px; border: var(--border); border-radius: 18px; background: var(--paper); box-shadow: 6px 6px 0 var(--ink); overflow: clip; }
+.frame__bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: var(--border); background: var(--desk); }
+.frame__bar i { width: 10px; height: 10px; border: 1.5px solid var(--ink); border-radius: 50%; background: var(--paper); }
+.sec { position: relative; padding: 32px 14px 14px; border-bottom: 1.5px dashed var(--line); cursor: pointer; transition: background .12s, box-shadow .12s; }
+.sec:last-child { border-bottom: 0; }
+@media (hover: hover) { .sec:hover { background: var(--hl); } .sec:hover .tag { background: var(--ink); color: var(--paper); } }
+.sec.is-sel { background: var(--hl); box-shadow: inset 0 0 0 3px var(--ink); }
+.sec.is-limited { background: repeating-linear-gradient(-45deg, var(--surface) 0 8px, var(--desk) 8px 16px); }
+.tag { position: absolute; top: 7px; left: 10px; z-index: 1; display: inline-flex; align-items: center; gap: 6px; padding: 1px 10px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--paper); font-weight: 800; font-size: 12px; line-height: 1.6; cursor: pointer; }
+.sec.is-sel .tag { background: var(--ink); color: var(--paper); }
+.art { display: grid; gap: 8px; }
+.part { position: relative; display: grid; gap: 6px; width: 100%; padding: 4px; margin: -4px; border: 0; border-radius: 8px; background: none; text-align: left; cursor: pointer; transition: background .15s, outline-color .15s; }
+.sec.is-sel .part { outline: 1.5px dashed var(--muted); outline-offset: 1px; }
+.sec.is-sel .part.is-sel, .part.is-sel { background: var(--yellow); outline: 2.5px solid var(--ink); outline-offset: 1px; }
+.part.is-sel .blk, .part.is-sel .l:not(.dark) { background: #fff8; border-color: var(--ink); }
+.sec.is-whole .art { background: var(--yellow); outline: 2.5px solid var(--ink); outline-offset: 4px; border-radius: 6px; }
+.num { flex: none; display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--c, var(--paper)); color: var(--ink); font-size: 12px; font-weight: 900; line-height: 1; }
+.part > .num { position: absolute; top: -9px; right: -9px; z-index: 2; }
+.tag .num { min-width: 18px; height: 18px; margin-right: -7px; font-size: 11px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 16px 0 0; padding: 0; list-style: none; font-size: 13px; font-weight: 700; }
+.legend li { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--c); }
+.legend .legend__cap { color: var(--muted); font-weight: 600; }
+.elsewhere { margin-top: 10px; font-size: 14px; color: var(--muted); }
+
+/* wireframe pieces */
+.l { display: block; height: 8px; border-radius: 4px; background: var(--line); }
+.l.dark { background: var(--ink); }
+.l.c { margin-inline: auto; }
+.blk { display: block; border-radius: 7px; background: var(--desk); border: 1.5px solid var(--line); }
+.bt { display: grid; place-items: center; height: 30px; border: 2px solid var(--ink); border-radius: 99px; background: var(--paper); font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.bt.dark { background: var(--ink); color: var(--paper); }
+.row { display: flex; gap: 8px; align-items: center; }
+.grow { flex: 1; min-width: 0; }
+.g2, .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.is-desk .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card { display: grid; gap: 5px; }
+.ann { display: grid; place-items: center; height: 22px; margin: -2px -4px; border-radius: 5px; background: var(--ink); }
+.ann .l { background: #ffffff66; width: 60%; }
+.is-desk .ann .l { width: 30%; }
+.logo { display: block; width: 64px; height: 16px; border-radius: 4px; background: var(--ink); }
+.burger { display: grid; gap: 3px; width: 20px; padding: 2px 0; }
+.burger i { height: 2.5px; background: var(--ink); border-radius: 2px; }
+.nav { display: flex; gap: 12px; }
+.nav .l { width: 44px; }
+.ico { display: block; width: 18px; height: 18px; border: 2px solid var(--ink); border-radius: 50%; }
+.ico.bag { border-radius: 4px; }
+.chipsw { display: flex; flex-wrap: wrap; gap: 5px; }
+.chipsw i { width: 38px; height: 22px; border: 1.5px solid var(--ink); border-radius: 6px; background: var(--paper); }
+.chipsw i:first-child { background: var(--ink); }
+.stepper { display: flex; width: 96px; height: 28px; border: 1.5px solid var(--ink); border-radius: 7px; background: var(--paper); }
+.stepper i { flex: 1; border-left: 1.5px solid var(--ink); }
+.stepper i:first-child { border-left: 0; }
+.acc { display: block; height: 24px; border: 1.5px solid var(--line); border-radius: 6px; }
+.dots { display: flex; gap: 6px; }
+.dots i { width: 16px; height: 16px; border-radius: 50%; background: var(--line); }
+.pay { display: flex; gap: 5px; }
+.pay i { width: 26px; height: 16px; border-radius: 3px; border: 1.5px solid var(--line); }
+.stars { font-size: 13px; letter-spacing: 2px; }
+.circle { display: block; width: 36px; height: 36px; border-radius: 50%; background: var(--desk); border: 1.5px solid var(--line); margin-inline: auto; }
+.input { display: block; height: 30px; border: 1.5px solid var(--ink); border-radius: 7px; background: var(--paper); }
+.play { display: grid; place-items: center; }
+.play::after { content: ""; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--ink); background: var(--paper); }
+.pinfo { display: grid; gap: 12px; }
+.is-desk .pinfo { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: start; }
+.pinfo .col { display: grid; gap: 10px; }
+.drawer { margin-left: 18%; padding: 10px; border: var(--border); border-radius: 10px 0 0 10px; background: var(--surface); box-shadow: -4px 4px 0 var(--ink); display: grid; gap: 8px; }
+.is-desk .drawer { margin-left: 55%; }
+.progress { display: block; height: 10px; border: 1.5px solid var(--ink); border-radius: 99px; background: linear-gradient(90deg, var(--green) 60%, var(--paper) 60%); }
+.lock { font-size: 13px; font-weight: 700; color: var(--muted); text-align: center; }
+.f404 { font-weight: 900; font-stretch: 125%; font-size: 34px; text-align: center; color: var(--line); line-height: 1; }
+
+/* the picker: two wheels and a price, docked at the bottom so it never covers the part it lights up */
+.dock { position: fixed; z-index: 10; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); width: min(580px, calc(100% - 24px)); transform: translateX(-50%); padding: 14px; border: var(--border); border-radius: 18px; background: var(--paper); box-shadow: 6px 6px 0 var(--ink); display: grid; gap: 12px; animation: up .18s ease-out; }
+.dock[hidden] { display: none; }
+@keyframes up { from { transform: translate(-50%, 16px); opacity: 0; } }
+.dock__head { display: flex; gap: 10px; align-items: center; }
+.dock__head .num { min-width: 30px; height: 30px; font-size: 14px; }
+.dock__name { flex: 1; min-width: 0; font-weight: 900; font-size: 16px; line-height: 1.2; }
+.dock__name small { display: block; font-weight: 600; font-size: 12.5px; color: var(--muted); }
+.x { flex: none; width: 32px; height: 32px; border: var(--border); border-radius: 50%; background: var(--paper); font-weight: 900; cursor: pointer; line-height: 1; padding: 0; }
+.x:hover { background: var(--desk); }
+.wheels { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 10px; }
+.cap { margin-bottom: 4px; font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.wheel { position: relative; border: var(--border); border-radius: 12px; background: var(--surface); overflow: hidden; }
+.wheel__band { position: absolute; left: 4px; right: 4px; top: var(--row); height: var(--row); border: 2px solid var(--ink); border-radius: 9px; background: var(--yellow); pointer-events: none; }
+.wheel ul { position: relative; list-style: none; margin: 0; padding: var(--row) 0; height: calc(var(--row) * 3); overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; scrollbar-width: none; -webkit-mask-image: linear-gradient(transparent, #000 32%, #000 68%, transparent); mask-image: linear-gradient(transparent, #000 32%, #000 68%, transparent); }
+.wheel ul::-webkit-scrollbar { display: none; }
+.wheel ul:focus-visible { outline: none; }
+.wheel:has(ul:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; }
+.wheel li { height: var(--row); scroll-snap-align: center; display: flex; align-items: center; gap: 8px; padding: 0 14px; font-weight: 700; font-size: 14.5px; color: var(--muted); cursor: pointer; user-select: none; }
+.wheel li span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wheel li i { flex: none; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--c); }
+.wheel li.is-on { color: var(--ink); font-weight: 900; }
+.wheel--one ul { overflow: hidden; }
+.dock__foot { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.quote { min-width: 0; }
+.quote b { display: block; font-weight: 900; font-stretch: 112%; font-size: 26px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.quote small { display: block; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.quote.pop b { animation: pop .22s ease-out; }
+@keyframes pop { 40% { transform: scale(1.08); } }
+.in { width: 100%; min-height: 42px; padding: 8px 12px; border: var(--border); border-radius: 10px; background: var(--paper); font-size: 15px; }
+textarea.in { min-height: 70px; resize: vertical; }
+.in:focus { outline: none; box-shadow: 3px 3px 0 var(--ink); }
+.err { color: var(--error); font-size: 13px; font-weight: 700; }
+.err:empty { display: none; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 9px 18px; border: var(--border); border-radius: 999px; background: var(--paper); font-weight: 800; font-size: 13px; letter-spacing: .03em; text-transform: uppercase; cursor: pointer; box-shadow: var(--shadow); transition: transform .12s, box-shadow .12s; white-space: nowrap; }
+.btn:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+.btn--go { background: var(--yellow); }
+.link { border: 0; background: none; padding: 0; font-weight: 800; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* the fix list button and drawer, like a store's cart */
+.pill { position: fixed; z-index: 8; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border: var(--border); border-radius: 999px; background: var(--yellow); box-shadow: var(--shadow); font-weight: 800; font-size: 14px; cursor: pointer; transition: transform .12s, box-shadow .12s; }
+.pill:hover { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.pill .num { min-width: 28px; height: 28px; font-size: 13px; background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pill b { font-weight: 900; font-variant-numeric: tabular-nums; }
+.pill.bump { animation: bump .35s ease-out; }
+@keyframes bump { 30% { transform: scale(1.1) rotate(-2deg); } }
+body.dock-open .pill { display: none; }
+.toast { position: fixed; z-index: 9; left: 50%; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: calc(100% - 32px); padding: 9px 14px; border: var(--border); border-radius: 12px; background: var(--teal); box-shadow: 3px 3px 0 var(--ink); font-weight: 800; font-size: 14px; }
+.toast:empty { display: none; }
+
+.scrim { position: fixed; inset: 0; z-index: 20; background: #1111114d; }
+.scrim[hidden], .list[hidden] { display: none; }
+.list { position: fixed; z-index: 21; top: 0; right: 0; bottom: 0; width: min(430px, 100%); overflow-y: auto; overscroll-behavior: contain; padding: 20px max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) 18px; border-left: var(--border); background: var(--paper); display: grid; align-content: start; gap: 20px; animation: slide .2s ease-out; }
+@keyframes slide { from { transform: translateX(40px); opacity: 0; } }
+.list__head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.list h2 { font-weight: 900; font-stretch: 112%; font-size: 24px; line-height: 1.1; }
+.list h2:focus { outline: none; }
+/* list: reads like a store's order summary. Lines and type do the work, only the promise is a card */
+.items { list-style: none; padding: 0; display: grid; gap: 18px; }
+.item { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 0 12px; align-items: start; }
+.thumb { position: relative; width: 44px; height: 44px; border-radius: 9px; background: var(--c); border: 1.5px solid #11111126; }
+.thumb b { position: absolute; top: -7px; left: -7px; display: grid; place-items: center; min-width: 21px; height: 21px; padding: 0 5px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 11.5px; font-weight: 900; }
+.item__name { display: block; font-weight: 800; font-size: 15px; line-height: 1.25; }
+.item__meta { display: block; margin-top: 2px; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+.item__end { display: grid; justify-items: end; gap: 4px; }
+.price { font-weight: 900; font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.price.soft { font-weight: 700; font-size: 13px; color: var(--muted); }
+.remove { border: 0; background: none; padding: 0; font-size: 12px; font-weight: 700; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.remove:hover { color: var(--ink); }
+.notefield { grid-column: 2 / -1; display: flex; gap: 6px; align-items: baseline; margin-top: 6px; font-size: 12.5px; }
+.notefield span { flex: none; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+textarea.itemnote { flex: 1; min-width: 0; min-height: 22px; max-height: 140px; padding: 1px 0 3px; border: 0; border-bottom: 1.5px dashed var(--line); border-radius: 0; background: none; font-size: 12.5px; line-height: 1.4; resize: none; field-sizing: content; }
+textarea.itemnote::placeholder { color: #8a8478; }
+textarea.itemnote:focus { outline: none; border-bottom: 1.5px solid var(--ink); }
+.empty { font-size: 14px; color: var(--muted); }
+.sum { display: grid; gap: 8px; margin: 0; padding-top: 16px; border-top: 1.5px solid var(--line); font-size: 14px; }
+.sum div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.sum dt { color: var(--muted); }
+.sum dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.sum .sum__total { margin-top: 6px; }
+.sum__total dt { color: var(--ink); font-weight: 900; font-size: 19px; }
+.sum__total dd { font-weight: 900; font-stretch: 112%; font-size: 28px; line-height: 1; }
+.sum__total dd small { margin-right: 6px; font-stretch: 100%; font-size: 12px; font-weight: 700; color: var(--muted); }
+.promise { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; padding: 16px; border: var(--border); border-radius: 14px; background: var(--yellow); box-shadow: var(--shadow); }
+.promise svg { grid-row: span 2; width: 28px; height: 28px; }
+.promise b { font-weight: 900; font-size: 16px; line-height: 1.25; }
+.promise p { font-size: 14px; font-weight: 600; }
+.send { display: grid; gap: 12px; padding-top: 16px; border-top: 1.5px solid var(--line); }
+.send .in { border: 1.5px solid #c9c1b2; border-radius: 10px; }
+.send .in:focus { border-color: var(--ink); box-shadow: none; }
+.field { display: grid; gap: 5px; }
+.field label { font-weight: 800; font-size: 13px; }
+.field[hidden] { display: none; }
+textarea.note { min-height: 50px; max-height: 120px; field-sizing: content; font-size: 14.5px; }
+.attach { position: relative; justify-self: start; font-weight: 800; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.attach input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.attach:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; }
+.small { font-size: 12.5px; color: var(--muted); }
+.done { font-size: 14px; font-weight: 700; padding: 12px; border: 1.5px solid var(--ink); border-radius: 10px; background: var(--teal); }
+.copybox { min-height: 110px; font-family: ui-monospace, monospace; font-size: 12px; }
+
+.notes { margin-top: 40px; border: 2px dashed var(--ink); border-radius: 16px; background: var(--surface); padding: 16px 20px; }
+.notes summary { cursor: pointer; font-weight: 900; font-size: 16px; }
+.notes .body { display: grid; gap: 16px; margin-top: 14px; }
+.notes h3 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.notes p, .notes li { font-size: 14px; max-width: 75ch; }
+.notes ul { padding-left: 18px; display: grid; gap: 4px; margin-top: 6px; }
+.ncols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+.scroll { overflow-x: auto; margin-top: 6px; }
+.rules { width: 100%; border-collapse: collapse; font-size: 14px; }
+.rules th, .rules td { text-align: left; padding: 6px 8px; border-bottom: 1.5px dashed var(--line); vertical-align: top; }
+.rules th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.rules td:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 600px) {
+  .dock { left: 0; bottom: 0; width: 100%; transform: none; border-radius: 18px 18px 0 0; border-width: 2px 0 0; box-shadow: 0 -4px 0 var(--ink); padding: 14px max(14px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)); }
+  @keyframes up { from { transform: translateY(24px); opacity: 0; } }
+  .wheels { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 8px; }
+  .wheel li { padding: 0 10px; font-size: 14px; gap: 6px; }
+  .quote b { font-size: 23px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <div class="brand">Qonicode</div>
+  <h1 class="title">What should<br>I fix?</h1>
+  <p class="lede">Tap the section that's wrong. Roll to the part and the problem, and the price shows straight away.</p>
+
+  <nav class="tabs" id="tabs" aria-label="Page of the example store"></nav>
+  <div class="frame" id="frame"></div>
+  <ul class="legend" id="legend" aria-label="What the colours mean"></ul>
+  <p class="elsewhere">Your store looks different? Pick the section that does the same job. Can't find it? <button type="button" class="link" data-act="elsewhere">Describe it in a few words</button></p>
+
+  <details class="notes">
+    <summary>Catatan untuk diskusi (ID)</summary>
+    <div class="body ncols">
+      <div>
+        <h3>Yang berubah dari Fix List</h3>
+        <ul>
+          <li>Toko contoh selebar halaman. Fix list pindah ke tombol keranjang di pojok kanan bawah, dibuka seperti cart drawer.</li>
+          <li>Tidak ada tombol Phone/Desktop. Layar dipilih lewat masalahnya: "Looks wrong on phone" atau "on desktop". Wireframe mengikuti layar pengunjung.</li>
+          <li>Tidak ada tombol drawer. Mobile menu sudah termasuk Header › Menu, dan Cart drawer jadi section di halaman Cart.</li>
+          <li>Daftar dibuka kosong, tanpa contoh.</li>
+          <li>Dua roda: bagian dan masalah. Bagian yang sedang dipilih di roda menyala kuning di toko contoh, dan harga berubah saat roda diputar. Satu tombol "Add".</li>
+          <li>Mengetuk bagian kecil di toko langsung memutar roda ke bagian itu.</li>
+          <li>Warna = jenis masalah, sama di semua tempat: titik di roda, nomor di picker dan di toko contoh, thumbnail di fix list. Ada legenda di bawah toko contoh.</li>
+          <li>Note selalu ada di picker dengan satu pertanyaan untuk semua masalah: "what you see, and how it should be". Wajib hanya untuk "Something else".</li>
+          <li>Fix list meniru ringkasan pesanan di checkout: baris item dengan nomor, garis pemisah, total paling besar. Satu-satunya kartu adalah janji harga (kuning). Note setiap item bisa diedit langsung.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Aturan harga (angka contoh)</h3>
+        <div class="scroll">
+          <table class="rules">
+            <thead><tr><th>Masalah</th><th>Harga</th></tr></thead>
+            <tbody>
+              <tr><td>Looks wrong on phone, per template (bagian lain di template yang sama included)</td><td>$40, +$15</td></tr>
+              <tr><td>Looks wrong on desktop</td><td>after a look</td></tr>
+              <tr><td>Doesn't work</td><td>$40–$100</td></tr>
+              <tr><td>Variant picker (phone / doesn't work)</td><td>$45–$90</td></tr>
+              <tr><td>Reviews, Cart upsell (app)</td><td>$35–$70</td></tr>
+              <tr><td>Change it</td><td>$25, +$10</td></tr>
+              <tr><td>Add something here</td><td>$60–$120</td></tr>
+              <tr><td>Something else, Checkout</td><td>after a look</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3>Perlu kamu putuskan</h3>
+        <ul>
+          <li>Semua angka harga.</li>
+          <li>Header dan footer dihitung satu template sendiri ("Every page")?</li>
+          <li>Picker menempel di bawah layar supaya tidak menutupi bagian yang menyala. Atau kamu lebih suka melayang di dekat section seperti sketsamu?</li>
+          <li>Setelah "Add", picker tertutup. Atau tetap terbuka untuk menambah masalah lain di section yang sama?</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+</div>
+
+<div class="dock" id="dock" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button type="button" class="pill" id="pill" data-act="openlist"></button>
+<div class="scrim" id="scrim" data-act="closelist" hidden></div>
+<aside class="list" id="list" aria-label="Your fix list" hidden></aside>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => '$' + Math.round(n);
+const ROW = 40;
+const wide = matchMedia('(min-width: 760px)');
+const smooth = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
+/* wireframe helpers */
+const L = (w, cls = '', h) => `<span class="l ${cls}" style="width:${w}%${h ? `;height:${h}px` : ''}"></span>`;
+const B = h => `<span class="blk" style="height:${h}px"></span>`;
+const BT = (t, cls = '') => `<span class="bt ${cls}">${t}</span>`;
+const card = h => `<span class="card">${B(h)}${L(80)}${L(40)}</span>`;
+const cards = (d, h = 64) => `<span class="cards">${card(h).repeat(d ? 4 : 2)}</span>`;
+const circ = (size, lines) => `<span class="card"><span class="circle" style="width:${size}px;height:${size}px"></span>${lines}</span>`;
+
+/* Every section a client can pick. global = on every page; kind = which price rule its problems use */
+const GLOBAL_TOP = [
+  { id: 'announcement', name: 'Announcement bar', global: true, art: () => `<span class="ann">${L(60)}</span>` },
+  { id: 'header', name: 'Header', global: true, parts: ['Logo', 'Menu', 'Search', 'Cart icon'],
+    art: (d, p) => `<span class="row">${d
+      ? p('Logo', '<span class="logo"></span>') + `<span class="grow">${p('Menu', `<span class="nav">${L(0)}${L(0)}${L(0)}${L(0)}</span>`)}</span>`
+      : p('Menu', '<span class="burger"><i></i><i></i><i></i></span>') + `<span class="grow" style="display:flex;justify-content:center">${p('Logo', '<span class="logo"></span>')}</span>`}
+      ${p('Search', '<span class="ico"></span>')}${p('Cart icon', '<span class="ico bag"></span>')}</span>` }
+];
+const GLOBAL_BOTTOM = [
+  { id: 'newsletter', name: 'Newsletter signup', global: true, art: () => `${L(50, 'c', 12)}<span class="row"><span class="grow input"></span>${BT('Subscribe').replace('bt', 'bt" style="width:110px')}</span>` },
+  { id: 'footer', name: 'Footer', global: true, parts: ['Footer menus', 'Social icons', 'Payment icons'],
+    art: (d, p) => `${p('Footer menus', `<span class="g3">${[0, 1, 2].map(() => `<span style="display:grid;gap:5px">${L(70)}${L(55)}${L(60)}</span>`).join('')}</span>`)}<span class="row" style="justify-content:space-between">${p('Social icons', '<span class="dots"><i></i><i></i><i></i></span>')}${p('Payment icons', '<span class="pay"><i></i><i></i><i></i><i></i></span>')}</span>` }
+];
+
+const PAGES = {
+  home: { name: 'Home', tmpl: 'Home page', sections: [
+    { id: 'hero', name: 'Image banner', parts: ['Image', 'Heading', 'Button'], art: (d, p) => `${p('Image', B(d ? 170 : 140))}${p('Heading', L(70, 'dark', 14) + L(50))}${p('Button', BT('Shop now'))}` },
+    { id: 'featured', name: 'Featured collection', parts: ['Product cards', 'View all button'], art: (d, p) => `${L(40, '', 12)}${p('Product cards', cards(d))}${p('View all button', BT('View all'))}` },
+    { id: 'collist', name: 'Collection list', art: () => `${L(35, '', 12)}<span class="g3">${circ(56, L(60, 'c')).repeat(3)}</span>` },
+    { id: 'imgtext', name: 'Image with text', parts: ['Image', 'Text', 'Button'], art: (d, p) => `<span class="${d ? 'g2' : 'art'}">${p('Image', B(110))}<span class="art">${p('Text', L(80, 'dark', 12) + L(90) + L(70))}${p('Button', BT('Learn more'))}</span></span>` },
+    { id: 'multicol', name: 'Multicolumn', art: () => `<span class="g3">${circ(36, L(70, 'c') + L(50, 'c')).repeat(3)}</span>` },
+    { id: 'testimonials', name: 'Testimonials', art: d => `<span class="${d ? 'g3' : 'g2'}">${('<span class="card blk" style="padding:8px"><span class="stars">★★★★★</span>' + L(90) + L(70) + '</span>').repeat(d ? 3 : 2)}</span>` },
+    { id: 'video', name: 'Video', art: d => `<span class="blk play" style="height:${d ? 180 : 130}px"></span>` }
+  ] },
+  product: { name: 'Product', tmpl: 'Product page', sections: [
+    { id: 'info', name: 'Product information', parts: ['Media gallery', 'Title', 'Price', 'Variant picker', 'Quantity', 'Buy buttons', 'Description', 'Collapsible tabs'], partKinds: { 'Variant picker': 'data' },
+      art: (d, p) => `<span class="pinfo">${p('Media gallery', B(d ? 260 : 200) + `<span class="row">${'<span class="blk" style="flex:1;height:34px"></span>'.repeat(4)}</span>`)}
+        <span class="col">${p('Title', L(85, 'dark', 16))}${p('Price', L(30, 'dark', 11))}${p('Variant picker', L(25) + '<span class="chipsw"><i></i><i></i><i></i><i></i></span>')}${p('Quantity', '<span class="stepper"><i></i><i></i><i></i></span>')}${p('Buy buttons', BT('Add to cart') + BT('Buy it now', 'dark'))}${p('Description', L(95) + L(85) + L(60))}${p('Collapsible tabs', '<span class="acc"></span><span class="acc"></span><span class="acc"></span>')}</span></span>` },
+    { id: 'reviews', name: 'Reviews', kind: 'app', parts: ['Star rating', 'Review list', 'Write a review'], art: (d, p) => `${p('Star rating', '<span class="stars">★★★★☆</span>' + L(30))}${p('Review list', L(80) + L(60) + L(75) + L(50))}${p('Write a review', BT('Write a review').replace('bt', 'bt" style="width:160px'))}` },
+    { id: 'related', name: 'Related products', art: d => `${L(40, '', 12)}${cards(d, 56)}` },
+    { id: 'sticky', name: 'Sticky add to cart', phoneOnly: true, art: () => `<span class="row" style="padding:6px;border:1.5px solid var(--ink);border-radius:10px"><span class="grow">${L(70)}${L(30, 'dark')}</span>${BT('Add').replace('bt', 'bt" style="width:90px')}</span>` }
+  ] },
+  collection: { name: 'Collection', tmpl: 'Collection page', sections: [
+    { id: 'cbanner', name: 'Collection banner', art: () => `${L(50, 'dark', 16)}${L(75)}` },
+    { id: 'filters', name: 'Filters and sort', parts: ['Filters', 'Sort'], art: (d, p) => `<span class="row" style="justify-content:space-between">${p('Filters', '<span class="chipsw"><i style="width:60px"></i><i style="width:50px;background:var(--paper)"></i><i style="width:56px"></i></span>')}${p('Sort', '<span class="input" style="width:90px"></span>')}</span>` },
+    { id: 'grid', name: 'Product grid', parts: ['Product cards', 'Quick add', 'Sale badges'], art: (d, p) => `${p('Product cards', `<span class="cards">${card(70).repeat(d ? 4 : 2)}</span>`)}<span class="row">${p('Sale badges', '<span class="chipsw"><i style="width:44px;background:var(--orange)"></i></span>')}${p('Quick add', BT('Quick add').replace('bt', 'bt" style="width:120px'))}</span>` },
+    { id: 'pagination', name: 'Pagination', art: () => `<span class="row" style="justify-content:center">${'<span class="blk" style="width:26px;height:26px"></span>'.repeat(4)}</span>` }
+  ] },
+  cart: { name: 'Cart', tmpl: 'Cart page', sections: [
+    { id: 'cartdrawer', name: 'Cart drawer', parts: ['Free shipping bar', 'Cart items', 'Upsell', 'Checkout button'],
+      art: (d, p) => `<span class="drawer">${p('Free shipping bar', '<span class="progress"></span>')}${p('Cart items', `<span class="row"><span class="blk" style="width:40px;height:40px"></span><span class="grow" style="display:grid;gap:5px">${L(80)}${L(40)}</span></span>`)}${p('Upsell', `<span class="row">${L(30)}${L(20)}</span>`)}${p('Checkout button', BT('Check out', 'dark'))}</span>` },
+    { id: 'items', name: 'Cart items', parts: ['Product rows', 'Quantity', 'Remove'], art: (d, p) => `${p('Product rows', [0, 1].map(() => `<span class="row"><span class="blk" style="width:56px;height:56px"></span><span class="grow" style="display:grid;gap:5px">${L(70)}${L(30)}</span></span>`).join(''))}<span class="row" style="justify-content:space-between">${p('Quantity', '<span class="stepper"><i></i><i></i><i></i></span>')}${p('Remove', L(0).replace('width:0%', 'width:60px'))}</span>` },
+    { id: 'summary', name: 'Subtotal and checkout', parts: ['Discount code', 'Order note', 'Checkout button'], art: (d, p) => `${p('Discount code', '<span class="input"></span>')}${p('Order note', '<span class="input" style="height:44px"></span>')}<span class="row" style="justify-content:space-between">${L(25)}${L(20, 'dark')}</span>${p('Checkout button', BT('Check out', 'dark'))}` },
+    { id: 'upsell', name: 'Cart upsell', kind: 'app', art: d => `${L(40, '', 12)}<span class="${d ? 'g3' : 'g2'}">${('<span class="row blk" style="padding:6px"><span class="blk" style="width:36px;height:36px;background:var(--paper)"></span><span class="grow">' + L(70) + '</span></span>').repeat(d ? 3 : 2)}</span>` }
+  ] },
+  other: { name: 'Other pages', sections: [
+    { id: 'search', name: 'Search results', tmpl: 'Search page', art: () => `<span class="input"></span>${L(80)}${L(70)}${L(75)}` },
+    { id: 'blog', name: 'Blog and articles', tmpl: 'Blog pages', art: d => `<span class="${d ? 'g3' : 'g2'}">${('<span class="card">' + B(60) + L(80) + L(60) + '</span>').repeat(d ? 3 : 2)}</span>` },
+    { id: 'contact', name: 'Contact form', tmpl: 'Contact page', parts: ['Form fields', 'Send button'], art: (d, p) => `${p('Form fields', '<span class="input"></span><span class="input"></span><span class="input" style="height:60px"></span>')}${p('Send button', BT('Send'))}` },
+    { id: 'page', name: 'About or custom page', tmpl: 'Custom pages', art: () => `${L(45, 'dark', 16)}${L(95)}${L(90)}${L(70)}` },
+    { id: 'notfound', name: '404 page', tmpl: '404 page', art: () => `<span class="f404">404</span>${L(50, 'c')}` },
+    { id: 'checkout', name: 'Checkout', tmpl: 'Checkout', limited: 'Limited by Shopify without Plus. Tell me what you need and I check what is possible.',
+      art: () => `<span class="lock">Limited by Shopify</span><span class="input"></span><span class="input"></span>${BT('Pay now', 'dark')}` }
+  ] }
+};
+const ELSEWHERE = { id: 'elsewhere', name: 'Somewhere else', tmpl: 'Your store', limited: 'Not in the example store', art: () => '' };
+
+/* The second wheel. "Looks wrong" carries the screen, so there is no phone/desktop switch */
+const PROBS = [
+  { id: 'phone', why: 'looks', device: 'phone', t: 'Looks wrong on phone', short: 'Looks wrong · phone', c: 'var(--orange)' },
+  { id: 'desktop', why: 'looks', device: 'desktop', t: 'Looks wrong on desktop', short: 'Looks wrong · desktop', c: 'var(--teal)' },
+  { id: 'broken', why: 'broken', t: "Doesn't work", c: 'var(--pink)' },
+  { id: 'change', why: 'change', t: 'Change it', c: 'var(--purple)' },
+  { id: 'add', why: 'add', t: 'Add something here', c: 'var(--green)' },
+  { id: 'other', why: 'other', t: 'Something else', c: 'var(--yellow)' }
+];
+const PROB = Object.fromEntries(PROBS.map(p => [p.id, p]));
+
+const S = { page: 'product', sel: null, items: [], url: '', email: '', msg: '', shots: 0, sent: false, copied: false, errors: {} };
+
+const D = () => wide.matches;
+const sectionsFor = pid => {
+  const own = PAGES[pid].sections.filter(s => !(s.phoneOnly && D()));
+  return pid === 'other' ? own : [...GLOBAL_TOP, ...own, ...GLOBAL_BOTTOM];
+};
+const findSection = id => id === 'elsewhere' ? ELSEWHERE : [...GLOBAL_TOP, ...GLOBAL_BOTTOM, ...Object.values(PAGES).flatMap(p => p.sections)].find(s => s.id === id);
+const tmplOf = s => s.global ? 'Every page' : (s.tmpl || PAGES[S.page].tmpl);
+const partsOf = s => ['Whole section', ...(s.parts || [])];
+const probsOf = s => s.limited ? [PROB.other] : PROBS;
+const crumbOf = (tmpl, name, part) => `${tmpl} › ${name}${part !== 'Whole section' ? ' › ' + part : ''}`;
+
+/* Price every item, in list order. Phone layout: first template $40, each further template $15, more parts on an already-listed template are included. */
+function priceAll(items) {
+  const layout = new Set();
+  let changes = 0;
+  return items.map(it => {
+    if (it.why === 'other' || it.limited) return { after: true, rule: 'I look at your store first' };
+    if (it.why === 'looks' && it.device === 'desktop') return { after: true, rule: 'Desktop layout: I look at your store first' };
+    if ((it.why === 'looks' || it.why === 'broken') && it.kind === 'data') return { low: 45, high: 90, rule: 'Product options and data', days: 2 };
+    if ((it.why === 'looks' || it.why === 'broken') && it.kind === 'app') return { low: 35, high: 70, rule: 'Make the app fit your theme', days: 1 };
+    if (it.why === 'looks') {
+      if (layout.has(it.tmpl)) return { low: 0, high: 0, rule: `Part of the ${it.tmpl.toLowerCase()} phone fix`, days: 0 };
+      const price = layout.size ? 15 : 40;
+      layout.add(it.tmpl);
+      return { low: price, high: price, rule: `Phone layout · ${it.tmpl}${price === 15 ? ', extra page' : ''}`, days: layout.size === 1 ? 2 : 1 };
+    }
+    if (it.why === 'broken') return { low: 40, high: 100, rule: 'Repair', days: 2 };
+    if (it.why === 'change') { const price = changes++ ? 10 : 25; return { low: price, high: price, rule: price === 25 ? 'Text, label or setting change' : 'Extra change', days: .5 }; }
+    if (it.why === 'add') return { low: 60, high: 120, rule: 'New section, simple to advanced', days: 3 };
+    return { after: true, rule: 'I look at your store first' };
+  });
+}
+function totals() {
+  const ps = priceAll(S.items);
+  const low = ps.reduce((a, p) => a + (p.low || 0), 0), high = ps.reduce((a, p) => a + (p.high || 0), 0);
+  const after = ps.filter(p => p.after).length;
+  const days = Math.max(1, Math.ceil(ps.reduce((a, p) => a + (p.days ?? 0), 0)));
+  return { ps, low, high, after, days };
+}
+const priceText = p => p.after ? 'After a look' : p.high === 0 ? 'Included' : p.high > p.low ? `${money(p.low)}–${money(p.high)}` : money(p.low);
+const rangeText = t => t.low === t.high ? money(t.low) : `${money(t.low)}–${money(t.high)}`;
+
+/* The item the wheels point at right now, priced as if it were added last */
+function candidate() {
+  const s = S.sel.s, part = S.sel.part, pr = PROB[S.sel.prob];
+  const tmpl = s.id === 'elsewhere' ? 'Your store' : tmplOf(s);
+  return { secId: s.id, page: S.page, part, tmpl, crumb: crumbOf(tmpl, s.name, part), why: pr.why, prob: pr.id, device: pr.device, kind: (s.partKinds && s.partKinds[part]) || s.kind || null, limited: !!s.limited };
+}
+
+/* ---------- the store ---------- */
+function renderTabs() {
+  $('tabs').innerHTML = Object.entries(PAGES).map(([k, p]) => `<button type="button" data-tab="${k}" aria-pressed="${S.page === k}">${p.name}</button>`).join('');
+}
+function renderFrame() {
+  const d = D();
+  const frame = $('frame');
+  frame.className = 'frame ' + (d ? 'is-desk' : 'is-phone');
+  /* each number takes the colour of its problem, same as in the wheel and the fix list */
+  const num = x => `<b class="num" style="--c:${PROB[x.it.prob].c}" aria-label="item ${x.n}, ${PROB[x.it.prob].t}">${x.n}</b>`;
+  frame.innerHTML = `<div class="frame__bar" aria-hidden="true"><i></i><i></i><i></i></div>` + sectionsFor(S.page).map(s => {
+    const mine = S.items.map((it, i) => ({ it, n: i + 1 })).filter(x => x.it.secId === s.id);
+    const p = (name, inner) => `<button type="button" class="part" tabindex="-1" data-part="${esc(name)}" aria-label="${esc(s.name)}: ${esc(name)}">${inner}${mine.filter(x => x.it.part === name).map(x => num(x)).join('')}</button>`;
+    return `<section class="sec ${s.limited ? 'is-limited' : ''}" data-sec="${s.id}" aria-label="${esc(s.name)}">
+      <button type="button" class="tag" data-pick="${s.id}">${esc(s.name)}${mine.filter(x => x.it.part === 'Whole section').map(x => num(x)).join('')}</button>
+      <div class="art">${s.art(d, p)}</div></section>`;
+  }).join('');
+  highlight();
+}
+/* light up the section, and the part the first wheel is on */
+function highlight(reveal) {
+  const frame = $('frame');
+  frame.querySelectorAll('.is-sel, .is-whole').forEach(el => el.classList.remove('is-sel', 'is-whole'));
+  if (!S.sel) return;
+  const sec = frame.querySelector(`.sec[data-sec="${S.sel.s.id}"]`);
+  if (!sec) return;
+  sec.classList.add('is-sel');
+  let target = sec;
+  if (S.sel.part === 'Whole section') sec.classList.add('is-whole');
+  else {
+    const part = [...sec.querySelectorAll('.part')].find(el => el.dataset.part === S.sel.part);
+    if (part) { part.classList.add('is-sel'); target = part; }
+  }
+  if (reveal) keepVisible(target);
+}
+/* scroll just enough that the lit part sits between the tabs and the picker */
+function keepVisible(el) {
+  const r = el.getBoundingClientRect();
+  const top = $('tabs').getBoundingClientRect().bottom + 12;
+  const dock = $('dock');
+  /* offsetTop ignores the dock's slide-in animation */
+  const bottom = (dock.hidden ? innerHeight : dock.offsetTop) - 16;
+  if (r.top < top) scrollBy({ top: r.top - top, behavior: smooth });
+  else if (r.bottom > bottom) scrollBy({ top: Math.min(r.bottom - bottom, r.top - top), behavior: smooth });
+}
+
+/* ---------- the picker ---------- */
+function wheelHTML(id, label, options, on) {
+  return `<div><div class="cap" id="${id}-cap">${label}</div>
+    <div class="wheel ${options.length === 1 ? 'wheel--one' : ''}"><span class="wheel__band" aria-hidden="true"></span>
+      <ul id="${id}" role="listbox" tabindex="0" data-on="${on}" aria-labelledby="${id}-cap" aria-activedescendant="${id}-${on}">
+        ${options.map((o, i) => `<li role="option" id="${id}-${i}" data-i="${i}" class="${i === on ? 'is-on' : ''}" aria-selected="${i === on}" ${o.c ? `style="--c:${o.c}" title="${esc(o.t)}"` : ''}>${o.c ? '<i aria-hidden="true"></i>' : ''}<span>${esc(o.short && innerWidth < 420 ? o.short : o.t)}</span></li>`).join('')}
+      </ul></div></div>`;
+}
+function openPicker(s, part = 'Whole section') {
+  const same = S.sel && S.sel.s.id === s.id;
+  if (same) { spinTo('wPart', partsOf(s).indexOf(part)); return; }
+  const probs = probsOf(s);
+  const keep = S.sel && probs.some(p => p.id === S.sel.prob) ? S.sel.prob : probs[0].id;
+  S.sel = { s, part, prob: keep, note: '' };
+  const tmpl = s.id === 'elsewhere' ? 'Your store' : tmplOf(s);
+  const dock = $('dock');
+  dock.innerHTML = `
+    <div class="dock__head">
+      <span class="num" id="dockNum" aria-hidden="true">${S.items.length + 1}</span>
+      <div class="dock__name">${esc(s.name)}<small>${esc(tmpl)}${s.limited && s.id !== 'elsewhere' ? ' · ' + esc(s.limited) : ''}</small></div>
+      <button type="button" class="x" data-act="closepick" aria-label="Close">×</button>
+    </div>
+    <div class="wheels">
+      ${wheelHTML('wPart', s.id === 'elsewhere' ? 'Where' : 'Which part', partsOf(s).map(t => ({ t })), partsOf(s).indexOf(part))}
+      ${wheelHTML('wProb', "What's wrong", probs, probs.findIndex(p => p.id === keep))}
+    </div>
+    <div class="field">
+      <label for="note">Note: what you see, and how it should be</label>
+      <textarea class="in note" id="note" rows="2" maxlength="300" placeholder="The title wraps to three lines. It should fit on one."></textarea>
+      <div class="err" id="noteErr"></div>
+    </div>
+    <div class="dock__foot">
+      <div class="quote" id="quote" aria-live="polite"><b></b><small></small></div>
+      <button type="button" class="btn btn--go" data-act="add">Add to list</button>
+    </div>`;
+  dock.setAttribute('role', 'dialog');
+  dock.setAttribute('aria-label', `What's wrong with ${s.name}`);
+  dock.hidden = false;
+  document.body.classList.add('dock-open');
+  for (const id of ['wPart', 'wProb']) bindWheel(id);
+  $('wPart').scrollTop = partsOf(s).indexOf(part) * ROW;
+  $('wProb').scrollTop = probs.findIndex(p => p.id === keep) * ROW;
+  update(true);
+  document.body.style.paddingBottom = dock.offsetHeight + 24 + 'px';
+  highlight(true);
+}
+function closePicker() {
+  S.sel = null;
+  $('dock').hidden = true;
+  document.body.classList.remove('dock-open');
+  document.body.style.paddingBottom = '';
+  highlight();
+}
+function bindWheel(id) {
+  const ul = $(id);
+  const count = ul.children.length;
+  ul.addEventListener('scroll', () => {
+    const i = Math.max(0, Math.min(count - 1, Math.round(ul.scrollTop / ROW)));
+    if (+ul.dataset.on !== i) setWheel(id, i);
+  }, { passive: true });
+  ul.addEventListener('keydown', e => {
+    const step = { ArrowDown: 1, ArrowUp: -1 }[e.key];
+    if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); return spinTo(id, e.key === 'Home' ? 0 : count - 1); }
+    if (!step) return;
+    e.preventDefault();
+    spinTo(id, Math.max(0, Math.min(count - 1, (+ul.dataset.on || 0) + step)));
+  });
+}
+function spinTo(id, i) { $(id).scrollTo({ top: i * ROW, behavior: smooth }); }
+/* runs while the wheel is still rolling, so the store and the price follow it live */
+function setWheel(id, i) {
+  const ul = $(id);
+  ul.dataset.on = i;
+  [...ul.children].forEach((li, n) => { li.classList.toggle('is-on', n === i); li.setAttribute('aria-selected', n === i); });
+  ul.setAttribute('aria-activedescendant', `${id}-${i}`);
+  if (id === 'wPart') { S.sel.part = partsOf(S.sel.s)[i]; highlight(true); }
+  else S.sel.prob = probsOf(S.sel.s)[i].id;
+  update();
+}
+function update(first) {
+  const c = candidate();
+  const p = priceAll([...S.items, c]).at(-1);
+  $('dockNum').style.setProperty('--c', PROB[c.prob].c);
+  const q = $('quote');
+  const big = p.after ? 'After a look' : p.high === 0 ? 'Included' : (S.items.length ? '+' : '') + priceText(p);
+  if (q.querySelector('b').textContent !== big && !first) { q.classList.remove('pop'); void q.offsetWidth; q.classList.add('pop'); }
+  q.querySelector('b').textContent = big;
+  q.querySelector('small').textContent = p.rule;
+  $('noteErr').textContent = '';
+  if (!first) document.body.style.paddingBottom = $('dock').offsetHeight + 24 + 'px';
+}
+function addItem() {
+  const c = candidate();
+  const note = ($('note').value || '').trim();
+  if (c.why === 'other' && !note) { $('noteErr').textContent = 'For "Something else", write a few words so I know what to look for'; $('note').focus(); return; }
+  S.items.push({ ...c, note });
+  const n = S.items.length, p = totals().ps[n - 1];
+  closePicker();
+  renderFrame();
+  renderPill(true);
+  toast(`Added ${n}: ${c.part === 'Whole section' ? c.crumb.split(' › ').at(-1) : c.part} · ${priceText(p)}`);
+  if (!$('list').hidden) renderList();
+}
+
+let toastTimer;
+function toast(text) {
+  const t = $('toast');
+  t.textContent = text;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.textContent = ''; }, 2600);
+}
+
+/* ---------- the fix list (cart) ---------- */
+function renderPill(bump) {
+  const t = totals(), pill = $('pill');
+  pill.innerHTML = `<span class="num">${S.items.length}</span>${S.items.length ? `Fix list · <b>${rangeText(t)}</b>${t.after ? '+' : ''}` : 'Your fix list'}`;
+  pill.setAttribute('aria-label', `Open your fix list, ${S.items.length} item${S.items.length === 1 ? '' : 's'}`);
+  if (bump) { pill.classList.remove('bump'); void pill.offsetWidth; pill.classList.add('bump'); }
+}
+function renderList() {
+  const t = totals();
+  const rows = S.items.map((it, i) => {
+    const p = t.ps[i], pr = PROB[it.prob];
+    const whole = it.part === 'Whole section';
+    const where = it.crumb.split(' › ');
+    return `<li class="item">
+      <span class="thumb" style="--c:${pr.c}" aria-hidden="true"><b>${i + 1}</b></span>
+      <div>
+        <b class="item__name">${esc(whole ? where[1] || where[0] : it.part)}</b>
+        <span class="item__meta">${esc(whole ? where[0] : where.slice(0, 2).join(' › '))}</span>
+        <span class="item__meta">${pr.t}</span>
+      </div>
+      <div class="item__end">
+        <span class="price ${p.after || p.high === 0 ? 'soft' : ''}">${priceText(p)}</span>
+        <button type="button" class="remove" data-del="${i}" aria-label="Remove item ${i + 1}">Remove</button>
+      </div>
+      <label class="notefield"><span>Note</span><textarea class="itemnote" data-note="${i}" rows="1" maxlength="300" aria-label="Note for item ${i + 1}" placeholder="${it.prob === 'other' ? 'Needed: what you see, and how it should be' : 'What you see, and how it should be'}">${esc(it.note)}</textarea></label></li>`;
+  }).join('');
+  $('list').innerHTML = `
+    <div class="list__head"><h2 id="listTitle" tabindex="-1">Your fix list</h2><button type="button" class="x" data-act="closelist" aria-label="Close fix list">×</button></div>
+    ${S.items.length ? `<ul class="items">${rows}</ul>` : '<p class="empty">Nothing here yet. Tap a section of the example store to start.</p>'}
+    ${S.items.length ? `
+    <dl class="sum">
+      <div><dt>Fixes</dt><dd>${S.items.length}</dd></div>
+      ${t.after ? `<div><dt>Priced after I look</dt><dd>${t.after} item${t.after > 1 ? 's' : ''}</dd></div>` : ''}
+      <div><dt>Time</dt><dd>About ${t.days} working day${t.days > 1 ? 's' : ''}</dd></div>
+      <div class="sum__total"><dt>Estimate</dt><dd><small>USD</small>${rangeText(t)}${t.after ? '+' : ''}</dd></div>
+    </dl>
+    <div class="promise">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg>
+      <b>Fixed price, confirmed first</b>
+      <p>I check every item on your store and confirm the price before any contract.${t.high > t.low ? ` It won't go above ${money(t.high)} unless you agree.` : ''}</p>
+    </div>
+    <div class="send">
+      ${S.sent ? `<p class="done">Sent. I'll look at your store and reply with every item confirmed and a fixed price, usually within one working day.</p>` : `
+      <div class="field"><label for="url">Store address</label><input class="in" id="url" data-k="url" value="${esc(S.url)}" placeholder="yourstore.com" autocomplete="url"><div class="err">${S.errors.url || ''}</div></div>
+      <div class="field"><label for="email">Email</label><input class="in" id="email" data-k="email" type="email" value="${esc(S.email)}" placeholder="you@yourstore.com" autocomplete="email"><div class="err">${S.errors.email || ''}</div></div>
+      <div class="field"><label for="msg">Anything else? (optional)</label><textarea class="in" id="msg" data-k="msg" maxlength="500" placeholder="The theme is Dawn. The menu only breaks on iPhone.">${esc(S.msg)}</textarea></div>
+      <label class="attach">${S.shots ? `${S.shots} screenshot${S.shots > 1 ? 's' : ''} attached · change` : 'Attach screenshots (optional)'}<input type="file" id="shots" accept="image/png, image/jpeg, image/webp" multiple></label>
+      <div class="err">${S.errors.notes || ''}</div>
+      <button type="button" class="btn btn--go" data-act="send">Send for a fixed price</button>
+      <span class="small">One reply with your price. No newsletter.</span>`}
+      <button type="button" class="link" data-act="copy">${S.copied ? 'Copied. Paste it into an Upwork message.' : 'Prefer Upwork? Copy this list for a message'}</button>
+      <textarea class="in copybox" id="copybox" readonly hidden aria-label="Your fix list as text"></textarea>
+    </div>` : ''}`;
+}
+function openList() {
+  closePicker();
+  renderList();
+  $('list').hidden = false; $('scrim').hidden = false;
+  $('listTitle').focus();
+}
+function closeList() { $('list').hidden = true; $('scrim').hidden = true; $('pill').focus(); }
+
+function listText() {
+  const t = totals();
+  return S.items.map((it, i) => `${i + 1}. ${it.crumb}: ${PROB[it.prob].t}${it.note ? ` ("${it.note}")` : ''} (${priceText(t.ps[i]).toLowerCase()})`).join('\n')
+    + `\nEstimate: ${rangeText(t)}${t.after ? ` + ${t.after} after a look` : ''}`;
+}
+const validUrl = v => /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(\/.*)?$/i.test(v.trim());
+const validEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const li = e.target.closest('.wheel li');
+  if (li) return spinTo(li.parentElement.id, +li.dataset.i);
+  const t = e.target.closest('button, [data-act]');
+  if (t) {
+    if (t.dataset.tab) { closePicker(); S.page = t.dataset.tab; renderTabs(); renderFrame(); return; }
+    if (t.dataset.pick) return openPicker(findSection(t.dataset.pick));
+    if (t.dataset.part) return openPicker(findSection(t.closest('.sec').dataset.sec), t.dataset.part);
+    if (t.dataset.del) { S.items.splice(+t.dataset.del, 1); S.sent = false; renderList(); renderFrame(); renderPill(); return; }
+    const a = t.dataset.act;
+    if (a === 'closepick') return closePicker();
+    if (a === 'add') return addItem();
+    if (a === 'elsewhere') return openPicker(ELSEWHERE);
+    if (a === 'openlist') return openList();
+    if (a === 'closelist') return closeList();
+    if (a === 'send') {
+      S.errors = {};
+      if (!validUrl(S.url)) S.errors.url = 'Enter your store address, like yourstore.com';
+      if (!validEmail(S.email)) S.errors.email = 'Enter an email like you@yourstore.com';
+      const blank = S.items.findIndex(it => it.prob === 'other' && !it.note.trim());
+      if (blank > -1) S.errors.notes = `Item ${blank + 1} needs a few words so I know what to look for`;
+      if (!Object.keys(S.errors).length) S.sent = true;
+      renderList();
+      const bad = blank > -1 ? $('list').querySelector(`[data-note="${blank}"]`) : $('list').querySelector('.err:not(:empty)')?.previousElementSibling;
+      if (bad) bad.focus();
+      return;
+    }
+    if (a === 'copy') {
+      const text = listText();
+      const fallback = () => { const box = $('copybox'); box.hidden = false; box.value = text; box.select(); };
+      try { navigator.clipboard.writeText(text).then(() => { S.copied = true; renderList(); }, fallback); } catch (err) { fallback(); }
+      return;
+    }
+    if (t.classList.contains('dock') || t.closest('.dock')) return;
+  }
+  /* a tap anywhere else on a section opens it with the whole section picked */
+  const sec = e.target.closest('.sec');
+  if (sec) openPicker(findSection(sec.dataset.sec));
+});
+document.addEventListener('input', e => {
+  if (e.target.dataset.note) { S.items[+e.target.dataset.note].note = e.target.value; S.copied = false; return; }
+  const k = e.target.dataset.k;
+  if (k) S[k] = e.target.value;
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'shots') { S.shots = Math.min(6, e.target.files.length); renderList(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!$('list').hidden) closeList();
+  else if (S.sel) closePicker();
+});
+wide.addEventListener('change', () => { renderFrame(); if (S.sel) highlight(true); });
+
+$('legend').innerHTML = '<li class="legend__cap">Colours show the problem:</li>' + PROBS.map(p => `<li style="--c:${p.c}"><i aria-hidden="true"></i>${p.t}</li>`).join('');
+renderTabs();
+renderFrame();
+renderPill();
+</script>

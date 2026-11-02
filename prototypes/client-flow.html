@@ -1,0 +1,1195 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Qonicode Client Flow</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+<style>
+/* Layout: phase stepper on top, the client's screen in a framed window, design notes (Indonesian) beside it. Single light theme, same as qonicode.tech. */
+:root {
+  --bg: #F5EFE3; --paper: #FFFFFF; --surface: #FFFDF8; --desk: #EFE7D8;
+  --ink: #111111; --muted: #5B564D; --line: #D9D1C2;
+  --teal: #A7DBD8; --green: #BAFCA2; --yellow: #FFDB58; --orange: #FFA07A; --pink: #FFC0CB; --purple: #C4A1FF;
+  --error: #B4231B;
+  --font: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --border: 2px solid var(--ink);
+  --shadow: 4px 4px 0 var(--ink);
+  --radius: 14px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+.wrap { max-width: 1200px; margin: 0 auto; padding-block: 28px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
+.brand { font-weight: 900; font-stretch: 125%; font-size: 15px; letter-spacing: .02em; text-transform: uppercase; }
+.title { font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(28px, 5vw, 52px); line-height: .95; letter-spacing: -.02em; text-wrap: balance; margin-top: 6px; }
+.lede { color: var(--muted); font-size: 15px; max-width: 46ch; }
+
+.phases { display: grid; grid-template-columns: 4fr 2fr 3fr; gap: 12px; margin-top: 24px; }
+.phase { border: var(--border); border-radius: var(--radius); background: var(--ph); padding: 10px 12px 12px; min-width: 0; }
+.phase__label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.phase__steps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.dot { width: 38px; height: 38px; border: var(--border); border-radius: 50%; background: var(--paper); font-weight: 800; font-size: 14px; cursor: pointer; display: grid; place-items: center; transition: transform .12s, box-shadow .12s; }
+.dot:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+.dot.is-done { background: var(--ink); color: var(--paper); }
+.dot.is-current { box-shadow: 3px 3px 0 var(--ink); transform: translate(-2px, -2px); background: var(--yellow); color: var(--ink); }
+
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px; margin-top: 24px; align-items: start; }
+
+.frame { border: var(--border); border-radius: var(--radius); background: var(--paper); box-shadow: 6px 6px 0 var(--ink); overflow: clip; min-width: 0; }
+.frame__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 14px; border-bottom: var(--border); background: var(--desk); }
+.lights { display: flex; gap: 6px; }
+.lights i { width: 11px; height: 11px; border: 1.5px solid var(--ink); border-radius: 50%; background: var(--paper); }
+.where { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--paper); font-size: 13px; font-weight: 700; min-width: 0; }
+.where small { font-weight: 500; color: var(--muted); }
+.clock { margin-left: auto; font-size: 13px; font-weight: 700; }
+.frame__body { padding: clamp(18px, 4vw, 34px); min-height: 520px; display: grid; gap: 18px; align-content: start; }
+.frame__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-top: var(--border); background: var(--surface); }
+.frame__foot #count { font-size: 13px; font-weight: 700; color: var(--muted); text-align: center; }
+.frame__foot #count.est { color: var(--ink); font-size: 15px; font-weight: 900; font-variant-numeric: tabular-nums; }
+
+.eyebrow { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.h { font-weight: 900; font-stretch: 112%; font-size: clamp(22px, 3vw, 30px); line-height: 1.1; text-wrap: balance; }
+.sub { color: var(--muted); max-width: 58ch; }
+.small { font-size: 13px; color: var(--muted); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 20px; border: var(--border); border-radius: 999px; background: var(--paper); font-weight: 800; font-size: 14px; letter-spacing: .02em; text-transform: uppercase; line-height: 1; cursor: pointer; white-space: nowrap; box-shadow: var(--shadow); transition: transform .12s, box-shadow .12s; }
+.btn:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+.btn--go { background: var(--yellow); }
+.btn--ghost { box-shadow: none; background: transparent; }
+.btn--ghost:hover { transform: none; background: var(--desk); }
+.btn--sm { min-height: 36px; padding: 8px 14px; font-size: 12px; box-shadow: 3px 3px 0 var(--ink); }
+.btn--sm:hover { transform: translate(3px, 3px); }
+.link { border: 0; background: none; padding: 0; font-weight: 800; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+.field { display: grid; gap: 6px; }
+.field label, .legend { font-weight: 800; font-size: 14px; }
+.input { width: 100%; min-height: 48px; padding: 10px 14px; border: var(--border); border-radius: 10px; background: var(--paper); font: inherit; font-size: 16px; transition: transform .12s, box-shadow .12s; }
+.input:focus { outline: none; box-shadow: 3px 3px 0 var(--ink); transform: translate(-1px, -1px); }
+textarea.input { min-height: 84px; resize: vertical; }
+.err { color: var(--error); font-size: 13px; font-weight: 700; min-height: 1.2em; }
+.err:empty { min-height: 0; }
+
+.price-strip { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 12px 14px; border: var(--border); border-radius: 12px; background: var(--yellow); font-weight: 700; font-size: 15px; }
+.price-strip b { font-weight: 900; font-stretch: 112%; font-size: 20px; }
+
+.picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.pick { position: relative; display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 12px 14px; border: var(--border); border-radius: 12px; background: var(--paper); cursor: pointer; transition: background .12s, box-shadow .12s, transform .12s; }
+.pick:hover { box-shadow: 3px 3px 0 var(--ink); transform: translate(-1px, -1px); }
+.pick input { position: absolute; opacity: 0; pointer-events: none; }
+.pick .box { width: 20px; height: 20px; border: var(--border); border-radius: 6px; background: var(--paper); display: grid; place-items: center; font-size: 13px; font-weight: 900; margin-top: 1px; }
+.pick.is-on { background: var(--teal); }
+.pick.is-on .box::after { content: "✓"; }
+.pick:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 3px; }
+.pick b { display: block; font-size: 15px; line-height: 1.25; }
+.pick small { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.pick .plus { font-weight: 900; font-size: 14px; white-space: nowrap; padding: 1px 8px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--paper); font-variant-numeric: tabular-nums; }
+.pick .formula { display: block; font-size: 12px; font-weight: 700; color: var(--ink); margin-top: 6px; }
+.qty { display: inline-flex; align-items: center; gap: 0; margin-top: 8px; border: var(--border); border-radius: 999px; background: var(--paper); overflow: hidden; }
+.qty button { width: 34px; height: 30px; border: 0; background: transparent; font-weight: 900; cursor: pointer; }
+.qty button:hover { background: var(--desk); }
+.qty span { min-width: 74px; text-align: center; font-weight: 800; font-size: 13px; border-left: var(--border); border-right: var(--border); line-height: 30px; font-variant-numeric: tabular-nums; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 8px 14px; border: var(--border); border-radius: 999px; background: var(--paper); font-weight: 700; font-size: 14px; cursor: pointer; }
+.chip.is-on { background: var(--ink); color: var(--paper); }
+
+.bar { display: flex; gap: 6px; }
+.bar i { flex: 1; height: 8px; border: 1.5px solid var(--ink); border-radius: 99px; background: var(--paper); }
+.bar i.on { background: var(--ink); }
+
+.card { border: var(--border); border-radius: 12px; background: var(--paper); padding: 16px; min-width: 0; }
+.card--tint { background: var(--tint, var(--surface)); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.offer-line { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 9px 0; border-bottom: 1.5px dashed var(--line); font-size: 15px; }
+.offer-line small { grid-column: 1; font-size: 12px; color: var(--muted); }
+.offer-line b { font-variant-numeric: tabular-nums; grid-row: 1; grid-column: 2; }
+.offer-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 12px; }
+.offer-total b { font-weight: 900; font-stretch: 112%; font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums; }
+.ceiling { margin-top: 12px; padding: 10px 12px; border: 1.5px solid var(--ink); border-radius: 10px; background: var(--green); font-size: 14px; font-weight: 600; }
+
+.mode { position: relative; display: grid; gap: 8px; padding: 16px; border: var(--border); border-radius: 12px; background: var(--paper); cursor: pointer; text-align: left; transition: box-shadow .12s, transform .12s; }
+.mode:hover { box-shadow: 3px 3px 0 var(--ink); transform: translate(-1px, -1px); }
+.mode.is-on { background: var(--green); box-shadow: 4px 4px 0 var(--ink); transform: translate(-2px, -2px); }
+.mode b { font-size: 17px; }
+.tag { display: inline-block; padding: 2px 9px; border: 1.5px solid var(--ink); border-radius: 999px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; background: var(--yellow); justify-self: start; }
+.ticks { list-style: none; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+.ticks li { display: flex; gap: 8px; }
+.ticks li::before { content: "✓"; font-weight: 900; }
+.ticks li.no::before { content: "✕"; color: var(--error); }
+
+.seg { display: inline-flex; flex-wrap: wrap; border: var(--border); border-radius: 999px; overflow: hidden; background: var(--paper); }
+.seg button { border: 0; background: transparent; padding: 8px 14px; font-weight: 700; font-size: 13px; cursor: pointer; }
+.seg button + button { border-left: var(--border); }
+.seg button.is-on { background: var(--ink); color: var(--paper); }
+
+details.more { border: 1.5px dashed var(--ink); border-radius: 12px; padding: 10px 14px; background: var(--surface); }
+details.more summary { cursor: pointer; font-weight: 800; font-size: 14px; }
+details.more[open] summary { margin-bottom: 10px; }
+details.more .field + .field { margin-top: 10px; }
+
+/* mark-on-a-page mode */
+.inmode { justify-self: start; }
+.map { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 20px; align-items: start; }
+.map__left { display: grid; gap: 10px; justify-items: center; min-width: 0; }
+.map__right { display: grid; gap: 12px; min-width: 0; position: sticky; top: calc(12px + env(safe-area-inset-top, 0px)); }
+.map__tools { display: grid; gap: 10px; min-width: 0; }
+/* long pages on narrow screens and wide screenshots: picker first and sticky, then the page, then the list */
+.map--wide { display: flex; flex-direction: column; align-items: stretch; }
+.map--wide .map__right { display: contents; }
+.map--wide .map__tools { order: -1; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 3; background: var(--sticky-bg, var(--paper)); padding-block: 8px; border-bottom: 1.5px dashed var(--line); }
+.map--wide .tools { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+.map--wide .tool { flex: none; }
+.map--wide .key { display: none; }
+.map--wide .pinlist { order: 1; }
+.map--wide .map__left { justify-items: stretch; }
+.map--wide .canvas:not(.canvas--wide) { justify-self: center; }
+.seg--sm button { padding: 6px 10px; font-size: 12px; }
+.map__left .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; width: min(240px, 100%); border-radius: 12px; background: var(--ink); }
+.map__left .seg button { border-left: 0; background: var(--paper); }
+.map__left .seg button.is-on { background: var(--ink); color: var(--paper); }
+/* the canvas is the whole page, top to bottom: its height comes from the wireframe or the stacked screenshots, and marks sit at % of that */
+.canvas { position: relative; width: 240px; max-width: 100%; border: var(--border); border-radius: 22px; background: var(--surface); overflow: hidden; cursor: crosshair; display: grid; gap: 8px; align-content: start; padding: 14px 12px 18px; box-shadow: var(--shadow); touch-action: manipulation; }
+.canvas.is-empty { cursor: default; align-content: center; min-height: 420px; }
+.canvas.is-shot { padding: 0; gap: 0; border-radius: 14px; }
+.canvas.is-shot img { display: block; width: 100%; height: auto; }
+.canvas.is-shot img + img { border-top: 2px dashed var(--ink); }
+.canvas--wide { width: 100%; }
+.shot-tools { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; }
+.addshot { position: relative; font-weight: 800; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.addshot input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+.addshot:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 3px; }
+.cv-acc { height: 22px; border: 1.5px solid var(--line); border-radius: 6px; }
+.cv-foot { height: 64px; margin-top: 6px; border-radius: 8px; background: var(--desk); border: 1.5px solid var(--line); }
+.cv-head { display: flex; justify-content: space-between; align-items: center; height: 16px; }
+.cv-head i { width: 18px; height: 10px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+.cv-head b { width: 60px; height: 10px; border-radius: 4px; background: var(--ink); }
+.cv-banner { height: 92px; border-radius: 8px; background: var(--pink); border: 1.5px solid var(--line); }
+.cv-img { height: 120px; border-radius: 8px; background: var(--desk); border: 1.5px solid var(--line); }
+.cv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.cv-grid i { aspect-ratio: 1; border-radius: 6px; background: var(--desk); border: 1.5px solid var(--line); }
+.cv-chips { display: flex; gap: 5px; }
+.cv-chips i { width: 40px; height: 14px; border-radius: 99px; border: 1.5px solid var(--ink); }
+.upload { position: relative; display: grid; gap: 6px; justify-items: center; text-align: center; padding: 18px 12px; border: 2px dashed var(--ink); border-radius: 12px; background: var(--paper); font-weight: 800; font-size: 14px; cursor: pointer; }
+.upload small { font-weight: 500; font-size: 12px; color: var(--muted); }
+.upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.upload:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 3px; }
+.pin { position: absolute; z-index: 2; width: 28px; height: 28px; margin: -14px 0 0 -14px; border: var(--border); border-radius: 50%; background: var(--pc); font-weight: 900; font-size: 13px; display: grid; place-items: center; box-shadow: 2px 2px 0 var(--ink); cursor: default; }
+.pin.is-new { animation: drop .18s ease-out; }
+.pin--static { position: static; margin: 0; animation: none; box-shadow: none; }
+@keyframes drop { from { transform: translateY(-8px); opacity: 0; } }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; }
+.tool { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border: var(--border); border-radius: 999px; background: var(--paper); font-weight: 700; font-size: 13px; cursor: pointer; }
+.tool i { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--pc); flex: none; }
+.tool.is-on { background: var(--ink); color: var(--paper); }
+.pinlist { list-style: none; padding: 0; display: grid; gap: 8px; }
+.pinlist li { display: grid; grid-template-columns: 28px minmax(0, 1fr) 28px; gap: 10px; align-items: start; padding: 8px 10px; border: 1.5px solid var(--ink); border-radius: 10px; background: var(--paper); }
+.pinlist li.empty { display: block; color: var(--muted); border-style: dashed; font-size: 14px; }
+.pinlist b { font-size: 14px; }
+.pinlist small { display: block; font-size: 12px; color: var(--muted); }
+.x { width: 28px; height: 28px; border: var(--border); border-radius: 50%; background: var(--paper); font-weight: 900; cursor: pointer; line-height: 1; padding: 0; }
+.x:hover { background: var(--desk); }
+.input--sm { min-height: 36px; padding: 6px 10px; font-size: 14px; margin-top: 6px; }
+.key { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 5px; }
+.key i { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--pc); }
+@media (prefers-reduced-motion: reduce) { .pin { animation: none; } }
+
+/* landing page mock: a container, so the Desktop / Phone switch and a real phone both reflow it */
+.views { margin-top: 20px; }
+.views button { padding: 9px 16px; font-size: 14px; }
+.frame--wide .frame__bar .seg { margin-left: auto; }
+.site-outer { background: var(--desk); }
+.site { container-type: inline-size; background: var(--bg); margin: 0 auto; max-width: 100%; transition: max-width .25s; }
+.site.is-phone { max-width: 390px; border-inline: var(--border); }
+.s-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px clamp(14px, 3cqi, 28px); border-bottom: var(--border); background: var(--paper); }
+.s-nav .logo { font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: 15px; }
+.s-nav .links { display: flex; gap: 18px; font-weight: 700; font-size: 14px; }
+.hero2 { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: clamp(20px, 4cqi, 48px); align-items: center; padding: clamp(22px, 4cqi, 48px) clamp(14px, 3cqi, 28px); }
+.h-title { font-weight: 900; font-stretch: 125%; text-transform: uppercase; line-height: .92; letter-spacing: -.02em; font-size: clamp(28px, 5.8cqi, 76px); }
+.h-title span { display: block; }
+.h-title .it { font-style: italic; }
+.hero2__sub { margin-top: 16px; font-weight: 800; font-stretch: 112%; font-size: clamp(16px, 1.8cqi, 21px); line-height: 1.3; }
+.hero2__sub em { font-weight: 500; color: var(--muted); font-stretch: 100%; }
+.hero2 .price-strip { margin-top: 16px; }
+.hero2 .row { margin-top: 18px; }
+.try { position: relative; border: var(--border); border-radius: var(--radius); background: var(--paper); box-shadow: 6px 6px 0 var(--ink); padding: 14px; display: grid; gap: 10px; justify-items: center; min-width: 0; }
+.demo__badge { position: absolute; top: -12px; left: 14px; padding: 2px 10px; border: var(--border); border-radius: 999px; background: var(--pink); font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.canvas--demo { max-height: 360px; cursor: default; pointer-events: none; }
+.canvas--demo::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 48px; background: linear-gradient(transparent, var(--surface)); }
+.demo .dp { opacity: 0; transform: translateY(-8px); transition: opacity .25s, transform .25s; }
+.demo[data-step="1"] .d1, .demo[data-step="2"] .d1, .demo[data-step="2"] .d2, .demo[data-step="3"] .dp { opacity: 1; transform: none; }
+.demo__cap { min-height: 2.6em; font-size: 13px; font-weight: 700; text-align: center; max-width: 240px; }
+.try__label { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; text-align: center; }
+.canvas--mini { width: 200px; }
+.tools--mini { justify-content: center; }
+.try__total { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 4px 10px; padding: 8px 16px; border: var(--border); border-radius: 999px; background: var(--yellow); font-weight: 700; font-size: 14px; }
+.try__total b { font-weight: 900; font-stretch: 112%; font-size: 20px; font-variant-numeric: tabular-nums; }
+.band { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; margin: 20px clamp(14px, 3cqi, 28px); padding: 14px 16px; border: var(--border); border-radius: var(--radius); background: var(--teal); }
+.band span { display: block; font-size: 14px; }
+.check { --sticky-bg: var(--surface); padding: clamp(22px, 4cqi, 40px) clamp(14px, 3cqi, 28px); border-top: var(--border); display: grid; gap: 16px; background: var(--surface); }
+.check__grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+.lead { display: grid; gap: 10px; }
+.lead__title { font-weight: 900; font-size: 17px; line-height: 1.2; }
+.lead hr { border: 0; border-top: 1.5px dashed var(--line); margin: 2px 0; width: 100%; }
+.lead .offer-line { font-size: 14px; }
+.later { display: grid; gap: 8px; padding: 20px clamp(14px, 3cqi, 28px) 28px; }
+.later__band { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 14px 16px; border: 1.5px dashed var(--muted); border-radius: 12px; color: var(--muted); font-weight: 700; font-size: 14px; }
+.later__band small { font-weight: 500; }
+.notes--wide { position: static; margin-top: 24px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; }
+@container (max-width: 760px) {
+  .hero2, .check__grid { grid-template-columns: minmax(0, 1fr); }
+  .h-title { font-size: clamp(26px, 8.2cqi, 60px); }
+  .s-nav .links { display: none; }
+  .site .map { display: flex; flex-direction: column; align-items: stretch; }
+  .site .map__right { display: contents; }
+  .site .map__tools { order: -1; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 3; background: var(--sticky-bg, var(--paper)); padding-block: 8px; border-bottom: 1.5px dashed var(--line); }
+  .site .tools { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  .site .tool { flex: none; }
+  .site .key { display: none; }
+  .site .pinlist { order: 1; }
+}
+
+/* simplified admin mock: deliberately plain, no logos */
+.admin { border: 1.5px solid var(--ink); border-radius: 12px; background: #FAF8F3; overflow: hidden; font-size: 14px; }
+.admin__head { display: flex; justify-content: space-between; gap: 10px; padding: 8px 12px; border-bottom: 1.5px solid var(--ink); background: var(--desk); font-size: 12px; font-weight: 700; color: var(--muted); }
+.admin__body { padding: 14px; display: grid; gap: 10px; }
+.perm { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); }
+.perm.is-yes { border-color: var(--ink); background: var(--green); font-weight: 700; }
+.perm .box { width: 18px; height: 18px; border: 1.5px solid var(--ink); border-radius: 4px; display: grid; place-items: center; font-size: 12px; font-weight: 900; background: var(--paper); flex: none; }
+.theme-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); }
+.theme-row .thumb { width: 54px; height: 38px; border: 1.5px solid var(--ink); border-radius: 5px; background: repeating-linear-gradient(0deg, var(--desk) 0 6px, var(--paper) 6px 12px); flex: none; }
+.theme-row .grow { flex: 1; min-width: 120px; }
+.theme-row .grow b { display: block; }
+.live { padding: 2px 8px; border-radius: 999px; background: var(--green); border: 1.5px solid var(--ink); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.menu { display: grid; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--paper); overflow: hidden; width: min(240px, 100%); margin-left: auto; }
+.menu button { text-align: left; border: 0; background: transparent; padding: 8px 12px; font-size: 14px; cursor: pointer; }
+.menu button:hover { background: var(--desk); }
+.menu button.hl { background: var(--yellow); font-weight: 800; }
+
+.steps { list-style: none; padding: 0; display: grid; gap: 10px; counter-reset: s; }
+.steps > li { counter-increment: s; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; }
+.steps > li::before { content: counter(s); width: 28px; height: 28px; border: var(--border); border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 13px; background: var(--paper); }
+.path { font-weight: 800; }
+
+.timeline { list-style: none; padding: 0; display: grid; }
+.timeline li { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 10px 0; border-bottom: 1.5px dashed var(--line); }
+.timeline li:last-child { border-bottom: 0; }
+.timeline .st { width: 22px; height: 22px; border: var(--border); border-radius: 50%; background: var(--paper); display: grid; place-items: center; font-size: 12px; font-weight: 900; }
+.timeline li.done .st { background: var(--ink); color: var(--paper); }
+.timeline li.done .st::after { content: "✓"; }
+.timeline li.now .st { background: var(--yellow); }
+.timeline li.now .st::after { content: "•"; font-size: 18px; line-height: 1; }
+.timeline li.todo { color: var(--muted); }
+.timeline time { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.timeline small { display: block; color: var(--muted); font-size: 13px; }
+
+.preview { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 22px; align-items: start; }
+.phone { width: 190px; justify-self: center; border: var(--border); border-radius: 26px; padding: 12px 10px 16px; background: var(--paper); box-shadow: var(--shadow); }
+.phone__notch { width: 54px; height: 6px; border-radius: 9px; background: var(--ink); margin: 0 auto 10px; }
+.screen { position: relative; border: 1.5px solid var(--ink); border-radius: 10px; overflow: hidden; height: 300px; background: var(--surface); display: grid; gap: 8px; align-content: start; padding: 10px; }
+.wf { height: 9px; border-radius: 5px; background: var(--line); }
+.wf-img { height: 104px; border-radius: 6px; background: var(--desk); border: 1.5px solid var(--line); }
+.wf-btn { height: 34px; border-radius: 99px; border: 2px solid var(--ink); background: var(--yellow); font-size: 11px; font-weight: 800; display: grid; place-items: center; text-transform: uppercase; }
+.screen.is-before .wf-btn { width: 150%; }
+.screen.is-before .wf-img { width: 125%; }
+.screen.is-before::after { content: "slides sideways"; position: absolute; right: 6px; bottom: 6px; padding: 2px 6px; font-size: 10px; font-weight: 800; color: var(--paper); background: var(--error); border-radius: 4px; }
+.video { aspect-ratio: 16 / 9; max-width: 100%; border: var(--border); border-radius: 12px; background: var(--desk); display: grid; place-items: center; position: relative; }
+.video .play { width: 56px; height: 56px; border: var(--border); border-radius: 50%; background: var(--yellow); display: grid; place-items: center; box-shadow: var(--shadow); }
+.video .play::after { content: ""; border-left: 16px solid var(--ink); border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin-left: 4px; }
+.video span { position: absolute; left: 10px; bottom: 8px; font-size: 12px; font-weight: 800; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 999px; padding: 1px 8px; }
+
+.banner { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: flex-start; padding: 12px 14px; border: var(--border); border-radius: 12px; background: var(--b, var(--teal)); font-size: 15px; }
+.banner > span { flex: 1; min-width: 200px; }
+.flash { font-weight: 800; font-size: 14px; padding: 10px 14px; border: var(--border); border-radius: 10px; background: var(--green); }
+
+.log { width: 100%; border-collapse: collapse; font-size: 14px; }
+.log th, .log td { text-align: left; padding: 8px 10px; border-bottom: 1.5px dashed var(--line); vertical-align: top; }
+.log th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.log code { font-size: 13px; background: var(--desk); padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+.scroll { overflow-x: auto; }
+.kit { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.kit .card { display: grid; gap: 4px; }
+.kit .ico { width: 34px; height: 34px; border: var(--border); border-radius: 50%; display: grid; place-items: center; font-weight: 900; background: var(--ico, var(--yellow)); }
+
+.stars { display: flex; gap: 6px; }
+.stars button { width: 40px; height: 40px; border: var(--border); border-radius: 10px; background: var(--paper); cursor: pointer; font-size: 20px; line-height: 1; }
+.stars button.is-on { background: var(--yellow); }
+
+.notes { border: 2px dashed var(--ink); border-radius: var(--radius); background: var(--surface); padding: 18px; display: grid; gap: 16px; position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); }
+.notes h2 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.notes p, .notes li { font-size: 14px; }
+.notes ul { padding-left: 18px; display: grid; gap: 4px; }
+.notes .lang { display: inline-block; font-size: 11px; font-weight: 800; padding: 1px 8px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--pink); }
+.meter { display: grid; gap: 6px; }
+.meter__track { height: 14px; border: var(--border); border-radius: 99px; background: var(--paper); overflow: hidden; }
+.meter__fill { height: 100%; background: var(--teal); border-right: 2px solid var(--ink); transition: width .3s; }
+.meter__num { font-weight: 900; font-stretch: 112%; font-size: 22px; font-variant-numeric: tabular-nums; }
+.q { padding: 10px 12px; border: 1.5px solid var(--ink); border-radius: 10px; background: var(--paper); }
+
+@media (max-width: 960px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .notes { position: static; }
+}
+@media (max-width: 680px) {
+  .phases { grid-template-columns: minmax(0, 1fr); }
+  .preview { grid-template-columns: minmax(0, 1fr); }
+  .map { display: flex; flex-direction: column; align-items: stretch; }
+  .map__right { display: contents; }
+  .map__tools { order: -1; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 3; background: var(--sticky-bg, var(--paper)); padding-block: 8px; border-bottom: 1.5px dashed var(--line); }
+  .tools { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  .tool { flex: none; }
+  .key { display: none; }
+  .pinlist { order: 1; }
+  .frame__body { min-height: 0; }
+  .clock { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="brand">Qonicode</div>
+      <h1 class="title">Client flow<br>prototype</h1>
+    </div>
+    <p class="lede">Click through it the way a client would. The screen text is in English for clients. The notes on the right are in Indonesian, for our discussion. All store data and prices are examples.</p>
+  </header>
+
+  <div class="seg views" role="group" aria-label="View">
+    <button type="button" data-view="landing">Landing page</button>
+    <button type="button" data-view="flow">Client flow</button>
+  </div>
+
+  <div id="landingView">
+    <section class="frame frame--wide" style="margin-top:20px">
+      <div class="frame__bar">
+        <div class="lights" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="where">qonicode.tech <small>· home page, top</small></div>
+        <div class="seg seg--sm" role="group" aria-label="Preview width">
+          <button type="button" data-width="desktop">Desktop</button>
+          <button type="button" data-width="phone">Phone</button>
+        </div>
+      </div>
+      <div class="site-outer"><div class="site" id="site"></div></div>
+    </section>
+    <aside class="notes notes--wide" id="lnotes" aria-label="Design notes"></aside>
+  </div>
+
+  <div id="flowView">
+  <nav class="phases" aria-label="Steps" id="phases"></nav>
+
+  <div class="stage">
+    <section class="frame">
+      <div class="frame__bar">
+        <div class="lights" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="where" id="where"></div>
+        <div class="clock" id="clock"></div>
+      </div>
+      <div class="frame__body" id="screen"></div>
+      <div class="frame__foot">
+        <button class="btn btn--ghost btn--sm" id="back" type="button">← Back</button>
+        <span id="count" aria-live="polite"></span>
+        <button class="btn btn--sm btn--go" id="next" type="button">Next →</button>
+      </div>
+    </section>
+    <aside class="notes" id="notes" aria-label="Design notes"></aside>
+  </div>
+  </div>
+</div>
+
+<script>
+const PHASES = [
+  { name: 'Onboarding', color: 'var(--teal)', steps: [0, 1, 2, 3] },
+  { name: 'Work', color: 'var(--yellow)', steps: [4, 5] },
+  { name: 'Offboarding', color: 'var(--green)', steps: [6, 7, 8] }
+];
+
+/* Price formula. Fixed items: base + per extra unit. Open items (store-dependent): a range, firm after I look. */
+const FIXES = [
+  { id: 'mobile', t: 'Phone layout breaks', d: 'Pages slide sideways, buttons fall off the screen or are too small to tap.', base: 40, per: 15, unit: 'page', days: 2, perDays: 1 },
+  { id: 'change', t: 'Small theme change', d: 'One setting, label, block or text change.', base: 25, per: 15, unit: 'change', days: 1, perDays: .5 },
+  { id: 'qa', t: 'Check before I publish', d: '36 checks at five screen widths, all pages.', base: 30, days: 1 },
+  { id: 'data', t: 'Product options or custom fields', d: 'Variants, swatches or metafields show wrong.', base: 45, max: 90, days: 2 },
+  { id: 'app', t: 'An app block looks wrong', d: 'Reviews, upsell or other app sections.', base: 35, max: 70, days: 2 },
+  { id: 'other', t: 'Something else', d: '', base: 25, max: 50, days: 1, mapOnly: true }
+];
+const PAGES = ['Home', 'Product', 'Collection', 'Cart', 'Other'];
+
+/* Marks a client can drop on a page. Each one feeds a fix in FIXES. Colour = group: phone layout, content, store data, other. */
+const TYPES = {
+  sideways: { t: 'Slides sideways', fix: 'mobile', color: 'var(--orange)' },
+  cutoff: { t: 'Button cut off', fix: 'mobile', color: 'var(--orange)' },
+  small: { t: 'Too small to tap or read', fix: 'mobile', color: 'var(--orange)' },
+  overlap: { t: 'Things overlap', fix: 'mobile', color: 'var(--orange)' },
+  label: { t: 'Wrong text or label', fix: 'change', color: 'var(--purple)' },
+  options: { t: 'Product options wrong', fix: 'data', color: 'var(--teal)' },
+  app: { t: 'App block broken', fix: 'app', color: 'var(--teal)' },
+  other: { t: 'Something else', fix: 'other', color: 'var(--pink)' }
+};
+const FIX_NOTE = {
+  mobile: 'Part of the phone fix for this page',
+  change: '$25 first change, $15 each extra',
+  data: '$45–$90, firm after I look',
+  app: '$35–$70, firm after I look',
+  other: '$25–$50, firm after I look'
+};
+const MAP_PAGES = ['Home', 'Product', 'Collection', 'Screenshot'];
+const pageName = p => p === 'Screenshot' ? 'Your screenshot' : p + ' page';
+
+const S = {
+  step: 0, sub: 0,
+  url: 'lunaceramics.com', auditSent: false, skipped: false,
+  picked: new Set(['mobile']), qty: { change: 1 }, pages: new Set(['Product']),
+  view: 'landing', width: 'desktop', checkOpen: false, leadSent: false,
+  input: 'map', mapPage: 'Product', tool: 'sideways', shots: [], shotWide: false, pinSeq: 2,
+  pins: [
+    { id: 1, page: 'Product', type: 'cutoff', x: 80, y: 33 },
+    { id: 2, page: 'Product', type: 'sideways', x: 50, y: 13 }
+  ],
+  theme: 'unsure', email: '', extra: '', copySent: false,
+  mode: null, approved: false, noteOpen: false, noteSent: false, note: '',
+  before: false, published: false, accessGranted: false, fileAsked: false,
+  removed: false, rating: 0, errors: {}
+};
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => '$' + Math.round(n);
+/* What the client asked for, from either the marked page or the list */
+function derive() {
+  if (S.input === 'list') return { picked: S.picked, pages: Math.max(1, S.pages.size), changes: S.qty.change, others: 0, issues: 0 };
+  const fx = p => TYPES[p.type].fix;
+  const mob = S.pins.filter(p => fx(p) === 'mobile');
+  return {
+    picked: new Set(S.pins.map(fx)),
+    pages: Math.max(1, new Set(mob.map(p => p.page)).size),
+    changes: S.pins.filter(p => fx(p) === 'change').length,
+    others: S.pins.filter(p => fx(p) === 'other').length,
+    issues: mob.length
+  };
+}
+const needsStore = () => { const p = derive().picked; return p.has('data') || p.has('app'); };
+const recMode = () => needsStore() ? 'collab' : 'zip';
+const mode = () => S.mode || recMode();
+const isZip = () => mode() === 'zip';
+const plural = (n, w) => `${n} ${w}${n > 1 ? 's' : ''}`;
+
+function line(f, D = derive()) {
+  const n = f.id === 'mobile' ? D.pages : f.id === 'change' ? Math.max(1, D.changes) : f.id === 'other' ? Math.max(1, D.others) : 1;
+  const each = f.id === 'other';
+  const low = each ? f.base * n : f.base + (f.per ? f.per * (n - 1) : 0);
+  const high = f.max ? (each ? f.max * n : f.max) : low;
+  const days = f.days + (f.perDays ? f.perDays * (n - 1) : 0);
+  let formula;
+  if (each) formula = `${money(f.base)}–${money(f.max)} each, firm after I look`;
+  else if (f.max) formula = `${money(f.base)}–${money(f.max)}, firm after I look`;
+  else if (f.per) formula = `${money(f.base)} first ${f.unit} + ${money(f.per)} each extra${f.id === 'mobile' ? ', any number of issues per page' : ''}`;
+  else formula = 'Flat price';
+  let label = f.t;
+  if (f.id === 'mobile') label = `Phone layout fix · ${plural(n, 'page')}${D.issues ? ` · ${plural(D.issues, 'issue')}` : ''}`;
+  if (f.id === 'change') label = `Small theme change × ${n}`;
+  if (each) label = `Something else × ${n}`;
+  return { f, n, low, high, days, formula, label };
+}
+function quote() {
+  const D = derive();
+  const lines = FIXES.filter(f => D.picked.has(f.id)).map(f => line(f, D));
+  const low = lines.reduce((a, l) => a + l.low, 0);
+  const high = lines.reduce((a, l) => a + l.high, 0);
+  const days = Math.ceil(lines.reduce((a, l) => a + l.days, 0));
+  return { lines, low, high, days, range: high > low };
+}
+const priceText = q => q.lines.length ? (q.range ? `${money(q.low)}–${money(q.high)}` : money(q.low)) : '$0';
+
+/* minutes of client time per step, by mode */
+function minutes(i) {
+  const zip = isZip();
+  return [1, S.input === 'map' ? 2 : 1, 1, zip ? 3 : 2, 0, zip ? 3 : 1, 1, 0, 1][i];
+}
+const ALL = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const totalMin = () => ALL.reduce((a, i) => a + minutes(i), 0);
+const spentMin = () => ALL.slice(0, S.step + 1).reduce((a, i) => a + minutes(i), 0);
+
+const STEPS = [
+  {
+    where: () => ['qonicode.tech', 'no account'],
+    render: () => `
+      <div class="eyebrow">Step 1 · See it first</div>
+      <h2 class="h">Send your store link. Get 3 things I'd fix on a phone, free.</h2>
+      <div class="price-strip"><span>Fixes from <b>$25</b></span><span>Fixed price before any work. You pay only after you approve.</span></div>
+      <p class="sub">I look at your public store only. No login, no access, nothing to install. You get a 2-minute video back within one working day.</p>
+      <div class="grid2">
+        <div class="card card--tint" style="--tint: var(--pink)">
+          <div class="eyebrow">Before</div>
+          <p style="font-weight:700">Add to cart button cut off at 390 px</p>
+        </div>
+        <div class="card card--tint" style="--tint: var(--green)">
+          <div class="eyebrow">After</div>
+          <p style="font-weight:700">Full-width button, inside the screen</p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="url">Your store address</label>
+        <input class="input" id="url" data-k="url" value="${esc(S.url)}" placeholder="yourstore.com" autocomplete="url">
+        <div class="err" id="err-url">${S.errors.url || ''}</div>
+      </div>
+      <div class="row">
+        <button class="btn btn--go" type="button" data-act="audit">Get my free check</button>
+        <button class="link" type="button" data-act="skip">I know what I need. Message me on Upwork</button>
+      </div>
+      ${S.auditSent ? `<div class="flash">Got it. Your video arrives by tomorrow, 17:00 your time. Meanwhile, see what a fix would cost.</div>` : ''}
+    `
+  },
+  {
+    where: () => ['qonicode.tech', 'or the same list as an Upwork message'],
+    render: () => {
+      const bar = `<div class="bar" aria-label="Question ${S.sub + 1} of 2">${[0, 1].map(i => `<i class="${i <= S.sub ? 'on' : ''}"></i>`).join('')}</div>`;
+      if (S.sub === 0) return `
+        ${bar}
+        <div class="eyebrow">Step 2 · Question 1 of 2</div>
+        <h2 class="h">${S.input === 'map' ? 'Show me what looks wrong. Each mark adds to your total.' : 'What should I fix? Each pick adds to your total.'}</h2>
+        <div class="seg inmode" role="group" aria-label="How to tell me">
+          <button type="button" data-inmode="map" class="${S.input === 'map' ? 'is-on' : ''}">Mark it on a page</button>
+          <button type="button" data-inmode="list" class="${S.input === 'list' ? 'is-on' : ''}">Pick from a list</button>
+        </div>
+        ${S.input === 'map' ? mapView() : `
+        <div class="picks">${FIXES.filter(f => !f.mapOnly).map(f => {
+          const on = S.picked.has(f.id), l = line(f);
+          return `
+          <label class="pick ${on ? 'is-on' : ''}">
+            <input type="checkbox" data-pick value="${f.id}" id="p-${f.id}" ${on ? 'checked' : ''}>
+            <span class="box" aria-hidden="true"></span>
+            <span><b>${f.t}</b><small>${f.d}</small><span class="formula">${l.formula}</span>
+              ${on && f.id === 'change' ? `<span class="qty" role="group" aria-label="Number of changes"><button type="button" data-qty="-1" aria-label="One less change">−</button><span>${S.qty.change} change${S.qty.change > 1 ? 's' : ''}</span><button type="button" data-qty="1" aria-label="One more change">+</button></span>` : ''}
+            </span>
+            <span class="plus">+${f.max ? money(f.base) + '+' : money(on ? l.low : f.base)}</span>
+          </label>`;
+        }).join('')}
+        </div>`}
+        <div class="err">${S.errors.picked || ''}</div>
+        <button class="link" type="button" data-act="skip" style="justify-self:start">Not sure? Skip and describe it in an Upwork message</button>`;
+      return `
+        ${bar}
+        <div class="eyebrow">Step 2 · Question 2 of 2</div>
+        <h2 class="h">About your store</h2>
+        ${S.input === 'list' && S.picked.has('mobile') ? `
+        <div class="field">
+          <span class="legend">Which pages break on a phone? <span class="small">($15 each after the first)</span></span>
+          <div class="chips" role="group" aria-label="Pages">${PAGES.map(p => `
+            <button type="button" class="chip ${S.pages.has(p) ? 'is-on' : ''}" data-chip="${p}" aria-pressed="${S.pages.has(p)}">${p}</button>`).join('')}
+          </div>
+        </div>` : ''}
+        <div class="field">
+          <span class="legend">Which theme do you use?</span>
+          <div class="seg" role="group" aria-label="Theme type">
+            <button type="button" data-theme="free" class="${S.theme === 'free' ? 'is-on' : ''}">Free Shopify theme</button>
+            <button type="button" data-theme="paid" class="${S.theme === 'paid' ? 'is-on' : ''}">Paid theme</button>
+            <button type="button" data-theme="unsure" class="${S.theme === 'unsure' ? 'is-on' : ''}">Not sure</button>
+          </div>
+          <span class="small">It changes how I copy your theme, not the price. Online Store › Themes shows the name.</span>
+        </div>
+        <button class="link" type="button" data-act="next" style="justify-self:start">Skip this question</button>`;
+    }
+  },
+  {
+    where: () => ['qonicode.tech', 'no email needed'],
+    render: () => {
+      const q = quote(), rec = recMode();
+      return `
+      <div class="eyebrow">Step 3 · Your plan</div>
+      <h2 class="h">${priceText(q)}, ready in about ${q.days} working day${q.days > 1 ? 's' : ''}.</h2>
+      <div class="card">
+        ${q.lines.map(l => `<div class="offer-line"><span>${l.label}</span><b>${l.high > l.low ? money(l.low) + '–' + money(l.high) : money(l.low)}</b><small>${l.formula}</small></div>`).join('')}
+        <div class="offer-total"><span class="legend">Estimate</span><b>${priceText(q)}</b></div>
+        <div class="ceiling">${q.range
+          ? `I confirm the exact price after I look at your store, before any work. It won't go above ${money(q.high)} unless you agree.`
+          : `This is the price, unless your store has something unusual. If so, I tell you before starting and you can say no.`}
+          Paid through Upwork, released only after you approve.</div>
+      </div>
+      ${S.input === 'map' && S.pins.length ? `<p class="small">Your marked page${new Set(S.pins.map(p => p.page)).size > 1 ? 's go' : ' goes'} with your Upwork message, so I see exactly where each problem is.</p>` : ''}
+      <div class="legend">How would you like to work?</div>
+      <div class="grid2">
+        <button type="button" class="mode ${mode() === 'zip' ? 'is-on' : ''}" data-mode="zip">
+          ${rec === 'zip' ? '<span class="tag">Recommended for you</span>' : ''}
+          <b>No access</b>
+          <span class="small">You send me your theme file. I fix it on my own test store and send it back. You upload and publish it.</span>
+          <ul class="ticks"><li>I never enter your store</li><li class="no">Your products and apps aren't on my test store</li></ul>
+        </button>
+        <button type="button" class="mode ${mode() === 'collab' ? 'is-on' : ''}" data-mode="collab">
+          ${rec === 'collab' ? '<span class="tag">Recommended for you</span>' : ''}
+          <b>Themes-only access</b>
+          <span class="small">You approve a collaborator request for themes only. I work on a copy of your theme with your real products.</span>
+          <ul class="ticks"><li>Tested with your real products and apps</li><li>No orders, customers or password</li></ul>
+        </button>
+      </div>
+      ${rec === 'collab' ? `<p class="small">Product data and app blocks only show on your real store, so a themes-only copy tests them properly.</p>` : ''}
+      ${isZip() && S.theme !== 'free' ? `<div class="banner" style="--b: var(--orange)"><b>${S.theme === 'paid' ? 'Paid theme' : 'Not sure of your theme'}?</b><span>Paid themes are licensed to one store. I'll install the same theme on my test store and copy only the changed files, so your licence stays clean.</span></div>` : ''}
+      <details class="more" ${S.copySent ? 'open' : ''}>
+        <summary>Email me a copy of this plan (optional)</summary>
+        ${S.copySent ? `<div class="flash">Sent. One email, no newsletter, no follow-ups unless you reply.</div>` : `
+        <div class="field">
+          <label for="email">Email</label>
+          <input class="input" id="email" data-k="email" type="email" value="${esc(S.email)}" placeholder="you@yourstore.com" autocomplete="email">
+          <div class="err" id="err-email">${S.errors.email || ''}</div>
+        </div>
+        <div class="field">
+          <label for="extra">Anything else? <span class="small">(optional)</span></label>
+          <textarea class="input" id="extra" data-k="extra" placeholder="The size chart on product pages is too wide on iPhone">${esc(S.extra)}</textarea>
+        </div>
+        <div class="row" style="margin-top:10px"><button class="btn btn--sm" type="button" data-act="copy">Send copy</button><span class="small">One email. No newsletter.</span></div>`}
+      </details>
+      <div class="row"><button class="btn btn--go" type="button" data-act="next">Continue on Upwork</button><span class="small">or email qonita@qonicode.tech</span></div>`;
+    }
+  },
+  {
+    where: () => ['Shopify admin', isZip() ? 'about 3 minutes' : 'about 2 minutes'],
+    render: () => `
+      ${S.skipped ? `<div class="banner" style="--b: var(--yellow)"><b>You skipped the questions.</b><span>We agreed the price in Upwork chat. This is the next step.</span></div>` : ''}
+      ${isZip() ? `
+      <div class="row" style="justify-content:space-between">
+        <div class="eyebrow">Step 4 · Send your theme file</div>
+        ${modeSwitch()}
+      </div>
+      <h2 class="h">Two clicks in Shopify, one attachment on Upwork.</h2>
+      <ol class="steps">
+        <li><div><span class="path">Online Store › Themes</span>, then the <b>…</b> button next to your current theme.</div></li>
+        <li><div>Choose <span class="path">Download theme file</span>. Shopify emails you a link to a .zip file.</div></li>
+        <li><div>Attach that .zip in our Upwork chat. That's all I need.</div></li>
+      </ol>
+      <div class="admin" aria-label="Simplified Shopify admin">
+        <div class="admin__head"><span>Online Store › Themes</span><span>simplified view</span></div>
+        <div class="admin__body">
+          <div class="theme-row">
+            <div class="thumb" aria-hidden="true"></div>
+            <div class="grow"><b>Dawn</b><span class="small">Current theme</span></div>
+            <span class="live">Live</span>
+          </div>
+          <div class="menu" role="menu" aria-label="Theme actions">
+            <button type="button" role="menuitem">Preview</button>
+            <button type="button" role="menuitem">Rename</button>
+            <button type="button" role="menuitem">Duplicate</button>
+            <button type="button" role="menuitem" class="hl" data-act="download">Download theme file</button>
+            <button type="button" role="menuitem">Edit code</button>
+          </div>
+        </div>
+      </div>
+      ${S.fileAsked ? `<div class="flash">Shopify is emailing the file to you. Attach it in our Upwork chat when it arrives.</div>` : ''}
+      <ul class="ticks"><li>No account, no password, no access to your store</li><li>The file holds your theme's code and settings only. No orders, no customers.</li></ul>`
+    : `
+      <div class="row" style="justify-content:space-between">
+        <div class="eyebrow">Step 4 · Approve themes-only access</div>
+        ${modeSwitch()}
+      </div>
+      <h2 class="h">You'll see this request from Shopify. Here's what to check.</h2>
+      <p class="sub">Shopify shows the request in your admin and by email. Only <b>Themes</b> should be ticked.</p>
+      <div class="admin" aria-label="Simplified collaborator request">
+        <div class="admin__head"><span>Collaborator request · Qonicode</span><span>simplified view</span></div>
+        <div class="admin__body">
+          <div class="perm is-yes"><span class="box">✓</span>Themes</div>
+          <div class="perm"><span class="box"></span>Products</div>
+          <div class="perm"><span class="box"></span>Orders</div>
+          <div class="perm"><span class="box"></span>Customers</div>
+          <div class="perm"><span class="box"></span>Settings and payments</div>
+          <div class="row"><button class="btn btn--sm btn--go" type="button" data-act="grant">${S.accessGranted ? 'Approved' : 'Approve request'}</button><span class="small">You can remove it any time in Settings › Users.</span></div>
+        </div>
+      </div>
+      ${S.accessGranted ? `<div class="flash">Access approved: themes only. Your live store doesn't change until you publish.</div>` : ''}
+      <div class="grid2">
+        <ul class="ticks"><li>I can see and copy your themes</li><li>I work on a copy, never the live theme</li></ul>
+        <ul class="ticks"><li class="no">Orders and customers</li><li class="no">Payments and your password</li></ul>
+      </div>`}`
+  },
+  {
+    where: () => ['private status link', 'no login'],
+    render: () => {
+      const zip = isZip(), q = quote();
+      const first = q.lines[0];
+      const items = [
+        ['done', 'Brief and price agreed', first ? `${first.label}, ${priceText(q)}` : 'Agreed in Upwork chat', '2 Nov · 09:10'],
+        ['done', zip ? 'Theme file received' : 'Themes-only access approved', zip ? 'Loaded on my test store' : 'Nothing else is visible to me', '2 Nov · 10:02'],
+        ['done', zip ? 'Your original file kept untouched' : 'Copy made: “Qonicode – working copy”', zip ? 'So there is always a clean version' : 'Your live theme stays as it is', '2 Nov · 10:05'],
+        ['now', 'Fixing product page on phone', '2 of 3 done', 'in progress'],
+        ['todo', 'Pre-handoff QA, 36 checks', 'Five screen widths', 'est. 4 Nov'],
+        ['todo', 'Preview ready for you', 'With a 2-minute video', 'est. 5 Nov']
+      ];
+      return `
+      <div class="eyebrow">Step 5 · Status</div>
+      <h2 class="h">Luna Ceramics · ${first ? esc(first.f.t) : 'Theme fix'}</h2>
+      <p class="sub">No need to message. This page changes when a step is done.</p>
+      <ul class="timeline">${items.map(([s, t, d, w]) => `
+        <li class="${s}"><span class="st" aria-hidden="true"></span><div><b>${t}</b><small>${d}</small></div><time>${w}</time></li>`).join('')}
+      </ul>
+      <p class="small">Updated 3 Nov, 14:20 (Surabaya, UTC+7). This link stops working 7 days after we close.</p>`;
+    }
+  },
+  {
+    where: () => ['your store preview', isZip() ? 'upload, then preview' : 'one link'],
+    render: () => `
+      <div class="eyebrow">Step 6 · Your preview</div>
+      <h2 class="h">Open it on your phone. Your live store hasn't changed.</h2>
+      ${isZip() ? `<div class="banner"><b>First:</b><span><span class="path">Online Store › Themes › Add theme › Upload zip file</span>. The new theme lands unpublished, so nothing changes for your shoppers. Then press Preview.</span></div>` : ''}
+      <div class="preview">
+        <div>
+          <div class="phone">
+            <div class="phone__notch" aria-hidden="true"></div>
+            <div class="screen ${S.before ? 'is-before' : ''}" aria-label="${S.before ? 'Before: content slides sideways' : 'After: everything fits'}">
+              <div class="wf" style="width:60%"></div>
+              <div class="wf-img"></div>
+              <div class="wf" style="width:85%"></div>
+              <div class="wf" style="width:40%"></div>
+              <div class="wf-btn">Add to cart</div>
+              <div class="wf" style="width:70%"></div>
+              <div class="wf" style="width:55%"></div>
+            </div>
+          </div>
+          <div class="seg" style="margin:14px auto 0;display:flex;width:max-content" role="group" aria-label="Compare">
+            <button type="button" data-before="1" class="${S.before ? 'is-on' : ''}">Before</button>
+            <button type="button" data-before="0" class="${!S.before ? 'is-on' : ''}">After</button>
+          </div>
+        </div>
+        <div style="display:grid;gap:14px;min-width:0">
+          <div class="video" role="img" aria-label="Walkthrough video placeholder"><div class="play"></div><span>Walkthrough · 2:10</span></div>
+          <ul class="ticks"><li>Add to cart stays inside the screen at 390 px</li><li>Size chart scrolls inside its box</li><li>Image gallery swipes without moving the page</li></ul>
+          ${S.approved ? `<div class="flash">Approved. Next: publish it yourself when you're ready.</div>` : S.noteSent ? `<div class="flash" style="background:var(--yellow)">Note sent. I'll fix it on the same copy and update your status page.</div>` : `
+          <div class="row">
+            <button class="btn btn--go" type="button" data-act="approve">Approve</button>
+            <button class="btn btn--ghost" type="button" data-act="note">Something's off</button>
+          </div>`}
+          ${S.noteOpen && !S.noteSent && !S.approved ? `
+          <div class="field">
+            <label for="note">What looks wrong?</label>
+            <textarea class="input" id="note" data-k="note" placeholder="On my iPhone the button still touches the edge"></textarea>
+            <div class="err">${S.errors.note || ''}</div>
+            <div><button class="btn btn--sm" type="button" data-act="sendnote">Send note</button></div>
+          </div>` : ''}
+          <div class="err">${S.errors.approve || ''}</div>
+        </div>
+      </div>`
+  },
+  {
+    where: () => ['Shopify admin', 'one click'],
+    render: () => `
+      <div class="eyebrow">Step 7 · You publish</div>
+      <h2 class="h">${S.published ? 'Live. Your old theme is one click away.' : 'Press Publish when it suits you.'}</h2>
+      <p class="sub">I never publish for you. Your previous theme stays in your library, so undoing is one click.</p>
+      <div class="admin" aria-label="Simplified theme library">
+        <div class="admin__head"><span>Online Store › Themes</span><span>simplified view</span></div>
+        <div class="admin__body">
+          ${S.published ? `
+          <div class="theme-row"><div class="thumb" aria-hidden="true"></div><div class="grow"><b>Dawn · Qonicode fix 5 Nov</b><span class="small">Current theme</span></div><span class="live">Live</span></div>
+          <div class="theme-row"><div class="thumb" aria-hidden="true"></div><div class="grow"><b>Dawn</b><span class="small">Your previous theme. Publish this to undo.</span></div><button class="btn btn--sm" type="button" data-act="unpublish">Publish</button></div>`
+          : `
+          <div class="theme-row"><div class="thumb" aria-hidden="true"></div><div class="grow"><b>Dawn</b><span class="small">Current theme</span></div><span class="live">Live</span></div>
+          <div class="theme-row"><div class="thumb" aria-hidden="true"></div><div class="grow"><b>Dawn · Qonicode fix 5 Nov</b><span class="small">${isZip() ? 'Uploaded by you' : 'Made by Qonicode'} · not published</span></div><button class="btn btn--sm btn--go" type="button" data-act="publish">Publish</button></div>`}
+        </div>
+      </div>
+      <div class="banner" style="--b: var(--surface)"><b>If anything looks off:</b><span>publish <b>Dawn</b> again. Your store is back to how it was, and I'll fix the copy.</span></div>`
+  },
+  {
+    where: () => ['Upwork message', 'nothing to do'],
+    render: () => `
+      <div class="eyebrow">Step 8 · Handoff kit</div>
+      <h2 class="h">Everything you need to keep it, in one message.</h2>
+      <div class="kit">
+        <div class="card"><span class="ico">▶</span><b>Walkthrough video</b><span class="small">2:10, what changed and where</span></div>
+        <div class="card"><span class="ico" style="--ico:var(--teal)">≡</span><b>Change log</b><span class="small">Every file I touched</span></div>
+        <div class="card"><span class="ico" style="--ico:var(--pink)">◐</span><b>Before / after</b><span class="small">Phone, tablet, desktop</span></div>
+        <div class="card"><span class="ico" style="--ico:var(--purple)">✎</span><b>Edit it yourself</b><span class="small">Which settings you can change</span></div>
+        <div class="card"><span class="ico" style="--ico:var(--green)">↺</span><b>Undo in one click</b><span class="small">Publish your previous theme</span></div>
+      </div>
+      <div class="scroll">
+        <table class="log">
+          <thead><tr><th>File</th><th>What changed</th></tr></thead>
+          <tbody>
+            <tr><td><code>assets/qc-mobile.css</code></td><td>New phone and tablet rules, loaded after the theme's own styles</td></tr>
+            <tr><td><code>sections/main-product.liquid</code></td><td>Size chart wrapped so it scrolls inside its box</td></tr>
+            <tr><td><code>layout/theme.liquid</code></td><td>One line that loads qc-mobile.css</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small">Your products, pages and settings were not changed.</p>`
+  },
+  {
+    where: () => [isZip() ? 'Upwork' : 'Shopify admin + Upwork', 'about 1 minute'],
+    render: () => `
+      <div class="eyebrow">Step 9 · Close</div>
+      <h2 class="h">${S.removed || isZip() ? 'All closed. Nothing of yours stays with me.' : 'Last step: remove my access.'}</h2>
+      <div class="card">
+        <ul class="timeline">
+          ${isZip()
+            ? `<li class="done"><span class="st"></span><div><b>No access to remove</b><small>You never gave me access to your store.</small></div><time>—</time></li>`
+            : `<li class="${S.removed ? 'done' : 'now'}"><span class="st"></span><div><b>Remove Qonicode as collaborator</b><small><span class="path">Settings › Users › Collaborators › Qonicode › Remove</span></small>
+                ${S.removed ? '' : '<div style="margin-top:8px"><button class="btn btn--sm btn--go" type="button" data-act="remove">I removed it</button></div>'}</div><time>${S.removed ? '5 Nov' : 'now'}</time></li>`}
+          <li class="done"><span class="st"></span><div><b>${isZip() ? 'Your theme file deleted from my test store' : 'Working copy left in your library, yours to keep or delete'}</b><small>Local copies deleted on 12 Nov</small></div><time>12 Nov</time></li>
+          <li class="now"><span class="st"></span><div><b>Free fix window until 12 Nov</b><small>If something I changed breaks, I fix it free.</small></div><time>7 days</time></li>
+        </ul>
+      </div>
+      ${S.removed && !isZip() ? `<div class="flash">Confirmed: I no longer see your store. I'll write this in our Upwork chat too.</div>` : ''}
+      <div class="field">
+        <span class="legend">How did it go?</span>
+        <div class="stars" role="group" aria-label="Rating">${[1, 2, 3, 4, 5].map(n => `<button type="button" data-star="${n}" class="${n <= S.rating ? 'is-on' : ''}" aria-label="${n} star${n > 1 ? 's' : ''}">★</button>`).join('')}</div>
+      </div>
+      ${S.rating ? `<div class="row"><button class="btn btn--go" type="button">Leave it on Upwork</button><span class="small">Thank you. It helps small stores find me.</span></div>` : ''}`
+  }
+];
+
+function canvasArt(page = S.mapPage) {
+  const lines = (...w) => w.map(x => `<div class="wf" style="width:${x}%"></div>`).join('');
+  const head = '<div class="cv-head"><i></i><b></b><i></i></div>';
+  if (page === 'Screenshot') {
+    if (S.shots.length) return S.shots.map((src, i) => `<img src="${src}" alt="Your store screenshot, part ${i + 1}">`).join('');
+    return `<label class="upload">Upload screenshots of your store<small>One or several, top to bottom. They stack into one full page. PNG, JPG or WebP, up to 8 MB each. They stay in your browser until you send them.</small><input type="file" id="shot" accept="image/png, image/jpeg, image/webp" multiple></label>`;
+  }
+  const grid = n => `<div class="cv-grid">${'<i></i>'.repeat(n)}</div>`;
+  const foot = '<div class="cv-foot"></div>';
+  if (page === 'Home') return `${head}<div class="cv-banner"></div>${lines(70, 45)}<div class="wf-btn" style="width:60%">Shop now</div>${lines(40)}${grid(4)}<div class="cv-banner" style="height:70px;background:var(--teal)"></div>${lines(50)}${grid(4)}${lines(65, 40)}<div class="wf-btn" style="width:50%">Subscribe</div>${foot}`;
+  if (page === 'Collection') return `${head}${lines(55)}<div class="cv-chips"><i></i><i></i><i></i></div>${grid(8)}<div class="cv-chips" style="justify-content:center"><i style="width:24px"></i><i style="width:24px"></i><i style="width:24px"></i></div>${foot}`;
+  return `${head}<div class="cv-img"></div>${lines(80, 35)}<div class="wf" style="width:30%;height:12px;background:var(--ink)"></div><div class="wf-btn">Add to cart</div>${lines(90, 75, 60)}<div class="cv-acc"></div><div class="cv-acc"></div><div class="cv-acc"></div>${lines(45)}${grid(4)}${foot}`;
+}
+
+/* the hero card: a looping, labelled demo, never mistaken for the real tool */
+const DEMO = [
+  { cap: 'Tap where it looks wrong on a phone', total: '$0' },
+  { cap: '1 · Button cut off: +$40, phone fix for this page', total: '$40' },
+  { cap: '2 · Slides sideways: same page, no extra', total: '$40' },
+  { cap: '3 · Wrong text: +$25', total: '$65' }
+];
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let demoTick = 0;
+const demoStep = () => reduceMotion.matches ? 3 : Math.min(3, demoTick % 6);
+function paintDemo() {
+  const d = $('demo');
+  if (!d) return;
+  const s = demoStep();
+  d.dataset.step = s;
+  $('demoCap').textContent = DEMO[s].cap;
+  $('demoTotal').textContent = DEMO[s].total;
+}
+setInterval(() => { demoTick++; paintDemo(); }, 1600);
+
+function mapView() {
+  const num = p => S.pins.indexOf(p) + 1;
+  const here = S.pins.filter(p => p.page === S.mapPage);
+  const isShot = S.mapPage === 'Screenshot';
+  const empty = isShot && !S.shots.length;
+  const wide = isShot && S.shots.length && S.shotWide;
+  return `
+  <div class="map ${wide ? 'map--wide' : ''}">
+    <div class="map__left">
+      <div class="seg seg--sm" role="group" aria-label="Page">${MAP_PAGES.map(p => `<button type="button" data-mpage="${p}" class="${S.mapPage === p ? 'is-on' : ''}">${p === 'Screenshot' ? 'My screenshot' : p}</button>`).join('')}</div>
+      <div class="canvas ${empty ? 'is-empty' : ''} ${isShot && !empty ? 'is-shot' : ''} ${wide ? 'canvas--wide' : ''}" data-canvas role="application" aria-label="${pageName(S.mapPage)}, full page. Tap where the problem is.">
+        ${canvasArt()}
+        ${here.map(p => `<button type="button" class="pin ${p.id === S.lastPin ? 'is-new' : ''}" data-pin="${p.id}" style="left:${p.x}%;top:${p.y}%;--pc:${TYPES[p.type].color}" aria-label="Problem ${num(p)}: ${TYPES[p.type].t}">${num(p)}</button>`).join('')}
+      </div>
+      <div class="err">${S.errors.shot || ''}</div>
+      ${isShot && S.shots.length ? `
+      <div class="shot-tools">
+        ${S.shots.length < 6 ? `<label class="addshot">Add the next part of the page<input type="file" id="shot" accept="image/png, image/jpeg, image/webp" multiple></label>` : ''}
+        <button class="link" type="button" data-act="clearshot">Remove screenshots</button>
+      </div>
+      <p class="small" style="text-align:center">${plural(S.shots.length, 'screenshot')} stacked into one page${wide ? ', desktop width' : ''}.</p>` : ''}
+    </div>
+    <div class="map__right">
+      <div class="map__tools">
+        <div class="legend">1. Pick what's wrong, 2. tap the page</div>
+        <div class="tools">${Object.entries(TYPES).map(([k, v]) => `<button type="button" class="tool ${S.tool === k ? 'is-on' : ''}" data-tool="${k}" style="--pc:${v.color}" aria-pressed="${S.tool === k}"><i></i>${v.t}</button>`).join('')}</div>
+        <div class="key"><span style="--pc:var(--orange)"><i></i>Phone layout</span><span style="--pc:var(--purple)"><i></i>Text change</span><span style="--pc:var(--teal)"><i></i>Store data or apps</span><span style="--pc:var(--pink)"><i></i>Other</span></div>
+        <button class="link" type="button" data-act="addcenter" style="font-size:13px;justify-self:start">Add it to the list without placing</button>
+      </div>
+      <ol class="pinlist">${S.pins.length ? S.pins.map(p => `
+        <li><span class="pin pin--static" style="--pc:${TYPES[p.type].color}" aria-hidden="true">${num(p)}</span>
+          <div><b>${TYPES[p.type].t}</b><small>${pageName(p.page)} · ${FIX_NOTE[TYPES[p.type].fix]}</small>
+          ${p.type === 'other' ? `<input class="input input--sm" data-pin-note="${p.id}" maxlength="40" placeholder="What's wrong here?" value="${esc(p.note || '')}" aria-label="Describe problem ${num(p)}">` : ''}</div>
+          <button type="button" class="x" data-unpin="${p.id}" aria-label="Remove problem ${num(p)}">×</button></li>`).join('')
+        : '<li class="empty">Nothing marked yet. Pick a problem, then tap the page.</li>'}
+      </ol>
+    </div>
+  </div>`;
+}
+
+function addPin(x, y, page = S.mapPage) {
+  const c = v => Math.round(Math.min(94, Math.max(6, v)));
+  S.pins.push({ id: ++S.pinSeq, page, type: S.tool, x: c(x), y: c(y) });
+  S.lastPin = S.pinSeq;
+  S.input = 'map';
+  S.errors = {};
+  render();
+  S.lastPin = null;
+}
+
+const LNOTES = {
+  goal: 'Hero tetap tentang jasamu. Kartu kanan sekarang demo yang berjalan sendiri, berlabel "Demo", dan tidak bisa diketuk, jadi tidak dikira alat sungguhan. Alat sungguhan terbuka di bawah hero lewat "Mark what\'s broken" atau "Try it on your store". Strip angka dihapus sampai ada testimoni.',
+  lead: 'Estimasi selalu gratis tanpa email. Kontak baru diminta untuk harga pasti dan video 2 menit. Kuota: batas mingguan total sesuai kapasitasmu, ditambah satu cek gratis per toko. Tidak perlu akun.',
+  speed: 'Halaman ditampilkan penuh dari atas ke bawah. Screenshot bisa beberapa sekaligus dan tersusun jadi satu halaman. Screenshot desktop (melebar) otomatis memakai lebar penuh. Di layar sempit, pilihan masalah menempel di atas saat halaman digulir.',
+  ask: ['Kecepatan demo (1,6 detik per langkah) pas?', 'Maksimal 6 screenshot per halaman cukup?', 'Kuota awal: berapa cek gratis per minggu yang sanggup kamu kerjakan?', 'Coba tombol Phone di atas, lalu buka alatnya dan gulir halaman Product yang panjang.']
+};
+
+function renderLanding() {
+  const q = quote(), phone = S.width === 'phone';
+  document.querySelectorAll('[data-width]').forEach(b => b.classList.toggle('is-on', b.dataset.width === S.width));
+  $('site').className = 'site' + (phone ? ' is-phone' : '');
+  const lead = S.leadSent ? `
+    <div class="flash">Sent. Your fixed price and a 2-minute video arrive by tomorrow, 17:00 your time.</div>
+    <button class="btn btn--go" type="button" data-act="toplan">See your plan</button>` : `
+    <b class="lead__title">Get my fixed price + a free 2-minute video of your store</b>
+    <div class="field">
+      <label for="url">Store address</label>
+      <input class="input" id="url" data-k="url" value="${esc(S.url)}" placeholder="yourstore.com" autocomplete="url">
+      <div class="err" id="err-url">${S.errors.url || ''}</div>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input class="input" id="email" data-k="email" type="email" value="${esc(S.email)}" placeholder="you@yourstore.com" autocomplete="email">
+      <div class="err" id="err-email">${S.errors.email || ''}</div>
+    </div>
+    <button class="btn btn--go" type="button" data-act="lead">Send my marked page</button>
+    <span class="small">One email back with your price and video. No newsletter. A quiet spam check runs when you send.</span>`;
+  $('site').innerHTML = `
+    <nav class="s-nav" aria-label="Site (mock)">
+      <span class="logo">Qonicode</span>
+      <span class="links"><span>Work</span><span>Offers</span><span>How I work</span></span>
+      <span class="btn btn--sm">Hire me</span>
+    </nav>
+    <section class="hero2">
+      <div>
+        <h2 class="h-title"><span>Shopify</span><span class="it">theme fixes.</span><span>Tested.</span></h2>
+        <p class="hero2__sub">Qonita, Shopify theme developer. <em>Small, careful changes to the theme you already have.</em></p>
+        <div class="price-strip"><span>Fixes from <b>$25</b></span><span>Fixed price before work. Pay after you approve.</span></div>
+        <div class="row">
+          <button class="btn btn--go" type="button" data-act="opencheck">Mark what's broken</button>
+          <button class="btn btn--ghost" type="button">See the work ↓</button>
+        </div>
+      </div>
+      <div class="try demo" id="demo" data-step="${demoStep()}">
+        <span class="demo__badge">Demo</span>
+        <div class="try__label">How a free estimate works</div>
+        <div class="canvas canvas--mini canvas--demo" aria-hidden="true">
+          ${canvasArt('Product')}
+          <span class="pin dp d1" style="left:82%;top:66%;--pc:var(--orange)">1</span>
+          <span class="pin dp d2" style="left:50%;top:28%;--pc:var(--orange)">2</span>
+          <span class="pin dp d3" style="left:62%;top:48%;--pc:var(--purple)">3</span>
+        </div>
+        <p class="demo__cap" id="demoCap">${DEMO[demoStep()].cap}</p>
+        <div class="try__total"><span>Estimate</span><b id="demoTotal">${DEMO[demoStep()].total}</b></div>
+        <button class="btn btn--sm btn--go" type="button" data-act="opencheck">Try it on your store</button>
+      </div>
+    </section>
+    ${S.checkOpen ? `
+    <section class="check" id="check">
+      <div>
+        <div class="eyebrow">Free estimate · no email needed to see it</div>
+        <h2 class="h">Show me what's broken. Each mark adds to your total.</h2>
+      </div>
+      <div class="check__grid">
+        <div style="min-width:0">${mapView()}</div>
+        <div class="card lead">
+          <div class="eyebrow">Your estimate</div>
+          ${q.lines.length ? q.lines.map(l => `<div class="offer-line"><span>${l.label}</span><b>${l.high > l.low ? money(l.low) + '–' + money(l.high) : money(l.low)}</b></div>`).join('') : '<p class="small">Mark a problem to see a price.</p>'}
+          <div class="offer-total"><span class="legend">Estimate</span><b>${priceText(q)}</b></div>
+          <hr>
+          ${lead}
+        </div>
+      </div>
+      <div class="row">
+        <button class="link" type="button" data-act="tolist">Prefer a list?</button>
+        <button class="link" type="button" data-act="skip">I know what I need. Message me on Upwork</button>
+      </div>
+    </section>` : `
+    <div class="band">
+      <div><b>Mark what's broken on your own store.</b><span>A free estimate in about 2 minutes. Upload a screenshot or use an example page.</span></div>
+      <button class="btn btn--sm btn--go" type="button" data-act="opencheck">Start</button>
+    </div>`}
+    <div class="later" aria-label="Rest of the page">
+      ${[['Work so far', '4 before / after projects'], ['Starter offers', 'Mobile fix, small change, QA check'], ['How I work', 'Duplicate theme, tested, change log'], ['About', 'Surabaya, UTC+7'], ['Playground', 'Build a layout, now the second mode'], ["Let's talk", 'Contact form']].map(([t, s]) => `<div class="later__band"><span>${t}</span><small>${s}</small></div>`).join('')}
+    </div>`;
+  $('lnotes').innerHTML = `
+    <div><span class="lang">Catatan · ID</span><h2 style="margin-top:10px">Tujuan</h2><p>${LNOTES.goal}</p></div>
+    <div><h2>Lead gen</h2><p>${LNOTES.lead}</p></div>
+    <div><h2>Kecepatan</h2><p>${LNOTES.speed}</p></div>
+    <div class="q"><h2>Untuk didiskusikan</h2><ul>${LNOTES.ask.map(a => `<li>${a}</li>`).join('')}</ul></div>`;
+}
+
+function modeSwitch() {
+  return `<div class="seg" role="group" aria-label="Way of working"><button type="button" data-mode="zip" class="${isZip() ? 'is-on' : ''}">No access</button><button type="button" data-mode="collab" class="${!isZip() ? 'is-on' : ''}">Themes-only</button></div>`;
+}
+
+const NOTES = [
+  { goal: 'Jual hasil sebelum minta apa pun. Harga "from $25" sudah terlihat sebelum ada pertanyaan, sesuai keluhan di komentar YouTube soal harga yang disembunyikan.', safe: 'Tidak ada login atau akses. Hanya URL publik.', ask: ['Audit gratis dalam bentuk video 2 menit atau 3 screenshot?', 'Link "I know what I need" langsung ke Upwork. Coba klik untuk melihat jalurnya.'] },
+  { goal: 'Mode utama: klien menandai masalah langsung di halaman (Home, Product, Collection, atau screenshot toko mereka sendiri). Setiap tanda menjadi item perbaikan dan total di bawah layar ikut berubah. Mode "Pick from a list" tetap ada untuk yang tidak mau menandai.', safe: 'Screenshot hanya dibaca di browser klien, dibatasi 8 MB, dan baru terkirim saat klien sendiri yang mengirim. Tidak ada email atau data pribadi yang diminta di sini.', ask: ['Beberapa masalah HP di halaman yang sama dihitung satu halaman ($40), bukan per tanda. Adil menurutmu?', 'Angka $40 / $15 / $25 / $30 adalah contoh dari Starter offers sekarang. Perlu kamu tetapkan.', 'Coba tab "My screenshot": upload beberapa screenshot dari atas ke bawah, nanti tersusun jadi satu halaman penuh.'] },
+  { goal: 'Rencana dan harga langsung terlihat tanpa email. Email hanya untuk yang mau salinan, dengan janji satu email saja.', safe: 'Batas atas harga dijanjikan: tidak akan melebihi angka atas tanpa persetujuan klien.', ask: ['Janji batas atas aman untukmu, atau perlu kalimat lain?', 'Kalau klien memilih product data atau app block, rekomendasi berpindah ke akses themes-only.'] },
+  { goal: 'Layar penjelasan sebelum izin: klien tahu persis apa yang akan muncul dan apa yang harus dicentang.', safe: 'Mode zip: kamu tidak pernah masuk ke toko. Mode collaborator: hanya Themes, bisa dicabut kapan saja.', ask: ['Perlu video 30 detik untuk langkah ini?', 'Admin di sini sengaja disederhanakan. Nanti diganti screenshot asli dari dev store-mu.'] },
+  { goal: 'Pengganti pertanyaan "sudah sampai mana?". Klien bisa memantau tanpa chat.', safe: 'Link rahasia tanpa login, kedaluwarsa 7 hari setelah selesai, tidak diindeks, tanpa data sensitif.', ask: ['Versi awal cukup lewat milestone atau pesan Upwork?', 'Update tiap langkah selesai, atau sekali sehari?'] },
+  { goal: 'Aha moment: klien melihat toko mereka sendiri sudah beres di HP, sementara toko live tidak berubah.', safe: 'Di mode zip, klien meng-upload sendiri sebagai theme yang belum dipublish, jadi preview tetap memakai produk asli mereka.', ask: ['Tombol "Something\'s off" cukup, atau perlu batas jumlah revisi?', 'Video walkthrough wajib di setiap proyek?'] },
+  { goal: 'Klien yang menekan publish. Theme lama otomatis tersimpan di library, jadi rollback cukup satu klik.', safe: 'Kamu tidak pernah mengubah toko live. Ini sinyal kepercayaan yang kuat.', ask: ['Perlu menawarkan "aku temani saat publish"?'] },
+  { goal: 'Paket serah terima yang sama untuk setiap proyek: video, change log, before/after, cara edit, cara undo.', safe: 'Change log menyebut setiap file yang disentuh, dan menegaskan konten tidak diubah.', ask: ['Kirim sebagai satu pesan Upwork atau satu halaman PDF?'] },
+  { goal: 'Penutupan resmi: akses dicabut dan dikonfirmasi, file lokal dihapus, masa garansi jelas, lalu minta review.', safe: 'Mode zip: tidak ada akses yang perlu dicabut. Mode collaborator: konfirmasi tertulis.', ask: ['Garansi 7 hari cukup?', 'Minta review di sini, atau 2 hari setelah publish?'] }
+];
+
+const $ = id => document.getElementById(id);
+
+function render() {
+  const land = S.view === 'landing';
+  $('landingView').hidden = !land;
+  $('flowView').hidden = land;
+  document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('is-on', b.dataset.view === S.view));
+  /* only one view in the DOM at a time, so form ids stay unique */
+  if (land) { $('screen').innerHTML = ''; return renderLanding(); }
+  $('site').innerHTML = '';
+  const st = STEPS[S.step];
+  $('phases').innerHTML = PHASES.map(p => `
+    <div class="phase" style="--ph:${p.color}">
+      <div class="phase__label">${p.name}</div>
+      <div class="phase__steps">${p.steps.map(i => `<button type="button" class="dot ${i === S.step ? 'is-current' : i < S.step ? 'is-done' : ''}" data-go="${i}" aria-label="Step ${i + 1}" ${i === S.step ? 'aria-current="step"' : ''}>${i < S.step ? '✓' : i + 1}</button>`).join('')}</div>
+    </div>`).join('');
+  const [w, note] = st.where();
+  $('where').innerHTML = `${esc(w)} <small>· ${esc(note)}</small>`;
+  const m = minutes(S.step);
+  $('clock').textContent = m ? `Client time: ~${m} min` : 'Client time: none';
+  $('screen').innerHTML = st.render();
+  const showEst = S.step === 1 || S.step === 2;
+  $('count').className = showEst ? 'est' : '';
+  $('count').textContent = showEst ? `Estimate: ${priceText(quote())}` : `Step ${S.step + 1} of 9`;
+  $('back').style.visibility = S.step === 0 ? 'hidden' : 'visible';
+  $('next').textContent = S.step === 8 ? 'Start over' : 'Next →';
+  const n = NOTES[S.step], spent = spentMin(), total = totalMin();
+  $('notes').innerHTML = `
+    <div><span class="lang">Catatan · ID</span></div>
+    <div class="meter">
+      <h2>Waktu klien sampai langkah ini</h2>
+      <div class="meter__num">${spent} / ${total} menit</div>
+      <div class="meter__track"><div class="meter__fill" style="width:${Math.round(spent / total * 100)}%"></div></div>
+      <p class="small">Mode: ${isZip() ? 'tanpa akses (file theme)' : 'akses themes-only'}${S.mode ? '' : ' · otomatis dari jawaban'}</p>
+    </div>
+    <div><h2>Tujuan</h2><p>${n.goal}</p></div>
+    <div><h2>Keamanan</h2><p>${n.safe}</p></div>
+    <div class="q"><h2>Untuk didiskusikan</h2><ul>${n.ask.map(a => `<li>${a}</li>`).join('')}</ul></div>`;
+}
+
+function validUrl(v) { return /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(\/.*)?$/i.test(v.trim()); }
+function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
+
+function go(i) { S.errors = {}; S.step = i; render(); $('screen').scrollIntoView({ block: 'nearest' }); }
+
+function next() {
+  S.errors = {};
+  if (S.step === 0 && !validUrl(S.url)) { S.errors.url = 'Enter your store address, like yourstore.com'; return render(); }
+  if (S.step === 1) {
+    if (S.sub === 0 && S.input === 'map' && !S.pins.length) { S.errors.picked = 'Mark at least one problem, or skip to an Upwork message'; return render(); }
+    if (S.sub === 0 && S.input === 'list' && !S.picked.size) { S.errors.picked = 'Pick at least one fix, or skip to an Upwork message'; return render(); }
+    if (S.sub === 0) { S.sub = 1; return render(); }
+  }
+  if (S.step === 5 && !S.approved && !S.noteSent) { S.errors.approve = 'Approve the preview or send a note first'; return render(); }
+  if (S.step === 8) { Object.assign(S, { step: 0, sub: 0, auditSent: false, skipped: false, approved: false, noteOpen: false, noteSent: false, published: false, accessGranted: false, fileAsked: false, removed: false, rating: 0, mode: null, copySent: false }); return render(); }
+  if (S.step === 0) S.skipped = false;
+  go(S.step + 1);
+}
+function back() {
+  S.errors = {};
+  if (S.step === 1 && S.sub > 0) { S.sub--; return render(); }
+  if (S.step === 3 && S.skipped) { S.skipped = false; S.sub = 0; return go(0); }
+  if (S.step > 0) { S.step--; if (S.step === 1) S.sub = 1; }
+  render();
+}
+
+document.addEventListener('click', e => {
+  const cv = e.target.closest('[data-canvas]');
+  if (cv && !e.target.closest('.pin, .upload') && !cv.classList.contains('is-empty')) {
+    const r = cv.getBoundingClientRect();
+    return addPin((e.clientX - r.left) / r.width * 100, (e.clientY - r.top) / r.height * 100, cv.dataset.canvas === 'mini' ? 'Product' : S.mapPage);
+  }
+  const t = e.target.closest('button');
+  if (!t) return;
+  if (t.dataset.pin) return;
+  if (t.dataset.view) { S.view = t.dataset.view; S.errors = {}; return render(); }
+  if (t.dataset.width) { S.width = t.dataset.width; return render(); }
+  if (t.dataset.act === 'opencheck') { S.checkOpen = true; S.input = 'map'; render(); const c = $('check'); if (c) c.scrollIntoView({ block: 'start' }); return; }
+  if (t.dataset.act === 'lead') {
+    S.errors = {};
+    if (!validUrl(S.url)) S.errors.url = 'Enter your store address, like yourstore.com';
+    if (!validEmail(S.email)) S.errors.email = 'Enter an email like you@yourstore.com';
+    if (!S.errors.url && !S.errors.email) S.leadSent = true;
+    return render();
+  }
+  if (t.dataset.act === 'toplan') { S.view = 'flow'; S.input = 'map'; S.step = 2; return render(); }
+  if (t.dataset.act === 'tolist') { S.view = 'flow'; S.input = 'list'; S.sub = 0; S.step = 1; return render(); }
+  if (t.dataset.inmode) { S.input = t.dataset.inmode; S.errors = {}; return render(); }
+  if (t.dataset.mpage) { S.mapPage = t.dataset.mpage; S.errors = {}; return render(); }
+  if (t.dataset.tool) { S.tool = t.dataset.tool; return render(); }
+  if (t.dataset.unpin) { S.pins = S.pins.filter(p => p.id !== +t.dataset.unpin); return render(); }
+  if (t.dataset.act === 'addcenter') { if (S.mapPage === 'Screenshot' && !S.shots.length) { S.errors.shot = 'Upload a screenshot first, or pick another page'; return render(); } return addPin(50, 8); }
+  if (t.dataset.act === 'clearshot') { S.shots = []; S.shotWide = false; S.pins = S.pins.filter(p => p.page !== 'Screenshot'); return render(); }
+  if (t.id === 'next') return next();
+  if (t.id === 'back') return back();
+  if (t.dataset.go) { S.sub = 0; S.skipped = false; return go(+t.dataset.go); }
+  if (t.dataset.chip) { const p = t.dataset.chip; S.pages.has(p) ? S.pages.delete(p) : S.pages.add(p); return render(); }
+  if (t.dataset.qty) { e.preventDefault(); S.qty.change = Math.min(5, Math.max(1, S.qty.change + +t.dataset.qty)); return render(); }
+  if (t.dataset.theme) { S.theme = t.dataset.theme; return render(); }
+  if (t.dataset.mode) { S.mode = t.dataset.mode; return render(); }
+  if (t.dataset.before) { S.before = t.dataset.before === '1'; return render(); }
+  if (t.dataset.star) { S.rating = +t.dataset.star; return render(); }
+  const a = t.dataset.act;
+  if (a === 'audit') { if (!validUrl(S.url)) { S.errors.url = 'Enter your store address, like yourstore.com'; } else { S.errors = {}; S.auditSent = true; } return render(); }
+  if (a === 'skip') { S.skipped = true; S.view = 'flow'; return go(3); }
+  if (a === 'next') return next();
+  if (a === 'copy') { if (!validEmail(S.email)) { S.errors.email = 'Enter an email like you@yourstore.com'; return render(); } S.copySent = true; S.errors = {}; return render(); }
+  if (a === 'download') { S.fileAsked = true; return render(); }
+  if (a === 'grant') { S.accessGranted = true; return render(); }
+  if (a === 'approve') { S.approved = true; S.errors = {}; return render(); }
+  if (a === 'note') { S.noteOpen = true; render(); const n = $('note'); if (n) n.focus(); return; }
+  if (a === 'sendnote') { if (!S.note.trim()) { S.errors.note = 'Write what looks wrong first'; return render(); } S.noteSent = true; S.errors = {}; return render(); }
+  if (a === 'publish') { S.published = true; return render(); }
+  if (a === 'unpublish') { S.published = false; return render(); }
+  if (a === 'remove') { S.removed = true; return render(); }
+});
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'shot' && t.files.length) {
+    const files = [...t.files].slice(0, 6 - S.shots.length);
+    const bad = files.find(f => !/^image\/(png|jpeg|webp)$/.test(f.type) || f.size > 8 * 1024 * 1024);
+    if (bad) { S.errors.shot = `${bad.name} isn't a PNG, JPG or WebP under 8 MB.`; return render(); }
+    const read = f => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(f); });
+    Promise.all(files.map(read)).then(srcs => {
+      const first = !S.shots.length;
+      S.shots.push(...srcs);
+      S.errors = {};
+      if (!first) return render();
+      /* a landscape first screenshot means a desktop page: the canvas goes full width */
+      const img = new Image();
+      img.onload = () => { S.shotWide = img.naturalWidth > img.naturalHeight; render(); };
+      img.src = srcs[0];
+    });
+    return;
+  }
+  if (t.matches('[data-pick]')) {
+    t.checked ? S.picked.add(t.value) : S.picked.delete(t.value);
+    S.errors = {}; render();
+    const el = $('p-' + t.value); if (el) el.focus();
+  }
+});
+document.addEventListener('input', e => {
+  if (e.target.dataset.pinNote) { const p = S.pins.find(p => p.id === +e.target.dataset.pinNote); if (p) p.note = e.target.value; return; }
+  const k = e.target.dataset.k;
+  if (!k) return;
+  S[k] = e.target.value;
+  const err = $('err-' + k);
+  if (err && err.textContent) { err.textContent = ''; delete S.errors[k]; }
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || !e.target.matches('input.input')) return;
+  e.preventDefault();
+  if (S.view === 'landing') { const b = document.querySelector('[data-act="lead"]'); if (b) b.click(); return; }
+  if (S.step === 0) document.querySelector('[data-act="audit"]').click();
+  else if (e.target.id === 'email') document.querySelector('[data-act="copy"]').click();
+  else next();
+});
+
+render();
+</script>
